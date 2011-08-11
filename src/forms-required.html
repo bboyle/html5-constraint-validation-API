@@ -244,14 +244,14 @@
 		$( "#radio-foo-foo" ).attr( "checked", "checked" );
 		$( "#test" ).submit();
 		$( "#test :radio[name=radioFoo]" ).each(function() {
-			equal( this.validity.valueMissing, false, "#" + this.id + " validity.valueMissing should be true" );		
+			equal( this.validity.valueMissing, false, "#" + this.id + " validity.valueMissing should be false" );		
 		});
 
 		// test value=""
 		$( "#radio-foo-BLANK" ).attr( "checked", "checked" );
 		$( "#test" ).submit();
 		$( "#test :radio[name=radioFoo]" ).each(function() {
-			equal( this.validity.valueMissing, false, "#" + this.id + " validity.valueMissing should be true" );		
+			equal( this.validity.valueMissing, false, "#" + this.id + " validity.valueMissing should be false" );		
 		});
 
 	});

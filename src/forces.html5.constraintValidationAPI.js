@@ -1,13 +1,28 @@
 /*
 	forces Constraint Validation API
 
-	implements the HTML5 constraint validation API
-	2011-08-10: @required
+	helpers for the HTML5 constraint validation API
 
 */
 
 if ( jQuery !== "undefined" ) {
 (function( $ ){
+
+	// where one radio button is required, ensure all are required
+	// this ensures each one in the group reports the same .validity.valueMissing properties
+	(function() {
+		var names = {};
+
+		$( ":radio[required]" ).each(function() {
+
+			if ( ! names[ this.name ] ) {
+				$( ":radio[name=" + this.name + "]" ).attr( "required", "required" );
+				names[ this.name ] = true;
+			}
+
+		});
+	})();
+
 
 	// validity API not implemented in browser
 	if ( !( "validity" in $( "<input>" )[0] )) {
@@ -18,13 +33,38 @@ if ( jQuery !== "undefined" ) {
 			var form = $( this );
 
 			// check required fields
-			form.find( "input[required],select[required]" ).each(function() {
+			form.find( ":text[required],select[required]" ).each(function() {
 				var isBlank = ! this.value;
 				this.validity = {
 					valueMissing: isBlank,
 					valid: ! isBlank
 				};
 			});
+
+			// check required radio button groups
+			(function() {
+				
+				var names = {};
+
+				form.find( ":radio[required]" ).each(function() {
+
+					if ( ! names[ this.name ] ) {
+						
+						var group = form.find( ":radio[name=" + this.name + "]" );
+						var isBlank = group.filter( ":checked" ).length === 0;
+
+						group.each(function() {
+							this.validity = {
+								valueMissing: isBlank,
+								valid: ! isBlank
+							};
+						});
+
+						names[ this.name ] = true;
+					}
+				});
+
+			})();
 
 		});
 
