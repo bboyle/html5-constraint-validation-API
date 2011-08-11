@@ -136,6 +136,15 @@
 
 	});
 
+	test( "no radio buttons are checked", function() {
+
+		$( "form#test :radio" ).each(function() {
+			this.checked = false;
+		});
+		equal( $( "form#test :radio[checked]" ).length, 0, "form#test radio buttons should not be checked" );
+
+	});
+
 
 	module( "input validityState valueMissing" );
 
@@ -214,13 +223,6 @@
 
 	test( "validity.valueMissing is true when blank", function() {
 		
-		$( "#test" ).submit();
-		$( "#test :radio[name=radioFoo]" ).each(function() {
-			equal( this.validity.valueMissing, true, "#" + this.id + " validity.valueMissing should be true" );		
-		});
-
-		// selecting a radio button with value="" does not trigger 'suffering from a value being missing' ?
-		$( "#radio-foo-BLANK" ).attr( "checked", "checked" );
 		$( "#test" ).submit();
 		$( "#test :radio[name=radioFoo]" ).each(function() {
 			equal( this.validity.valueMissing, true, "#" + this.id + " validity.valueMissing should be true" );		
