@@ -1,0 +1,8 @@
+<jslint><file name='E:\Ben\Documents\Projects\dev\github\usetheforces-html5-constraint-validation-API\src\forces.html5.constraintValidationAPI.js'>
+<issue line='13' char='1' reason='Missing &apos;use strict&apos; statement.' evidence='	(function() {'/>
+<issue line='24' char='3' reason='Move the invocation into the parens that contain the function.' evidence='	})();'/>
+<issue line='28' char='20' reason='Unexpected &apos;in&apos;. Compare with undefined, or use the hasOwnProperty method instead.' evidence='	if ( !( &quot;validity&quot; in $( &quot;&lt;input>&quot; )[0] )) {'/>
+<issue line='54' char='5' reason='Combine this with the previous &apos;var&apos; statement.' evidence='						var isBlank = group.filter( &quot;:checked&quot; ).length === 0;'/>
+<issue line='67' char='3' reason='Move the invocation into the parens that contain the function.' evidence='			})();'/>
+<issue line='74' char='3' reason='Move the invocation into the parens that contain the function.' evidence='})( jQuery );'/>
+</file></jslint>
