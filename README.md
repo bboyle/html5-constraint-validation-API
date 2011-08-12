@@ -1,0 +1,1 @@
+* handle `@required` on `:text`, `select` and `:radio` controls
