@@ -14,6 +14,10 @@
 *.tar
 *.zip
 
+# Libraries #
+#############
+lib/*
+
 # Logs and databases #
 ######################
 logs/*
