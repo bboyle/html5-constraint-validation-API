@@ -1,1 +1,1 @@
-* handle `@required` on `:text`, `select` and `:radio` controls
+* handle `@required` on `:text`, `textarea`, `select` and `:radio` controls

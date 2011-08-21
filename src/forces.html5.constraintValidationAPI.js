@@ -25,7 +25,7 @@ if ( jQuery !== "undefined" ) {
 	}());
 
 
-	// validity API not implemented in browser
+	// INPUT validity API not implemented in browser
 	if ( typeof $( "<input>" )[0].validity !== "object" ) {
 
 		// check for blank required fields on submit
@@ -34,7 +34,7 @@ if ( jQuery !== "undefined" ) {
 			var form = $( this );
 
 			// check required fields
-			form.find( ":text[required],select[required]" ).each(function() {
+			form.find( ":text[required],select[required],textarea[required]" ).each(function() {
 				var isBlank = ! this.value;
 				this.validity = {
 					valueMissing: isBlank,

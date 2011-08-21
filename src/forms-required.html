@@ -76,6 +76,14 @@
 			</fieldset>
 		</li>
 
+		<li>
+			<label for="textarea-foo">
+				<span class="label">Textarea foo</span>
+				<abbr title="(required)">*</abbr>
+			</label>
+			<textarea name="textareaFoo" id="textarea-foo" rows="5" cols="50" required="required"></textarea>
+		</li>
+
 		<li class="footer">
 			<ol class="submit">
 				<li>
@@ -114,6 +122,7 @@
 		equal( $( "form#test input#foo" ).length, 1, "form#test contains input#foo" );
 		equal( $( "form#test select#select-foo" ).length, 1, "form#test contains select#select-foo" );
 		equal( $( "form#test :radio[name=radioFoo]" ).length, 5, "form#test contains 5 radio buttons in radioFoo group" );
+		equal( $( "form#test textarea#textarea-foo" ).length, 1, "form#test contains textarea#textarea-foo" );
 
 	});
 
@@ -253,6 +262,34 @@
 		$( "#test :radio[name=radioFoo]" ).each(function() {
 			equal( this.validity.valueMissing, false, "#" + this.id + " validity.valueMissing should be false" );		
 		});
+
+	});
+
+
+	module( "textarea validityState valueMissing" );
+
+	test( "validity.valueMissing is true when blank", function() {
+		
+		$( "#textarea-foo" ).val( "" );
+		$( "#test" ).submit();
+		equal( $( "#textarea-foo" )[0].validity.valueMissing, true, "#textarea-foo validity.valueMissing should be true" );
+
+	});
+
+	test( "validity.valid is false when blank", function() {
+		
+		$( "#textarea-foo" ).val( "" );
+		$( "#test" ).submit();
+		equal( $( "#textarea-foo" )[0].validity.valid, false, "#textarea-foo validity.valid should be false" );
+
+	});
+
+
+	test( "validity.valueMissing is false when a value is present", function() {
+		
+		$( "#textarea-foo" ).val( "foo" );
+		$( "#test" ).submit();
+		equal( $( "#textarea-foo" )[0].validity.valueMissing, false, "#textarea-foo validity.valueMissing should be false" );
 
 	});
 
