@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-AU" lang="en-AU">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>email input tests · forces Constraint Validation API tests</title>
+
+	<style>
+		body {
+			padding: 2em;
+			font-family: sans-serif;
+			background: #faf7f3;
+			color: #111;
+		}
+	</style>
+	<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-git.css">
+	<script src="http://code.jquery.com/qunit/qunit-git.js"></script>
+       
+</head>
+
+<body>
+
+<form id="test" action="javascript:">
+
+	<ol class="questions">
+
+		<li>
+			<label for="email">
+				<span class="label">Email</span>
+			</label>
+			<input type="email" name="email" id="email" value="" />
+		</li>
+
+		<li class="footer">
+			<ol class="submit">
+				<li>
+					<strong>
+						<input type="submit" value="Submit" />
+					</strong>
+				</li>
+			</ol>
+		</li>
+
+	</ol>
+
+</form>
+
+
+<div id="qunit">
+	<h1 id="qunit-header">QUnit</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup, will be hidden</div>
+</div>
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script src="../../src/forces.html5.constraintValidationAPI.js"></script>
+
+<script><!-- //
+
+	module( "environment" );
+
+	test( "email fields are in test form", function() {
+
+		equal( $( "form#test" ).length, 1, "form#test is present" );
+		equal( $( "form#test input#email" ).length, 1, "form#test contains input#email" );
+
+	});
+
+	test( "email fields are type email", function() {
+
+		equal( $( "[type=email]" )[0], $( "input#email" )[0], "input#foo is type email" );
+
+	});
+
+	test( "form submission is suppressed", function() {
+
+		var form = $( "#test" );
+
+		form.submit();
+		ok( true, "form was submitted and we are still running tests" );
+
+		form.find( "[type=submit]" ).click();
+		ok( true, "submit button clicked and we are still running tests" );
+
+	});
+
+	module( "input validityState typeMismatch" );
+
+	test( "validity.typeMismatch is false when blank", function() {
+		
+		$( "#email" ).val( "" );
+		$( "#test" ).submit();
+		equal( $( "#email" )[0].validity.typeMismatch, false, "#email[value=\"\"] validity.typeMismatch should be false" );
+
+	});
+
+	test( "validity.typeMismatch is true when value is not an email address", function() {
+		
+		$( "#email" ).val( "foo" );
+		$( "#test" ).submit();
+		equal( $( "#email" )[0].validity.typeMismatch, true, "#email[value=\"foo\"] validity.typeMismatch should be true" );
+
+	});
+
+
+	test( "validity.typeMismatch is false when an email address is supplied", function() {
+		
+		$( "#email" ).val( "foo@example.com" );
+		$( "#test" ).submit();
+		equal( $( "#email" )[0].validity.typeMismatch, false, "#email[value=\"foo@example.com\"] validity.typeMismatch should be false" );
+
+	});
+
+
+// --></script>
+
+</body>
+</html>
