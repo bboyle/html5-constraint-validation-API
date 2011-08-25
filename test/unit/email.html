@@ -24,6 +24,14 @@
 	<ol class="questions">
 
 		<li>
+			<label for="foo">
+				<span class="label">Foo</span>
+				<abbr title="(required)">*</abbr>
+			</label>
+			<input type="text" name="foo" id="foo" value="" />
+		</li>
+
+		<li>
 			<label for="email">
 				<span class="label">Email</span>
 			</label>
@@ -65,13 +73,15 @@
 	test( "email fields are in test form", function() {
 
 		equal( $( "form#test" ).length, 1, "form#test is present" );
+		equal( $( "form#test input#foo" ).length, 1, "form#test contains input#foo" );
 		equal( $( "form#test input#email" ).length, 1, "form#test contains input#email" );
 
 	});
 
 	test( "email fields are type email", function() {
 
-		equal( $( "[type=email]" )[0], $( "input#email" )[0], "input#foo is type email" );
+		equal( $( "[type=text]" )[0], $( "input#foo" )[0], "input#foo is type text" );
+		equal( $( "[type=email]" )[0], $( "input#email" )[0], "input#email is type email" );
 
 	});
 
@@ -91,26 +101,32 @@
 
 	test( "validity.typeMismatch is false when blank", function() {
 		
-		$( "#email" ).val( "" );
+		$( "#email,#foo" ).val( "" );
 		$( "#test" ).submit();
 		equal( $( "#email" )[0].validity.typeMismatch, false, "#email[value=\"\"] validity.typeMismatch should be false" );
+		equal( $( "#email" )[0].validity.valid, true, "#email[value=\"\"] validity.valid should be true" );
+		equal( $( "#foo" )[0].validity.typeMismatch, false, "#foo[value=\"\"] validity.typeMismatch should be false" );
 
 	});
 
 	test( "validity.typeMismatch is true when value is not an email address", function() {
 		
-		$( "#email" ).val( "foo" );
+		$( "#email,#foo" ).val( "foo" );
 		$( "#test" ).submit();
 		equal( $( "#email" )[0].validity.typeMismatch, true, "#email[value=\"foo\"] validity.typeMismatch should be true" );
+		equal( $( "#email" )[0].validity.valid, false, "#email[value=\"\"] validity.valid should be false" );
+		equal( $( "#foo" )[0].validity.typeMismatch, false, "#foo[value=\"foo\"] validity.typeMismatch should be false" );
 
 	});
 
 
 	test( "validity.typeMismatch is false when an email address is supplied", function() {
 		
-		$( "#email" ).val( "foo@example.com" );
+		$( "#email,#foo" ).val( "foo@example.com" );
 		$( "#test" ).submit();
 		equal( $( "#email" )[0].validity.typeMismatch, false, "#email[value=\"foo@example.com\"] validity.typeMismatch should be false" );
+		equal( $( "#email" )[0].validity.valid, true, "#email[value=\"\"] validity.valid should be true" );
+		equal( $( "#foo" )[0].validity.typeMismatch, false, "#foo[value=\"foo@example.com\"] validity.typeMismatch should be false" );
 
 	});
 

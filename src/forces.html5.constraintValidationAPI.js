@@ -28,17 +28,28 @@ if ( jQuery !== "undefined" ) {
 	// INPUT validity API not implemented in browser
 	if ( typeof $( "<input>" )[0].validity !== "object" ) {
 
+		// http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#valid-e-mail-address
+		// 1*( atext / "." ) "@" ldh-str 1*( "." ldh-str )
+		var REXP_EMAIL = /^[A-Za-z0-9!#$%&'*+\-\/=\?\^_`\{\|\}~\.]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+$/;
+
+
 		// check for blank required fields on submit
 		$( "form" ).live( "submit", function() {
 
 			var form = $( this );
 
 			// check required fields
-			form.find( ":text[required],select[required],textarea[required]" ).each(function() {
-				var isBlank = ! this.value;
+			form.find( ":text,select,textarea" ).each(function() {
+
+				var isBlank = this.hasAttribute( "required" ) && ! this.value,
+
+					isTypeMismatch = this.getAttribute( "type" ) === "email" && !! this.value && ! REXP_EMAIL.test( this.value )
+				;
+
 				this.validity = {
+					typeMismatch: isTypeMismatch,
 					valueMissing: isBlank,
-					valid: ! isBlank
+					valid: ! isBlank && ! isTypeMismatch
 				};
 			});
 
