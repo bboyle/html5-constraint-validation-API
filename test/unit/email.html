@@ -81,7 +81,9 @@
 	test( "email fields are type email", function() {
 
 		equal( $( "[type=text]" )[0], $( "input#foo" )[0], "input#foo is type text" );
-		equal( $( "[type=email]" )[0], $( "input#email" )[0], "input#email is type email" );
+		equal( $( "input" ).filter(function() {
+			reeutn this.type === "email"
+		})[0], $( "input#email" )[0], "input#email is type email" );
 
 	});
 

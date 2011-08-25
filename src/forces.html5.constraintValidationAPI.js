@@ -41,16 +41,19 @@ if ( jQuery !== "undefined" ) {
 			// check required fields
 			form.find( ":text,select,textarea" ).each(function() {
 
-				var isBlank = this.hasAttribute( "required" ) && ! this.value,
+				var isBlank = this.required && ! this.value,
 
-					isTypeMismatch = this.getAttribute( "type" ) === "email" && !! this.value && ! REXP_EMAIL.test( this.value )
+					invalidEmail = this.type === "email" && !! this.value && ! REXP_EMAIL.test( this.value )
 				;
 
 				this.validity = {
-					typeMismatch: isTypeMismatch,
-					valueMissing: isBlank,
-					valid: ! isBlank && ! isTypeMismatch
+					typeMismatch : invalidEmail,
+					valueMissing : isBlank,
+					valid : ! isBlank && ! invalidEmail
 				};
+
+				$( "body" ).append(
+				);
 			});
 
 			// check required radio button groups
