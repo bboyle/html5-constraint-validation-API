@@ -80,10 +80,8 @@
 
 	test( "email fields are type email", function() {
 
-		equal( $( "[type=text]" )[0], $( "input#foo" )[0], "input#foo is type text" );
-		equal( $( "input" ).filter(function() {
-			reeutn this.type === "email"
-		})[0], $( "input#email" )[0], "input#email is type email" );
+		equal( $( "#foo" )[0].type, "text", "input#foo is type text" );
+		equal( $( "#email" )[0].getAttribute( "type" ), "email", "input#email is type email" );
 
 	});
 

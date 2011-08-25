@@ -43,7 +43,7 @@ if ( jQuery !== "undefined" ) {
 
 				var isBlank = this.required && ! this.value,
 
-					invalidEmail = this.type === "email" && !! this.value && ! REXP_EMAIL.test( this.value )
+					invalidEmail = this.getAttribute( "type" ) === "email" && !! this.value && ! REXP_EMAIL.test( this.value )
 				;
 
 				this.validity = {
