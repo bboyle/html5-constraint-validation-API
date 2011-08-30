@@ -39,7 +39,7 @@ if ( jQuery !== "undefined" ) {
 			var form = $( this );
 
 			// check required fields
-			form.find( ":text,select,textarea" ).each(function() {
+			form.find( ":text, select, textarea" ).each(function() {
 
 				var isBlank = this.required && ! this.value,
 
