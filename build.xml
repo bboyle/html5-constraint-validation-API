@@ -38,6 +38,9 @@
 		<get src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" dest="${lib.dir}/jquery-1.4.4-min.js"/>
 	</target>
 
+	<target name="dependencies" depends="resolve,get-qunit,get-jquery" description="--> get all dependences"/>
+
+
 	<target name="clean" description="cleanup">
 		<delete dir="${build.dir}"/>
 		<delete dir="${log.dir}"/>
@@ -59,7 +62,7 @@
 	</target>
 
 
-	<target name="all" description="build" depends="init,resolve,jslint"/>
+	<target name="all" description="build" depends="init,dependencies,jslint"/>
 
 
 </project>
