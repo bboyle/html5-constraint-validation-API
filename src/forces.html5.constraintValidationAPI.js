@@ -41,7 +41,9 @@ if ( jQuery !== "undefined" ) {
 			// check required fields
 			form.find( ":text, select, textarea" ).each(function() {
 
-				var isBlank = this.required && ! this.value,
+				var $this = $( this ),
+
+					isBlank = $this.attr( "required" ) && ! this.value,
 
 					invalidEmail = this.getAttribute( "type" ) === "email" && !! this.value && ! REXP_EMAIL.test( this.value )
 				;
@@ -52,8 +54,6 @@ if ( jQuery !== "undefined" ) {
 					valid : ! isBlank && ! invalidEmail
 				};
 
-				$( "body" ).append(
-				);
 			});
 
 			// check required radio button groups

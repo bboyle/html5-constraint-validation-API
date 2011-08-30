@@ -133,6 +133,16 @@
 
 	});
 
+	test( "browser can report required fields", function() {
+		
+		ok( $( "input#foo" ).attr( "required" ), "input#foo.attr( \"required\" )" );
+		// fails in FF3.6 (OSX)
+		// ok( $( "input#foo" )[0].required, "input#foo[0].required" );
+		// fails i IE6
+		// ok( $( "input#foo" )[0].hasAttribute( "required" ), "input#foo[0].hasAttribute( \"required\" )" );
+
+	});
+
 	test( "form submission is suppressed", function() {
 
 		var form = $( "#test" );
@@ -156,6 +166,17 @@
 
 
 	module( "input validityState valueMissing" );
+
+	test( "validityState object present", function() {
+		
+		$( "#foo" ).val( "" );
+		$( "#test" )[0].submit();
+
+		equal( typeof $( "#foo")[0].validity, "object", "validityState is present" );
+		equal( typeof $( "#foo")[0].validity.valueMissing, "boolean", "validityState.valueMissing is present" );
+		equal( typeof $( "#foo")[0].validity.valid, "boolean", "validityState.valueMissing is present" );
+
+	});
 
 	test( "validity.valueMissing is true when blank", function() {
 		
