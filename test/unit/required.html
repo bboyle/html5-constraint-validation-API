@@ -181,14 +181,14 @@
 	test( "validity.valueMissing is true when blank", function() {
 		
 		$( "#foo" ).val( "" );
-		$( "#test" )[0].submit();
+		$( "#test" ).submit();
 		equal( $( "#foo" )[0].validity.valueMissing, true, "#foo[value=\"\"] validity.valueMissing should be true" );
 
 		// test blank values
-		$.each( [null, undefined], function( index, element ){
+		$.each( [null, undefined], function( index, element ) {
 
 			$( "#foo" ).val( element );
-			$( "#test" )[0].submit();
+			$( "#test" ).submit();
 			equal( $( "#foo" )[0].validity.valueMissing, true, "#foo[value=\"" + element + "\"] validity.valueMissing should be true" );
 
 		});

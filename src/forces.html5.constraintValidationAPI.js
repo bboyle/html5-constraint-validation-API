@@ -41,9 +41,7 @@ if ( jQuery !== "undefined" ) {
 			// check required fields
 			form.find( ":text, select, textarea" ).each(function() {
 
-				var $this = $( this ),
-
-					isBlank = $this.attr( "required" ) && ! this.value,
+				var isBlank = $( this ).attr( "required" ) && ! this.value,
 
 					invalidEmail = this.getAttribute( "type" ) === "email" && !! this.value && ! REXP_EMAIL.test( this.value )
 				;
