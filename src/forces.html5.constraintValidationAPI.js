@@ -30,11 +30,26 @@ if ( jQuery !== "undefined" ) {
 
 		// http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#valid-e-mail-address
 		// 1*( atext / "." ) "@" ldh-str 1*( "." ldh-str )
-		var REXP_EMAIL = /^[A-Za-z0-9!#$%&'*+\-\/=\?\^_`\{\|\}~\.]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+$/;
+		var REXP_EMAIL = /^[A-Za-z0-9!#$%&'*+\-\/=\?\^_`\{\|\}~\.]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+$/,
+
+			invalidCount = 0,
+
+			validityState = function( typeMismatch, valueMissing ) {
+				var valid = ! typeMismatch && ! valueMissing;
+				if ( valid === false ) {
+					invalidCount = invalidCount + 1;
+				}
+				return {
+					typeMismatch: typeMismatch,
+					valueMissing: valueMissing,
+					valid: valid
+				};
+			}
+		;
 
 
 		// check for blank required fields on submit
-		$( "form" ).live( "submit", function() {
+		$( "form" ).live( "submit", function( event ) {
 
 			var form = $( this );
 
@@ -46,11 +61,7 @@ if ( jQuery !== "undefined" ) {
 					invalidEmail = this.getAttribute( "type" ) === "email" && !! this.value && ! REXP_EMAIL.test( this.value )
 				;
 
-				this.validity = {
-					typeMismatch : invalidEmail,
-					valueMissing : isBlank,
-					valid : ! isBlank && ! invalidEmail
-				};
+				this.validity = validityState( invalidEmail, isBlank );
 
 			});
 
@@ -67,10 +78,7 @@ if ( jQuery !== "undefined" ) {
 							isBlank = group.filter( ":checked" ).length === 0;
 
 						group.each(function() {
-							this.validity = {
-								valueMissing: isBlank,
-								valid: ! isBlank
-							};
+							this.validity = validityState( false, isBlank );
 						});
 
 						names[ this.name ] = true;
@@ -78,6 +86,14 @@ if ( jQuery !== "undefined" ) {
 				});
 
 			}());
+
+			// suppress submit if invalid fields exist
+			if ( invalidCount > 0 ) {
+				
+				event.stopImmediatePropagation();
+				event.preventDefault();
+				return false;
+			}
 
 		});
 
