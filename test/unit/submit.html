@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+	<meta charset="UTF-8" />
+	<title>submit tests · forces Constraint Validation API tests</title>
+
+	<style>
+		body {
+			padding: 2em;
+			font-family: sans-serif;
+			background: #faf7f3;
+			color: #111;
+		}
+	</style>
+	<link rel="stylesheet" href="../../lib/qunit-git.css">
+	<script src="../../lib/qunit-git.js"></script>
+
+</head>
+
+<body>
+
+
+<div id="submitted">The form has been submitted <span>0</span> times.</div>
+
+<form id="test" action="javascript:">
+
+	<ol class="questions">
+
+		<li>
+			<label for="foo">
+				<span class="label">Foo</span>
+				<abbr title="(required)">*</abbr>
+			</label>
+			<input type="text" name="foo" id="foo" value="" required="required" />
+		</li>
+
+		<li class="footer">
+			<ol class="submit">
+				<li>
+					<strong>
+						<input type="submit" value="Submit" />
+					</strong>
+				</li>
+			</ol>
+		</li>
+
+	</ol>
+
+</form>
+
+
+<div id="qunit">
+	<h1 id="qunit-header">QUnit</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup, will be hidden</div>
+</div>
+
+
+<script src="../../lib/jquery-1.4.4-min.js"></script>
+<script src="../../src/forces.html5.constraintValidationAPI.js"></script>
+
+<script><!-- //
+
+	// submit counter
+	$( "form" ).live( "submit", function() {
+
+		var count = $( "#submitted span" );
+		count.text( parseInt( count.text()) + 1 );
+
+	});
+
+
+	module( "environment" );
+
+	test( "required fields are in test form", function() {
+
+		equal( $( "#submitted" ).length, 1, "span#submitted is present" );
+		equal( $( "#submitted" ).text(), "The form has been submitted 0 times.", "submit counter is 0" );
+		equal( $( "form#test" ).length, 1, "form#test is present" );
+		equal( $( "form#test input#foo" ).length, 1, "form#test contains input#foo" );
+		ok( $( "input#foo" ).attr( "required" ), "input#foo has @required" );
+		equal( $( "input#foo" ).val(), "", "input#foo has @required" );
+
+	});
+
+
+	module( "form submission" );
+
+	test( "form submission is counted", function() {
+
+		var form = $( "#test" );
+
+		// make form valid
+		$( "#foo" ).val( "foo" );
+
+		form.trigger( "submit" );
+		equal( $( "#submitted" ).text(), "The form has been submitted 1 times.", "submit counter is 1" );
+
+		form.find( ":submit" )[0].click();
+		equal( $( "#submitted" ).text(), "The form has been submitted 2 times.", "submit counter is 2" );
+
+	});
+
+	test( "submit suppressed by invalid fields", function() {
+
+		equal( $( "#submitted" ).text(), "The form has been submitted 2 times.", "submit counter is 2 before submit attempt" );
+
+		// make foo invalid
+		$( "#foo" ).val( "" );
+
+		$( "#test :submit" )[0].click();
+		equal( $( "#submitted" ).text(), "The form has been submitted 2 times.", "submit counter is 2 after submit attempt" );
+		
+	});
+
+// --></script>
+
+
+</body>
+</html>
