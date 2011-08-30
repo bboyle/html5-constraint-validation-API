@@ -56,12 +56,19 @@ if ( jQuery !== "undefined" ) {
 			// check required fields
 			form.find( ":text, select, textarea" ).each(function() {
 
-				var isBlank = $( this ).attr( "required" ) && ! this.value,
+				var $this = $( this ),
+
+					isBlank = $this.attr( "required" ) && ! this.value,
 
 					invalidEmail = this.getAttribute( "type" ) === "email" && !! this.value && ! REXP_EMAIL.test( this.value )
 				;
 
 				this.validity = validityState( invalidEmail, isBlank );
+
+				if ( !this.validity.valid ) {
+					// invalid event
+					$this.trigger( $.Event( "invalid" ));
+				}
 
 			});
 

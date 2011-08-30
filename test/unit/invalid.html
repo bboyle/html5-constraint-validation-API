@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+	<meta charset="UTF-8" />
+	<title>invalid tests · forces Constraint Validation API tests</title>
+
+	<style>
+		body {
+			padding: 2em;
+			font-family: sans-serif;
+			background: #faf7f3;
+			color: #111;
+		}
+	</style>
+	<link rel="stylesheet" href="../../lib/qunit-git.css">
+	<script src="../../lib/qunit-git.js"></script>
+
+</head>
+
+<body>
+
+
+<form id="test" action="javascript:">
+
+	<ol class="questions">
+
+		<li>
+			<label for="foo">
+				<span class="label">Foo</span>
+				<abbr title="(required)">*</abbr>
+			</label>
+			<input type="text" name="foo" id="foo" value="" required="required" />
+		</li>
+
+		<li class="footer">
+			<ol class="submit">
+				<li>
+					<strong>
+						<input type="submit" value="Submit" />
+					</strong>
+				</li>
+			</ol>
+		</li>
+
+	</ol>
+
+</form>
+
+
+<div id="qunit">
+	<h1 id="qunit-header">QUnit</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup, will be hidden</div>
+</div>
+
+
+<script src="../../lib/jquery-1.4.4-min.js"></script>
+<script src="../../src/forces.html5.constraintValidationAPI.js"></script>
+
+<script><!-- //
+
+	var	userInitiatedSubmit = function() {
+		$( "#test :submit" )[0].click();
+	};
+
+	module( "environment" );
+
+	test( "required fields are in test form", function() {
+		expect(4);
+
+		equal( $( "form#test" ).length, 1, "form#test is present" );
+		equal( $( "form#test input#foo" ).length, 1, "form#test contains input#foo" );
+		ok( $( "input#foo" ).attr( "required" ), "input#foo has @required" );
+		equal( $( "input#foo" ).val(), "", "input#foo has no value" );
+
+	});
+
+
+	module( "invalid events" );
+
+	test( "invalid thrown for @required", function() {
+		expect(2)
+
+		var handler = function( event ) {
+			ok( true, "invalid handler was triggered" );
+			equals( event.target, $( "#foo" )[0], "invalid event thrown by #foo" );
+		};
+
+		$( "#foo" ).bind( "invalid", handler );
+
+		userInitiatedSubmit();
+	});
+
+	// how many invalid events expected for a set of radio buttons?
+
+
+// --></script>
+
+
+</body>
+</html>
