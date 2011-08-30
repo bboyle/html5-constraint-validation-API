@@ -6,6 +6,7 @@
 
 	<!-- set global properties for this build -->
 	<property name="source.dir" location="src"/>
+	<property name="lib.dir" location="lib"/>
 	<property name="build.dir" location="build"/>
 	<property name="log.dir" location="logs"/>
 
