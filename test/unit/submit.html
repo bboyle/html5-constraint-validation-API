@@ -77,12 +77,12 @@
 
 	test( "required fields are in test form", function() {
 
-		equal( $( "#submitted" ).length, 1, "span#submitted is present" );
-		equal( $( "#submitted" ).text(), "The form has been submitted 0 times.", "submit counter is 0" );
-		equal( $( "form#test" ).length, 1, "form#test is present" );
-		equal( $( "form#test input#foo" ).length, 1, "form#test contains input#foo" );
+		strictEqual( $( "#submitted" ).length, 1, "span#submitted is present" );
+		strictEqual( $( "#submitted" ).text(), "The form has been submitted 0 times.", "submit counter is 0" );
+		strictEqual( $( "form#test" ).length, 1, "form#test is present" );
+		strictEqual( $( "form#test input#foo" ).length, 1, "form#test contains input#foo" );
 		ok( $( "input#foo" ).attr( "required" ), "input#foo has @required" );
-		equal( $( "input#foo" ).val(), "", "input#foo has @required" );
+		strictEqual( $( "input#foo" ).val(), "", "input#foo has @required" );
 
 	});
 
@@ -97,22 +97,22 @@
 		$( "#foo" ).val( "foo" );
 
 		form.trigger( "submit" );
-		equal( $( "#submitted" ).text(), "The form has been submitted 1 times.", "submit counter is 1" );
+		strictEqual( $( "#submitted" ).text(), "The form has been submitted 1 times.", "submit counter is 1" );
 
 		form.find( ":submit" )[0].click();
-		equal( $( "#submitted" ).text(), "The form has been submitted 2 times.", "submit counter is 2" );
+		strictEqual( $( "#submitted" ).text(), "The form has been submitted 2 times.", "submit counter is 2" );
 
 	});
 
 	test( "submit suppressed by invalid fields", function() {
 
-		equal( $( "#submitted" ).text(), "The form has been submitted 2 times.", "submit counter is 2 before submit attempt" );
+		strictEqual( $( "#submitted" ).text(), "The form has been submitted 2 times.", "submit counter is 2 before submit attempt" );
 
 		// make foo invalid
 		$( "#foo" ).val( "" );
 
 		$( "#test :submit" )[0].click();
-		equal( $( "#submitted" ).text(), "The form has been submitted 2 times.", "submit counter is 2 after submit attempt" );
+		strictEqual( $( "#submitted" ).text(), "The form has been submitted 2 times.", "submit counter is 2 after submit attempt" );
 		
 	});
 
