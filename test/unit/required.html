@@ -118,18 +118,18 @@
 
 	test( "required fields are in test form", function() {
 
-		equal( $( "form#test" ).length, 1, "form#test is present" );
-		equal( $( "form#test input#foo" ).length, 1, "form#test contains input#foo" );
-		equal( $( "form#test select#select-foo" ).length, 1, "form#test contains select#select-foo" );
-		equal( $( "form#test :radio[name=radioFoo]" ).length, 5, "form#test contains 5 radio buttons in radioFoo group" );
-		equal( $( "form#test textarea#textarea-foo" ).length, 1, "form#test contains textarea#textarea-foo" );
+		strictEqual( $( "form#test" ).length, 1, "form#test is present" );
+		strictEqual( $( "form#test input#foo" ).length, 1, "form#test contains input#foo" );
+		strictEqual( $( "form#test select#select-foo" ).length, 1, "form#test contains select#select-foo" );
+		strictEqual( $( "form#test :radio[name=radioFoo]" ).length, 5, "form#test contains 5 radio buttons in radioFoo group" );
+		strictEqual( $( "form#test textarea#textarea-foo" ).length, 1, "form#test contains textarea#textarea-foo" );
 
 	});
 
 	test( "required fields are present", function() {
 
-		equal( $( "[required]" )[0], $( "input#foo" )[0], "input#foo is the first required field" );
-		equal( $( "[required]" )[1], $( "select#select-foo" )[0], "select#select-foo is the second required field" );
+		strictEqual( $( "[required]" )[0], $( "input#foo" )[0], "input#foo is the first required field" );
+		strictEqual( $( "[required]" )[1], $( "select#select-foo" )[0], "select#select-foo is the second required field" );
 
 	});
 
@@ -160,7 +160,7 @@
 		$( "form#test :radio" ).each(function() {
 			this.checked = false;
 		});
-		equal( $( "form#test :radio[checked]" ).length, 0, "form#test radio buttons should not be checked" );
+		strictEqual( $( "form#test :radio[checked]" ).length, 0, "form#test radio buttons should not be checked" );
 
 	});
 
@@ -172,9 +172,9 @@
 		$( "#foo" ).val( "" );
 		$( "#test" )[0].submit();
 
-		equal( typeof $( "#foo")[0].validity, "object", "validityState is present" );
-		equal( typeof $( "#foo")[0].validity.valueMissing, "boolean", "validityState.valueMissing is present" );
-		equal( typeof $( "#foo")[0].validity.valid, "boolean", "validityState.valueMissing is present" );
+		strictEqual( typeof $( "#foo")[0].validity, "object", "validityState is present" );
+		strictEqual( typeof $( "#foo")[0].validity.valueMissing, "boolean", "validityState.valueMissing is present" );
+		strictEqual( typeof $( "#foo")[0].validity.valid, "boolean", "validityState.valueMissing is present" );
 
 	});
 
@@ -182,14 +182,14 @@
 		
 		$( "#foo" ).val( "" );
 		$( "#test" ).submit();
-		equal( $( "#foo" )[0].validity.valueMissing, true, "#foo[value=\"\"] validity.valueMissing should be true" );
+		strictEqual( $( "#foo" )[0].validity.valueMissing, true, "#foo[value=\"\"] validity.valueMissing should be true" );
 
 		// test blank values
 		$.each( [null, undefined], function( index, element ) {
 
 			$( "#foo" ).val( element );
 			$( "#test" ).submit();
-			equal( $( "#foo" )[0].validity.valueMissing, true, "#foo[value=\"" + element + "\"] validity.valueMissing should be true" );
+			strictEqual( $( "#foo" )[0].validity.valueMissing, true, "#foo[value=\"" + element + "\"] validity.valueMissing should be true" );
 
 		});
 
@@ -199,7 +199,7 @@
 		
 		$( "#foo" ).val( "" );
 		$( "#test" ).submit();
-		equal( $( "#foo" )[0].validity.valid, false, "#foo[value=\"\"] validity.valid should be false" );
+		strictEqual( $( "#foo" )[0].validity.valid, false, "#foo[value=\"\"] validity.valid should be false" );
 
 	});
 
@@ -207,14 +207,14 @@
 		
 		$( "#foo" ).val( "foo" );
 		$( "#test" ).submit();
-		equal( $( "#foo" )[0].validity.valueMissing, false, "#foo[value=\"foo\"] validity.valueMissing should be false" );
+		strictEqual( $( "#foo" )[0].validity.valueMissing, false, "#foo[value=\"foo\"] validity.valueMissing should be false" );
 
 		// test "falsey" values
 		$.each( ["0", 0, '""', "null", "undefined"], function( index, element ){
 
 			$( "#foo" ).val( element );
 			$( "#test" ).submit();
-			equal( $( "#foo" )[0].validity.valueMissing, false, "#foo[value=\"" + element + "\"] validity.valueMissing should be false" );
+			strictEqual( $( "#foo" )[0].validity.valueMissing, false, "#foo[value=\"" + element + "\"] validity.valueMissing should be false" );
 
 		});
 
@@ -227,7 +227,7 @@
 		
 		$( "#select-foo" ).find( "option[value='']" ).attr( "selected", "selected" );
 		$( "#test" ).submit();
-		equal( $( "#select-foo" )[0].validity.valueMissing, true, "#select-foo validity.valueMissing should be true" );
+		strictEqual( $( "#select-foo" )[0].validity.valueMissing, true, "#select-foo validity.valueMissing should be true" );
 
 	});
 
@@ -235,7 +235,7 @@
 		
 		$( "#select-foo" ).find( "option[value='']" ).attr( "selected", "selected" );
 		$( "#test" ).submit();
-		equal( $( "#select-foo" )[0].validity.valid, false, "#select-foo validity.valid should be false" );
+		strictEqual( $( "#select-foo" )[0].validity.valid, false, "#select-foo validity.valid should be false" );
 
 	});
 
@@ -244,7 +244,7 @@
 		
 		$( "#select-foo" ).find( "option[value=foo]" ).attr( "selected", "selected" );
 		$( "#test" ).submit();
-		equal( $( "#select-foo" )[0].validity.valueMissing, false, "#select-foo validity.valueMissing should be false" );
+		strictEqual( $( "#select-foo" )[0].validity.valueMissing, false, "#select-foo validity.valueMissing should be false" );
 
 	});
 
@@ -255,7 +255,7 @@
 		
 		$( "#test" ).submit();
 		$( "#test :radio[name=radioFoo]" ).each(function() {
-			equal( this.validity.valueMissing, true, "#" + this.id + " validity.valueMissing should be true" );		
+			strictEqual( this.validity.valueMissing, true, "#" + this.id + " validity.valueMissing should be true" );		
 		});
 
 	});
@@ -264,7 +264,7 @@
 		
 		$( "#test" ).submit();
 		$( "#test :radio[name=radioFoo]" ).each(function() {
-			equal( this.validity.valid, false, "#" + this.id + " validity.valid should be false" );		
+			strictEqual( this.validity.valid, false, "#" + this.id + " validity.valid should be false" );		
 		});
 
 	});
@@ -274,14 +274,14 @@
 		$( "#radio-foo-foo" ).attr( "checked", "checked" );
 		$( "#test" ).submit();
 		$( "#test :radio[name=radioFoo]" ).each(function() {
-			equal( this.validity.valueMissing, false, "#" + this.id + " validity.valueMissing should be false" );		
+			strictEqual( this.validity.valueMissing, false, "#" + this.id + " validity.valueMissing should be false" );		
 		});
 
 		// test value=""
 		$( "#radio-foo-BLANK" ).attr( "checked", "checked" );
 		$( "#test" ).submit();
 		$( "#test :radio[name=radioFoo]" ).each(function() {
-			equal( this.validity.valueMissing, false, "#" + this.id + " validity.valueMissing should be false" );		
+			strictEqual( this.validity.valueMissing, false, "#" + this.id + " validity.valueMissing should be false" );		
 		});
 
 	});
@@ -293,7 +293,7 @@
 		
 		$( "#textarea-foo" ).val( "" );
 		$( "#test" ).submit();
-		equal( $( "#textarea-foo" )[0].validity.valueMissing, true, "#textarea-foo validity.valueMissing should be true" );
+		strictEqual( $( "#textarea-foo" )[0].validity.valueMissing, true, "#textarea-foo validity.valueMissing should be true" );
 
 	});
 
@@ -301,7 +301,7 @@
 		
 		$( "#textarea-foo" ).val( "" );
 		$( "#test" ).submit();
-		equal( $( "#textarea-foo" )[0].validity.valid, false, "#textarea-foo validity.valid should be false" );
+		strictEqual( $( "#textarea-foo" )[0].validity.valid, false, "#textarea-foo validity.valid should be false" );
 
 	});
 
@@ -310,7 +310,7 @@
 		
 		$( "#textarea-foo" ).val( "foo" );
 		$( "#test" ).submit();
-		equal( $( "#textarea-foo" )[0].validity.valueMissing, false, "#textarea-foo validity.valueMissing should be false" );
+		strictEqual( $( "#textarea-foo" )[0].validity.valueMissing, false, "#textarea-foo validity.valueMissing should be false" );
 
 	});
 

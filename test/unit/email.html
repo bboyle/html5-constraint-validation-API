@@ -72,16 +72,16 @@
 
 	test( "email fields are in test form", function() {
 
-		equal( $( "form#test" ).length, 1, "form#test is present" );
-		equal( $( "form#test input#foo" ).length, 1, "form#test contains input#foo" );
-		equal( $( "form#test input#email" ).length, 1, "form#test contains input#email" );
+		strictEqual( $( "form#test" ).length, 1, "form#test is present" );
+		strictEqual( $( "form#test input#foo" ).length, 1, "form#test contains input#foo" );
+		strictEqual( $( "form#test input#email" ).length, 1, "form#test contains input#email" );
 
 	});
 
 	test( "email fields are type email", function() {
 
-		equal( $( "#foo" )[0].type, "text", "input#foo is type text" );
-		equal( $( "#email" )[0].getAttribute( "type" ), "email", "input#email is type email" );
+		strictEqual( $( "#foo" )[0].type, "text", "input#foo is type text" );
+		strictEqual( $( "#email" )[0].getAttribute( "type" ), "email", "input#email is type email" );
 
 	});
 
@@ -103,9 +103,9 @@
 		
 		$( "#email,#foo" ).val( "" );
 		$( "#test" ).submit();
-		equal( $( "#email" )[0].validity.typeMismatch, false, "#email[value=\"\"] validity.typeMismatch should be false" );
-		equal( $( "#email" )[0].validity.valid, true, "#email[value=\"\"] validity.valid should be true" );
-		equal( $( "#foo" )[0].validity.typeMismatch, false, "#foo[value=\"\"] validity.typeMismatch should be false" );
+		strictEqual( $( "#email" )[0].validity.typeMismatch, false, "#email[value=\"\"] validity.typeMismatch should be false" );
+		strictEqual( $( "#email" )[0].validity.valid, true, "#email[value=\"\"] validity.valid should be true" );
+		strictEqual( $( "#foo" )[0].validity.typeMismatch, false, "#foo[value=\"\"] validity.typeMismatch should be false" );
 
 	});
 
@@ -113,9 +113,9 @@
 		
 		$( "#email,#foo" ).val( "foo" );
 		$( "#test" ).submit();
-		equal( $( "#email" )[0].validity.typeMismatch, true, "#email[value=\"foo\"] validity.typeMismatch should be true" );
-		equal( $( "#email" )[0].validity.valid, false, "#email[value=\"\"] validity.valid should be false" );
-		equal( $( "#foo" )[0].validity.typeMismatch, false, "#foo[value=\"foo\"] validity.typeMismatch should be false" );
+		strictEqual( $( "#email" )[0].validity.typeMismatch, true, "#email[value=\"foo\"] validity.typeMismatch should be true" );
+		strictEqual( $( "#email" )[0].validity.valid, false, "#email[value=\"\"] validity.valid should be false" );
+		strictEqual( $( "#foo" )[0].validity.typeMismatch, false, "#foo[value=\"foo\"] validity.typeMismatch should be false" );
 
 	});
 
@@ -124,9 +124,9 @@
 		
 		$( "#email,#foo" ).val( "foo@example.com" );
 		$( "#test" ).submit();
-		equal( $( "#email" )[0].validity.typeMismatch, false, "#email[value=\"foo@example.com\"] validity.typeMismatch should be false" );
-		equal( $( "#email" )[0].validity.valid, true, "#email[value=\"\"] validity.valid should be true" );
-		equal( $( "#foo" )[0].validity.typeMismatch, false, "#foo[value=\"foo@example.com\"] validity.typeMismatch should be false" );
+		strictEqual( $( "#email" )[0].validity.typeMismatch, false, "#email[value=\"foo@example.com\"] validity.typeMismatch should be false" );
+		strictEqual( $( "#email" )[0].validity.valid, true, "#email[value=\"\"] validity.valid should be true" );
+		strictEqual( $( "#foo" )[0].validity.typeMismatch, false, "#foo[value=\"foo@example.com\"] validity.typeMismatch should be false" );
 
 	});
 
