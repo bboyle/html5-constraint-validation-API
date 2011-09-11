@@ -9,21 +9,6 @@ if ( jQuery !== "undefined" ) {
 (function( $ ){
 	"use strict";
 
-	// where one radio button is required, ensure all are required
-	// this ensures each one in the group reports the same .validity.valueMissing properties
-	(function() {
-		var names = {};
-
-		$( ":radio[required]" ).each(function() {
-
-			if ( names[ this.name ] !== true ) {
-				$( ":radio[name=" + this.name + "]" ).attr( "required", "required" );
-				names[ this.name ] = true;
-			}
-
-		});
-	}());
-
 
 	// INPUT validity API not implemented in browser
 	if ( typeof $( "<input>" )[0].validity !== "object" ) {
@@ -51,7 +36,12 @@ if ( jQuery !== "undefined" ) {
 		// check for blank required fields on submit
 		$( "form" ).live( "submit", function( event ) {
 
-			var form = $( this );
+			var form = $( this ),
+				invalidEvent = $.Event( "invalid" )
+			;
+
+			// invalid events do not bubble
+			invalidEvent.stopImmediatePropagation();
 
 			// check required fields
 			form.find( ":text, select, textarea" ).each(function() {
@@ -67,7 +57,7 @@ if ( jQuery !== "undefined" ) {
 
 				if ( !this.validity.valid ) {
 					// invalid event
-					$this.trigger( $.Event( "invalid" ));
+					$this.trigger( invalidEvent );
 				}
 
 			});
@@ -89,6 +79,12 @@ if ( jQuery !== "undefined" ) {
 						});
 
 						names[ this.name ] = true;
+
+						// TODO research "invalid" events for radio buttons for correct emulation
+						// are events thrown for each button or once for the group?
+						if ( isBlank === true ) {
+							$( this ).trigger( invalidEvent );
+						}
 					}
 				});
 
