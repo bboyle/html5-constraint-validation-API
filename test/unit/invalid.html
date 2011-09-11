@@ -4,6 +4,9 @@
 	<meta charset="UTF-8" />
 	<title>invalid tests · forces Constraint Validation API tests</title>
 
+	<link rel="stylesheet" href="../../lib/qunit-git.css" />
+	<script src="../../lib/qunit-git.js"></script>
+
 	<style>
 		body {
 			padding: 2em;
@@ -11,40 +14,15 @@
 			background: #faf7f3;
 			color: #111;
 		}
+
+		#qunit-fixture {
+			position: static;
+		}
 	</style>
-	<link rel="stylesheet" href="../../lib/qunit-git.css">
-	<script src="../../lib/qunit-git.js"></script>
 
 </head>
 
 <body>
-
-
-<form id="test" action="javascript:">
-
-	<ol class="questions">
-
-		<li>
-			<label for="foo">
-				<span class="label">Foo</span>
-				<abbr title="(required)">*</abbr>
-			</label>
-			<input type="text" name="foo" id="foo" value="" required="required" />
-		</li>
-
-		<li class="footer">
-			<ol class="submit">
-				<li>
-					<strong>
-						<input type="submit" value="Submit" />
-					</strong>
-				</li>
-			</ol>
-		</li>
-
-	</ol>
-
-</form>
 
 
 <div id="qunit">
@@ -53,7 +31,37 @@
 	<div id="qunit-testrunner-toolbar"></div>
 	<h2 id="qunit-userAgent"></h2>
 	<ol id="qunit-tests"></ol>
-	<div id="qunit-fixture">test markup, will be hidden</div>
+	<div id="qunit-fixture">
+
+
+		<form id="test" action="javascript:">
+
+			<ol class="questions">
+
+				<li>
+					<label for="foo">
+						<span class="label">Foo</span>
+						<abbr title="(required)">*</abbr>
+					</label>
+					<input type="text" name="foo" id="foo" value="" required="required" />
+				</li>
+
+				<li class="footer">
+					<ol class="submit">
+						<li>
+							<strong>
+								<input type="submit" value="Submit" />
+							</strong>
+						</li>
+					</ol>
+				</li>
+
+			</ol>
+
+		</form>
+
+
+	</div>
 </div>
 
 
@@ -84,10 +92,22 @@
 
 		var handler = function( event ) {
 			ok( true, "invalid handler was triggered" );
-			equals( event.target, $( "#foo" )[0], "invalid event thrown by #foo" );
+			strictEqual( event.target, $( "#foo" )[0], "invalid event thrown by #foo" );
 		};
 
 		$( "#foo" ).bind( "invalid", handler );
+
+		userInitiatedSubmit();
+	});
+
+	test( "invalid can be captured on form", 2, function() {
+
+		var handler = function( event ) {
+			ok( true, "invalid handler was triggered" );
+			strictEqual( event.target, $( "#foo" )[0], "invalid event thrown by #foo, captured on form" );
+		};
+
+		$( "form" ).bind( "invalid", handler );
 
 		userInitiatedSubmit();
 	});
