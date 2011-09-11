@@ -49,7 +49,7 @@ if ( jQuery !== "undefined" ) {
 
 
 		// check for blank required fields on submit
-		$( "form" ).live( "submit", function( event ) {
+		$( "form" ).live( "submit", function() {
 
 			var form = $( this );
 

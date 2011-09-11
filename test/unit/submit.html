@@ -4,6 +4,9 @@
 	<meta charset="UTF-8" />
 	<title>submit tests · forces Constraint Validation API tests</title>
 
+	<link rel="stylesheet" href="../../lib/qunit-git.css">
+	<script src="../../lib/qunit-git.js"></script>
+
 	<style>
 		body {
 			padding: 2em;
@@ -11,9 +14,11 @@
 			background: #faf7f3;
 			color: #111;
 		}
+
+		#qunit-fixture {
+			position: static;
+		}
 	</style>
-	<link rel="stylesheet" href="../../lib/qunit-git.css">
-	<script src="../../lib/qunit-git.js"></script>
 
 </head>
 
@@ -84,7 +89,7 @@
 		var form = $( "#test" );
 
 		var submitDetection = function() {
-			ok( true, "submit event detected" );	
+			ok( true, "counting submit event" );	
 		};
 
 		form.live( "submit", submitDetection );
@@ -103,7 +108,7 @@
 	test( "submit suppressed by invalid fields", 1, function() {
 
 		var submitDetection = function() {
-			ok( true, "submit event detected" );	
+			ok( true, "submit event was not suppressed" );	
 		};
 
 		$( "#test" ).live( "submit", submitDetection );
