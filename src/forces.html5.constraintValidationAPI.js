@@ -34,7 +34,7 @@ if ( jQuery !== "undefined" ) {
 
 
 		// check for blank required fields on submit
-		$( "form" ).live( "submit", function( event ) {
+		$( "form" ).live( "submit", function() {
 
 			var form = $( this ),
 				invalidEvent = $.Event( "invalid" )
@@ -90,17 +90,23 @@ if ( jQuery !== "undefined" ) {
 
 			}());
 
-			// suppress submit if invalid fields exist
-			if ( invalidCount > 0 ) {
-				
-				event.stopImmediatePropagation();
-				event.preventDefault();
-				return false;
-			}
-
 		});
 
 	}
+
+
+	// suppress submit if invalid fields exist
+	// required for Opera 11.5 on OSX
+	$( "form" ).live( "submit", function( event ) {
+		if ( $( this ).find( "input, select, textarea" ).filter(function() {
+			return this.validity && ! this.validity.valid;
+		}).length > 0 ) {
+			
+			event.stopImmediatePropagation();
+			event.preventDefault();
+			return false;
+		}
+	});
 
 
 }( jQuery ));
