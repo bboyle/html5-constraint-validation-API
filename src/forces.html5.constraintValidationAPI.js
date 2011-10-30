@@ -10,28 +10,36 @@ if ( jQuery !== 'undefined' ) {
 	'use strict';
 
 
+	// http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#valid-e-mail-address
+	// 1*( atext / "." ) "@" ldh-str 1*( "." ldh-str )
+	var REXP_EMAIL = /^[A-Za-z0-9!#$%&'*+\-\/=\?\^_`\{\|\}~\.]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+$/,
+
+		input = $( '<input>' ),
+
+		// TODO abstract this, maybe into .checkValidity (without event trigger)
+		// so that it also sets .validationMessage and .willValidate
+		validityState = function( typeMismatch, valueMissing, customError ) {
+			var valid = ! typeMismatch && ! valueMissing && ! customError;
+			return {
+				customError: !! customError,
+				typeMismatch: !! typeMismatch,
+				valueMissing: !! valueMissing,
+				valid: valid
+			};
+		}
+	;
+
+
+	// INPUT setCustomValidity
+	if ( typeof input[0].setCustomValidity !== 'function' ) {
+		HTMLInputElement.prototype.setCustomValidity = function( message ) {
+			this.validity = validityState( false, false, message );
+		};
+	}
+
+
 	// INPUT validity API not implemented in browser
-	if ( typeof $( '<input>' )[0].validity !== 'object' ) {
-
-		// http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#valid-e-mail-address
-		// 1*( atext / "." ) "@" ldh-str 1*( "." ldh-str )
-		var REXP_EMAIL = /^[A-Za-z0-9!#$%&'*+\-\/=\?\^_`\{\|\}~\.]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+$/,
-
-			invalidCount = 0,
-
-			validityState = function( typeMismatch, valueMissing ) {
-				var valid = ! typeMismatch && ! valueMissing;
-				if ( valid === false ) {
-					invalidCount = invalidCount + 1;
-				}
-				return {
-					typeMismatch: typeMismatch,
-					valueMissing: valueMissing,
-					valid: valid
-				};
-			}
-		;
-
+	if ( typeof input[0].validity !== 'object' ) {
 
 		// check for blank required fields on submit
 		$( 'form' ).live( 'submit', function() {
