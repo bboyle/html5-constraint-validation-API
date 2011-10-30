@@ -95,7 +95,7 @@
 
 	test( 'validity.typeMismatch is false when blank', function() {
 		
-		$( '#foo' ).setCustomValidity( 'foo' );
+		$( '#foo' )[0].setCustomValidity( 'foo' );
 		$( '#test' ).submit();
 		strictEqual( $( '#foo' )[0].validity.customError, true, '#foo validity.customError should be true' );
 		strictEqual( $( '#email' )[0].validity.customError, false, '#email validity.customError should be false' );
