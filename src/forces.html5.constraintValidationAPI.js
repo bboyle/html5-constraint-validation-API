@@ -5,13 +5,13 @@
 
 */
 
-if ( jQuery !== "undefined" ) {
+if ( jQuery !== 'undefined' ) {
 (function( $ ){
-	"use strict";
+	'use strict';
 
 
 	// INPUT validity API not implemented in browser
-	if ( typeof $( "<input>" )[0].validity !== "object" ) {
+	if ( typeof $( '<input>' )[0].validity !== 'object' ) {
 
 		// http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#valid-e-mail-address
 		// 1*( atext / "." ) "@" ldh-str 1*( "." ldh-str )
@@ -34,23 +34,23 @@ if ( jQuery !== "undefined" ) {
 
 
 		// check for blank required fields on submit
-		$( "form" ).live( "submit", function() {
+		$( 'form' ).live( 'submit', function() {
 
 			var form = $( this ),
-				invalidEvent = $.Event( "invalid" )
+				invalidEvent = $.Event( 'invalid' )
 			;
 
 			// invalid events do not bubble
 			invalidEvent.stopImmediatePropagation();
 
 			// check required fields
-			form.find( ":text, select, textarea" ).each(function() {
+			form.find( ':text, select, textarea' ).each(function() {
 
 				var $this = $( this ),
 
-					isBlank = $this.attr( "required" ) && ! this.value,
+					isBlank = $this.attr( 'required' ) && ! this.value,
 
-					invalidEmail = this.getAttribute( "type" ) === "email" && !! this.value && ! REXP_EMAIL.test( this.value )
+					invalidEmail = this.getAttribute( 'type' ) === 'email' && !! this.value && ! REXP_EMAIL.test( this.value )
 				;
 
 				this.validity = validityState( invalidEmail, isBlank );
@@ -67,12 +67,12 @@ if ( jQuery !== "undefined" ) {
 				
 				var names = {};
 
-				form.find( ":radio[required]" ).each(function() {
+				form.find( ':radio[required]' ).each(function() {
 
 					if ( names[ this.name ] !== true ) {
 						
-						var group = form.find( ":radio[name=" + this.name + "]" ),
-							isBlank = group.filter( ":checked" ).length === 0;
+						var group = form.find( ':radio[name=' + this.name + ']' ),
+							isBlank = group.filter( ':checked' ).length === 0;
 
 						group.each(function() {
 							this.validity = validityState( false, isBlank );
@@ -97,8 +97,8 @@ if ( jQuery !== "undefined" ) {
 
 	// suppress submit if invalid fields exist
 	// required for Opera 11.5 on OSX
-	$( "form" ).live( "submit", function( event ) {
-		if ( $( this ).find( "input, select, textarea" ).filter(function() {
+	$( 'form' ).live( 'submit', function( event ) {
+		if ( $( this ).find( 'input, select, textarea' ).filter(function() {
 			return this.validity && ! this.validity.valid;
 		}).length > 0 ) {
 			
