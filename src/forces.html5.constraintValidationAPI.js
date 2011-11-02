@@ -18,10 +18,11 @@ if ( jQuery !== 'undefined' ) {
 
 		// TODO abstract this, maybe into .checkValidity (without event trigger)
 		// so that it also sets .validationMessage and .willValidate
-		validityState = function( typeMismatch, valueMissing, customError ) {
-			var valid = ! typeMismatch && ! valueMissing && ! customError;
+		validityState = function( typeMismatch, valueMissing, message ) {
+			var customError = !! message,
+				valid = ! typeMismatch && ! valueMissing && ! customError;
 			return {
-				customError: !! customError,
+				customError: customError,
 				typeMismatch: !! typeMismatch,
 				valueMissing: !! valueMissing,
 				valid: valid
@@ -32,9 +33,16 @@ if ( jQuery !== 'undefined' ) {
 
 	// INPUT setCustomValidity
 	if ( typeof input[0].setCustomValidity !== 'function' ) {
-		HTMLInputElement.prototype.setCustomValidity = function( message ) {
-			this.validity = validityState( false, false, message );
-		};
+		// set initial validity
+		$( 'input' ).each(function() {
+			var that = this;
+
+			that.validity = validityState( false, false, '' );
+
+			that.setCustomValidity = function( message ) {
+				that.validity = validityState( false, false, message );
+			};
+		});
 	}
 
 
