@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+	<meta charset="UTF-8" />
+	<title>@novalidate tests · forces Constraint Validation API tests</title>
+
+	<link rel="stylesheet" href="../lib/qunit-git.css" />
+	<script src="../lib/qunit-git.js"></script>
+
+	<style>
+		body {
+			padding: 2em;
+			font-family: sans-serif;
+			background: #faf7f3;
+			color: #111;
+		}
+
+		#qunit-fixture {
+			position: static;
+		}
+	</style>
+
+</head>
+
+<body>
+
+
+<div id="qunit">
+	<h1 id="qunit-header">QUnit</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">
+
+
+		<form id="test" action="javascript:" novalidate="novalidate">
+
+			<ol class="questions">
+
+				<li>
+					<label for="foo">
+						<span class="label">Foo</span>
+						<abbr title="(required)">*</abbr>
+					</label>
+					<input type="text" name="foo" id="foo" value="" required="required" />
+				</li>
+
+				<li class="footer">
+					<ol class="submit">
+						<li>
+							<strong>
+								<input type="submit" value="Submit" />
+							</strong>
+						</li>
+					</ol>
+				</li>
+
+			</ol>
+
+		</form>
+
+
+	</div>
+</div>
+
+
+<script src="../lib/jquery-1.4.4-min.js"></script>
+<script src="../src/forces.html5.constraintValidationAPI.js"></script>
+
+<script><!-- //
+
+	var	userInitiatedSubmit = function() {
+		$( '#test :submit' )[0].click();
+	};
+
+	module( 'environment' );
+
+	test( 'required fields are in test form', 5, function() {
+
+		strictEqual( $( 'form#test' ).length, 1, 'form#test is present' );
+		ok( $( 'form#test' ).attr( 'novalidate' ), 'form#test has @novalidate' );
+		strictEqual( $( 'form#test input#foo' ).length, 1, 'form#test contains input#foo' );
+		ok( $( 'input#foo' ).attr( 'required' ), 'input#foo has @required' );
+		strictEqual( $( 'input#foo' ).val(), '', 'input#foo has no value' );
+
+	});
+
+
+	module( 'invalid events' );
+
+	test( 'invalid not thrown on submit', 1, function() {
+
+		var handler = function( event ) {
+			ok( true, 'invalid handler should not be triggered' );
+			strictEqual( event.target, $( '#foo' )[0], 'invalid event detected on #foo' );
+		};
+
+		$( '#foo' ).bind( 'invalid', handler );
+
+		userInitiatedSubmit();
+
+		ok( true, 'invalid event not seen' );
+	});
+
+
+// --></script>
+
+
+</body>
+</html>
