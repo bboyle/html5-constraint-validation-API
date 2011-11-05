@@ -10,28 +10,74 @@ if ( jQuery !== 'undefined' ) {
 	'use strict';
 
 
-	// INPUT validity API not implemented in browser
-	if ( typeof $( '<input>' )[0].validity !== 'object' ) {
+	// http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#valid-e-mail-address
+	// 1*( atext / "." ) "@" ldh-str 1*( "." ldh-str )
+	var REXP_EMAIL = /^[A-Za-z0-9!#$%&'*+\-\/=\?\^_`\{\|\}~\.]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+$/,
 
-		// http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#valid-e-mail-address
-		// 1*( atext / "." ) "@" ldh-str 1*( "." ldh-str )
-		var REXP_EMAIL = /^[A-Za-z0-9!#$%&'*+\-\/=\?\^_`\{\|\}~\.]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+$/,
+		input = $( '<input>' ),
 
-			invalidCount = 0,
+		// TODO abstract this, maybe into .checkValidity (without event trigger)
+		// so that it also sets .validationMessage and .willValidate
+		validityState = function( typeMismatch, valueMissing, message ) {
+			var customError = !! message,
+				valid = ! typeMismatch && ! valueMissing && ! customError;
+			return {
+				customError: customError,
+				typeMismatch: !! typeMismatch,
+				valueMissing: !! valueMissing,
+				valid: valid
+			};
+		},
 
-			validityState = function( typeMismatch, valueMissing ) {
-				var valid = ! typeMismatch && ! valueMissing;
-				if ( valid === false ) {
-					invalidCount = invalidCount + 1;
-				}
-				return {
-					typeMismatch: typeMismatch,
-					valueMissing: valueMissing,
-					valid: valid
-				};
+		checkValidity = function( message ) {
+
+			var validity;
+
+			// set .validityState
+			// TODO don't always pass false, false!
+			this.validity = validityState( this.validity.typeMismatch, this.validity.valueMissing, message );
+			
+			// get validity state
+			validity = this.validity;
+
+			// set .validationMessage
+			if ( validity.valid ) {
+				this.validationMessage = '';
+
+			} else if ( validity.customError ) {
+				this.validationMessage = message;
+
+			} else if ( validity.valueMissing ) {
+				this.validationMessage = 'Please answer this question';
+
+			} else if ( validity.typeMismatch ) {
+				this.validationMessage = 'Please type an email address';
 			}
-		;
 
+			return validity.valid;
+		}
+	;
+
+
+	// INPUT setCustomValidity
+	if ( typeof input[ 0 ].setCustomValidity !== 'function' ) {
+		// set initial validity
+		$( 'input' ).each(function() {
+			var that = this;
+
+			this.validity = validityState( false, false, '' );
+			this.validationMessage = '';
+
+			this.setCustomValidity = function( message ) {
+				checkValidity.call( that, message );
+			};
+
+		});
+	}
+
+
+	// INPUT validity API not implemented in browser
+	if ( typeof input[ 0 ].validity !== 'object' ) {
 
 		// check for blank required fields on submit
 		// TODO perform ALL validation (helps pickup autofilled entries that did not trigger change)
