@@ -32,22 +32,26 @@ if ( jQuery !== 'undefined' ) {
 
 
 	// INPUT setCustomValidity
-	if ( typeof input[0].setCustomValidity !== 'function' ) {
+	if ( typeof input[ 0 ].setCustomValidity !== 'function' ) {
 		// set initial validity
 		$( 'input' ).each(function() {
 			var that = this;
 
 			that.validity = validityState( false, false, '' );
+			that.validationMessage = '';
 
 			that.setCustomValidity = function( message ) {
 				that.validity = validityState( false, false, message );
+				// what if there is an underlying error?
+				that.validationMessage = message;
 			};
+
 		});
 	}
 
 
 	// INPUT validity API not implemented in browser
-	if ( typeof input[0].validity !== 'object' ) {
+	if ( typeof input[ 0 ].validity !== 'object' ) {
 
 		// check for blank required fields on submit
 		// TODO perform ALL validation (helps pickup autofilled entries that did not trigger change)

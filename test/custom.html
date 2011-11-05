@@ -93,14 +93,68 @@
 
 	module( 'input validityState customError' );
 
-	test( 'validity.typeMismatch is false when blank', function() {
+	test( 'validity.customError', function() {
 		
-		$( '#foo' )[0].setCustomValidity( 'foo' );
+		$( '#foo' )[ 0 ].setCustomValidity( 'foo' );
 
-		strictEqual( $( '#foo' )[0].validity.customError, true, '#foo validity.customError should be true' );
-		strictEqual( $( '#email' )[0].validity.customError, false, '#email validity.customError should be false' );
+		strictEqual( $( '#foo' )[ 0 ].validity.customError, true, '#foo validity.customError should be true' );
+		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo validity.valid should be false' );
+		strictEqual( $( '#email' )[ 0 ].validity.customError, false, '#email validity.customError should be false' );
 
 	});
+
+	test( 'setCustomValidity() from change event', function() {
+		
+		// must be @example.com
+		$( '#email' ).bind( 'change', function() {
+			var inDomain = /@example\.com/.test( this.value ),
+				customError = inDomain ? '' : 'Must be an @example.com email address'
+			;
+
+			this.setCustomValidity( customError );
+		});
+
+		$( '#email' ).val( 'foo@bar.com' ).trigger( 'change' );
+		strictEqual( $( '#email' )[ 0 ].validity.customError, true, '#email validity.customError should be true' );
+
+		$( '#email' ).val( 'foo@example.com' ).trigger( 'change' );
+		strictEqual( $( '#email' )[ 0 ].validity.customError, false, '#email validity.customError should be false' );
+
+	});
+
+	test( 'can get message set with setCustomValidity()', function() {
+		
+		strictEqual( $( '#email' )[ 0 ].validationMessage, '', '#email validationMessage is initially empty' );
+
+		// must be @example.com
+		$( '#email' )[ 0 ].setCustomValidity( 'Must be an @example.com email address' );
+
+		strictEqual( $( '#email' )[ 0 ].validity.customError, true, '#email validity.customError should be true' );
+		strictEqual( $( '#email' )[ 0 ].validationMessage, 'Must be an @example.com email address', '#email validationMessage is correct' );
+
+		// remove custom error
+		$( '#email' )[ 0 ].setCustomValidity( '' );
+		strictEqual( $( '#email' )[ 0 ].validity.customError, false, '#email validity.customError should be false' );
+		strictEqual( $( '#email' )[ 0 ].validationMessage, '', '#email validationMessage is empty' );
+
+	});
+
+	//test( 'setCustomValidity() can mask other errors', function() {
+		
+		// TODO
+		// make email invalid (type error)
+		// then set a custom error
+		// which is seen?
+
+		// remove custom error
+		// is invalid email seen?
+
+		// remove value
+		// is required seen?
+
+		// need to add other tests like min/max as implemented
+
+	//});
 
 // --></script>
 
