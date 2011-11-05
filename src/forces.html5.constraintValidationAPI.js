@@ -50,9 +50,13 @@ if ( jQuery !== 'undefined' ) {
 	if ( typeof input[0].validity !== 'object' ) {
 
 		// check for blank required fields on submit
-		$( 'form' ).live( 'submit', function() {
+		// TODO perform ALL validation (helps pickup autofilled entries that did not trigger change)
+		$( 'form' ).bind( 'submit.constraintValidationAPI', function() {
 
 			var form = $( this ),
+				novalidate = !! form.attr( 'novalidate' ),
+				// TODO this event be created as needed (not shared)
+				// method for new InvalidEvent() that returns a new event with stop propagation on by default
 				invalidEvent = $.Event( 'invalid' )
 			;
 
@@ -73,7 +77,9 @@ if ( jQuery !== 'undefined' ) {
 
 				if ( !this.validity.valid ) {
 					// invalid event
-					$this.trigger( invalidEvent );
+					if ( ! novalidate ) {
+						$this.trigger( invalidEvent );
+					}
 				}
 
 			});
@@ -99,7 +105,9 @@ if ( jQuery !== 'undefined' ) {
 						// TODO research "invalid" events for radio buttons for correct emulation
 						// are events thrown for each button or once for the group?
 						if ( isBlank === true ) {
-							$( this ).trigger( invalidEvent );
+							if ( ! novalidate ) {
+								$( this ).trigger( invalidEvent );
+							}
 						}
 					}
 				});
@@ -113,6 +121,7 @@ if ( jQuery !== 'undefined' ) {
 
 	// suppress submit if invalid fields exist
 	// required for Opera 11.5 on OSX
+	// TODO need @novalidate tests for this, it should not executive is @novalidate is true
 	$( 'form' ).live( 'submit', function( event ) {
 		if ( $( this ).find( 'input, select, textarea' ).filter(function() {
 			return this.validity && ! this.validity.valid;
