@@ -27,6 +27,34 @@ if ( jQuery !== 'undefined' ) {
 				valueMissing: !! valueMissing,
 				valid: valid
 			};
+		},
+
+		checkValidity = function( message ) {
+
+			var validity;
+
+			// set .validityState
+			// TODO don't always pass false, false!
+			this.validity = validityState( this.validity.typeMismatch, this.validity.valueMissing, message );
+			
+			// get validity state
+			validity = this.validity;
+
+			// set .validationMessage
+			if ( validity.valid ) {
+				this.validationMessage = '';
+
+			} else if ( validity.customError ) {
+				this.validationMessage = message;
+
+			} else if ( validity.valueMissing ) {
+				this.validationMessage = 'Please answer this question';
+
+			} else if ( validity.typeMismatch ) {
+				this.validationMessage = 'Please type an email address';
+			}
+
+			return validity.valid;
 		}
 	;
 
@@ -37,13 +65,11 @@ if ( jQuery !== 'undefined' ) {
 		$( 'input' ).each(function() {
 			var that = this;
 
-			that.validity = validityState( false, false, '' );
-			that.validationMessage = '';
+			this.validity = validityState( false, false, '' );
+			this.validationMessage = '';
 
-			that.setCustomValidity = function( message ) {
-				that.validity = validityState( false, false, message );
-				// what if there is an underlying error?
-				that.validationMessage = message;
+			this.setCustomValidity = function( message ) {
+				checkValidity.call( that, message );
 			};
 
 		});
