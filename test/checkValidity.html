@@ -6,6 +6,7 @@
 
 	<link rel="stylesheet" href="../lib/qunit-git.css" />
 	<script src="../lib/qunit-git.js"></script>
+	<script src="qunit-helpers.js"></script>
 
 	<style>
 		body {
@@ -69,16 +70,6 @@
 
 
 <script><!-- //
-
-	var lifecycleCVAPI = {
-		setup: function() {
-			initConstraintValidationAPI();
-		},
-		teardown: function() {
-			initConstraintValidationAPI();
-		}
-	};
-
 
 	module( 'environment', lifecycleCVAPI );
 

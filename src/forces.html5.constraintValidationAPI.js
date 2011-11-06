@@ -153,31 +153,22 @@ if ( jQuery !== 'undefined' ) {
 				novalidate = !! form.attr( 'novalidate' )
 			;
 
-			// invalid events do not bubble
-			invalidEvent.stopImmediatePropagation();
+			// check fields
+			form.find( candidateForValidation ).not( ':radio' ).each(function() {
 
-			// check required fields
-			form.find( candidateForValidation ).each(function() {
-
-				var $this = $( this ),
-
-					isBlank = $this.attr( 'required' ) && ! this.value,
-
-					invalidEmail = this.getAttribute( 'type' ) === 'email' && !! this.value && ! REXP_EMAIL.test( this.value )
-				;
-
-				this.validity = validityState( invalidEmail, isBlank );
+				validateField( this );
 
 				if ( !this.validity.valid ) {
 					// invalid event
 					if ( ! novalidate ) {
-						$this.trigger( invalidEvent() );
+						$( this ).trigger( invalidEvent() );
 					}
 				}
 
 			});
 
 			// check required radio button groups
+			// TODO roll radio button handling into .checkValidity() and validateField()
 			(function() {
 				
 				var names = {};
