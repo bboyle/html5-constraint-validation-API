@@ -6,6 +6,7 @@
 
 	<link rel="stylesheet" href="../lib/qunit-git.css">
 	<script src="../lib/qunit-git.js"></script>
+	<script src="qunit-helpers.js"></script>
 
 	<style>
 		body {
@@ -15,7 +16,6 @@
 			color: #111;
 		}
 	</style>
-
 </head>
 
 <body>
@@ -66,8 +66,7 @@
 
 <script><!-- //
 
-
-	module( 'environment' );
+	module( 'environment', lifecycleCVAPI );
 
 	test( 'required fields are in test form', function() {
 
@@ -77,77 +76,72 @@
 
 	});
 
+	test( 'form submission is counted', 2, function() {
 
-	module( 'form submission' );
-
-	test( 'form submission is counted', 3, function() {
-
-		var form = $( '#test' );
-
-		var submitDetection = function() {
-			ok( true, 'counting submit event' );	
-		};
-
-		form.live( 'submit', submitDetection );
+		var form = $( '#test' ),
+			submitted = 0,
+			submitDetection = function() {
+				submitted++;
+				ok( submitted <= 2, 'counting submit event' );	
+			};
+		form.bind( 'submit.TEST', submitDetection );
 
 		// make form valid
 		$( '#foo' ).val( 'foo' );
 
 		form.trigger( 'submit' );
-		form.find( ':submit' )[0].click();
+		form.find( ':submit' )[ 0 ].click();
 
-		form.die( 'submit', submitDetection );
-
-		ok( true, 'test complete' );
+		// teardown
+		form.unbind( 'submit.TEST' );
 	});
+
+	module( 'form submission', lifecycleCVAPI );
 
 	test( 'submit suppressed by invalid fields', 1, function() {
 
-		var submitDetection = function() {
-			ok( false, 'submit event was not suppressed' );	
-		};
+		var form = $( '#test' ),
+			submitDetection = function() {
+				ok( false, 'submit event was not suppressed' );
+			}
+		;
 
-		$( '#test' ).bind( 'submit', submitDetection );
+		// form.bind( 'submit.TEST', submitDetection );
 
 		// make foo invalid
 		$( '#foo' ).val( '' );
+		$( '#test' ).trigger( 'submit' );
+		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo is invalid' );
 
-		$( '#test :submit' )[0].click();
-
-		$( '#test' ).unbind( 'submit', submitDetection );
-
-		ok( true, 'test complete' );
+		// teardown
+		// form.unbind( 'submit.TEST' );
 		
 	});
 
-	test( 'submit allowed after correcting all invalid fields', 2, function() {
+	test( 'submit allowed after correcting all invalid fields', 3, function() {
 
-		var expectSubmit = function() {
-			ok( true, 'submit event expected' );	
-		},
+		var form = $( '#test' ),
+			submitted = 0;
+			submitDetection = function() {
+				submitted++;
+				ok( submitted <= 1, 'submit event detected' );	
+			}
+		;
 		
-		noSubmit = function() {
-			ok( false, 'submit event NOT expected' );	
-		};
-
-		$( '#test' ).live( 'submit', noSubmit );
+		form.bind( 'submit.TEST', submitDetection );
 
 		// make foo invalid
 		$( '#foo' ).val( '' );
-
-		$( '#test :submit' )[0].click();
-
-		$( '#test' ).die( 'submit', noSubmit );
-		$( '#test' ).live( 'submit', expectSubmit );
+		$( '#test' ).trigger( 'submit' );
+		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo is invalid' );
 
 		// make foo valid
 		$( '#foo' ).val( 'foo' );
+		$( '#test :submit' )[ 0 ].click();
+		strictEqual( $( '#foo' )[ 0 ].validity.valid, true, '#foo is valid' );
 
-		$( '#test :submit' )[0].click();
-
-		$( '#test' ).die( 'submit', expectSubmit );
-
-		ok( true, 'test complete' );
+		// teardown
+		form.unbind( 'submit.TEST' );
 		
 	});
 

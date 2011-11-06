@@ -22,7 +22,7 @@ if ( jQuery !== 'undefined' ) {
 
 
 		// polyfill test
-		polyfill = input[ 0 ].validity !== 'object',
+		polyfill = typeof input[ 0 ].validity !== 'object',
 
 
 		// new 'invalid' event
@@ -62,7 +62,7 @@ if ( jQuery !== 'undefined' ) {
 			if ( radio ) {
 				valueMissing = $( this.form.elements[ this.name ] ).filter( ':checked' ).length === 0;
 			}
-				
+
 			// set .validityState
 			this.validity = validityState( invalidEmail, valueMissing, message );
 			
@@ -81,6 +81,51 @@ if ( jQuery !== 'undefined' ) {
 			}
 
 			return this.validity.valid;
+		},
+
+
+		submitHandler = function( event ) {
+
+			var form = $( this ),
+				novalidate = !! form.attr( 'novalidate' ),
+				abortSubmit = false
+			;
+
+			// polyfill validation?
+			if ( polyfill ) {
+				// check fields
+				form.find( candidateForValidation ).each(function() {
+
+					validateField.call( this );
+
+
+					// unless @novalidate
+					if ( ! novalidate ) {
+						// if invalid
+						if ( ! this.validity.valid ) {
+							// trigger invalid
+							$( this ).trigger( invalidEvent() );
+							// submit will be aborted
+							abortSubmit = true;
+						}
+					}
+				});
+			}
+
+			// NOTE the code below runs in all browsers to polyfill implementation bugs
+			// e.g. Opera 11 on OSX fires submit event even when fields are invalid
+			// correct implementations will not invoke this submit handler until all fields are valid
+
+			// unless @novalidate
+			// if there are invalid fields
+			if ( ! novalidate && form.find( candidateForValidation ).filter(function() {
+				return ! this.validity.valid;
+			}).length > 0 ) {
+				// abort submit
+				event.stopImmediatePropagation();
+				event.preventDefault();
+				return false;
+			}
 		},
 
 
@@ -149,53 +194,18 @@ if ( jQuery !== 'undefined' ) {
 					};
 				});
 			}
+
+			// check validity on submit
+			// this should be bound before all other submit handlers bound to the same form
+			// otherwise they will execute before this handler can cancel submit (oninvalid)
+			$( 'form' ).bind( 'submit.constraintValidationAPI', submitHandler );
 		}
 	;
 
 
-	// check validity on submit
-	// this should be bound before all other submit handlers
-	$( 'form' ).bind( 'submit.constraintValidationAPI', function( event ) {
-
-		var form = $( this ),
-			novalidate = !! form.attr( 'novalidate' )
-		;
-
-		// polyfill validation?
-		if ( polyfill ) {
-			// check fields
-			form.find( candidateForValidation ).each(function() {
-
-				validateField( this );
-
-				// unless @novalidate
-				if ( ! novalidate ) {
-					// if invalid
-					if ( ! this.validity.valid ) {
-						// trigger invalid
-						$( this ).trigger( invalidEvent() );
-						// submit will be aborted
-						abortSubmit = true;
-					}
-				}
-			});
-		}
-
-		// NOTE the code below runs in all browsers to polyfill implementation bugs
-		// e.g. Opera 11 on OSX fires submit event even when fields are invalid
-		// correct implementations will not invoke this submit handler until all fields are valid
-
-		// unless @novalidate
-		// if there are invalid fields
-		if ( ! novalidate && form.find( candidateForValidation ).filter(function() {
-			return ! this.validity.valid;
-		}).length > 0 ) {
-			// abort submit
-			event.stopImmediatePropagation();
-			event.preventDefault();
-			return false;
-		}
-	});
+	// run immediately and onload
+	initConstraintValidationAPI();
+	$( initConstraintValidationAPI );
 
 
 	// expose init function

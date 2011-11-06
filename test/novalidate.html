@@ -6,6 +6,7 @@
 
 	<link rel="stylesheet" href="../lib/qunit-git.css" />
 	<script src="../lib/qunit-git.js"></script>
+	<script src="qunit-helpers.js"></script>
 
 	<style>
 		body {
@@ -13,10 +14,6 @@
 			font-family: sans-serif;
 			background: #faf7f3;
 			color: #111;
-		}
-
-		#qunit-fixture {
-			position: static;
 		}
 	</style>
 
@@ -71,10 +68,10 @@
 <script><!-- //
 
 	var	userInitiatedSubmit = function() {
-		$( '#test :submit' )[0].click();
+		$( '#test :submit' )[ 0 ].click();
 	};
 
-	module( 'environment' );
+	module( 'environment', lifecycleCVAPI );
 
 	test( 'required fields are in test form', 5, function() {
 
@@ -87,13 +84,13 @@
 	});
 
 
-	module( 'invalid events' );
+	module( 'invalid events', lifecycleCVAPI );
 
 	test( 'invalid not thrown on submit', 1, function() {
 
 		var handler = function( event ) {
-			ok( true, 'invalid handler should not be triggered' );
-			strictEqual( event.target, $( '#foo' )[0], 'invalid event detected on #foo' );
+			ok( false, 'invalid handler should not be triggered' );
+			strictEqual( event.target, $( '#foo' )[ 0 ], 'invalid event detected on #foo' );
 		};
 
 		$( '#foo' ).bind( 'invalid', handler );
@@ -101,6 +98,27 @@
 		userInitiatedSubmit();
 
 		ok( true, 'invalid event not seen' );
+	});
+
+
+	module( 'submit events', lifecycleCVAPI );
+
+	test( 'submit events triggered with invalid fields', 2, function() {
+
+		var handler = function() {
+			ok( true, 'submit event detected' );
+		};
+
+		$( '#foo' ).val( '' );
+		$( '#test' ).bind( 'submit', handler );
+
+		userInitiatedSubmit();
+
+		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo is invalid' );
+
+		// teardown
+		$( '#test' ).unbind( 'submit', handler );
+
 	});
 
 
