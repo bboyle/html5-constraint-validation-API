@@ -2,7 +2,7 @@
 <html lang="en-AU">
 <head>
 	<meta charset="UTF-8" />
-	<title>submit tests · forces Constraint Validation API tests</title>
+	<title>change tests · forces Constraint Validation API tests</title>
 
 	<link rel="stylesheet" href="../lib/qunit-git.css">
 	<script src="../lib/qunit-git.js"></script>
@@ -76,75 +76,21 @@
 
 	});
 
-	test( 'form submission is counted', 2, function() {
 
-		var form = $( '#test' ),
-			submitted = 0,
-			submitDetection = function() {
-				submitted++;
-				ok( submitted <= 2, 'counting submit event' );	
-			};
-		form.bind( 'submit.TEST', submitDetection );
+	module( 'text onchange', lifecycleCVAPI );
 
-		// make form valid
-		$( '#foo' ).val( 'foo' );
-
-		form.trigger( 'submit' );
-		form.find( ':submit' )[ 0 ].click();
-
-		// teardown
-		form.unbind( 'submit.TEST' );
-	});
-
-
-	module( 'form submission', lifecycleCVAPI );
-
-	test( 'submit suppressed by invalid fields', 1, function() {
-
-		var form = $( '#test' ),
-			submitDetection = function() {
-				ok( false, 'submit event was not suppressed' );
-			}
-		;
-
-		// form.bind( 'submit.TEST', submitDetection );
+	test( 'validity flagged onchange', 2, function() {
 
 		// make foo invalid
-		$( '#foo' ).val( '' );
-		$( '#test' ).trigger( 'submit' );
-		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo is invalid' );
-
-		// teardown
-		// form.unbind( 'submit.TEST' );
-		
-	});
-
-	test( 'submit allowed after correcting all invalid fields', 3, function() {
-
-		var form = $( '#test' ),
-			submitted = 0;
-			submitDetection = function() {
-				submitted++;
-				ok( submitted <= 1, 'submit event detected' );	
-			}
-		;
-		
-		form.bind( 'submit.TEST', submitDetection );
-
-		// make foo invalid
-		$( '#foo' ).val( '' );
-		$( '#test' ).trigger( 'submit' );
+		$( '#foo' ).val( '' ).trigger( 'change' );
 		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo is invalid' );
 
 		// make foo valid
-		$( '#foo' ).val( 'foo' );
-		$( '#test :submit' )[ 0 ].click();
+		$( '#foo' ).val( 'foo' ).trigger( 'change' );
 		strictEqual( $( '#foo' )[ 0 ].validity.valid, true, '#foo is valid' );
-
-		// teardown
-		form.unbind( 'submit.TEST' );
 		
 	});
+
 
 // --></script>
 
