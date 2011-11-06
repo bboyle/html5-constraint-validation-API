@@ -30,13 +30,16 @@ if ( jQuery !== 'undefined' ) {
 
 		// manage validity state object
 		validityState = function( typeMismatch, valueMissing, message ) {
-			var customError = !! message,
-				valid = ! typeMismatch && ! valueMissing && ! customError;
+			var customError = false;
+
+			if ( typeof message !== 'undefined' ) {
+				customError = !! message;
+			}
 			return {
 				customError: customError,
 				typeMismatch: !! typeMismatch,
 				valueMissing: !! valueMissing,
-				valid: valid
+				valid: ! typeMismatch && ! valueMissing && ! customError
 			};
 		},
 
@@ -48,7 +51,6 @@ if ( jQuery !== 'undefined' ) {
 			;
 
 			// set .validityState
-			// TODO don't always pass false, false!
 			this.validity = validityState( invalidEmail, valueMissing, message );
 			
 			// set .validationMessage

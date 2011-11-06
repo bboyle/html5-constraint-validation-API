@@ -6,6 +6,7 @@
 
 	<link rel="stylesheet" href="../lib/qunit-git.css">
 	<script src="../lib/qunit-git.js"></script>
+	<script src="qunit-helpers.js"></script>
 
 	<style>
 		body {
@@ -19,38 +20,6 @@
 
 <body>
 
-<form id="test" action="javascript:">
-
-	<ol class="questions">
-
-		<li>
-			<label for="foo">
-				<span class="label">Foo</span>
-				<abbr title="(required)">*</abbr>
-			</label>
-			<input type="text" name="foo" id="foo" value="" />
-		</li>
-
-		<li>
-			<label for="email">
-				<span class="label">Email</span>
-			</label>
-			<input type="email" name="email" id="email" value="" />
-		</li>
-
-		<li class="footer">
-			<ol class="submit">
-				<li>
-					<strong>
-						<input type="submit" value="Submit" />
-					</strong>
-				</li>
-			</ol>
-		</li>
-
-	</ol>
-
-</form>
 
 
 <div id="qunit">
@@ -59,7 +28,44 @@
 	<div id="qunit-testrunner-toolbar"></div>
 	<h2 id="qunit-userAgent"></h2>
 	<ol id="qunit-tests"></ol>
-	<div id="qunit-fixture">test markup, will be hidden</div>
+	<div id="qunit-fixture">
+
+
+		<form id="test" action="javascript:">
+
+			<ol class="questions">
+
+				<li>
+					<label for="foo">
+						<span class="label">Foo</span>
+						<abbr title="(required)">*</abbr>
+					</label>
+					<input type="text" name="foo" id="foo" value="" />
+				</li>
+
+				<li>
+					<label for="email">
+						<span class="label">Email</span>
+					</label>
+					<input type="email" name="email" id="email" value="" />
+				</li>
+
+				<li class="footer">
+					<ol class="submit">
+						<li>
+							<strong>
+								<input type="submit" value="Submit" />
+							</strong>
+						</li>
+					</ol>
+				</li>
+
+			</ol>
+
+		</form>
+
+
+	</div>
 </div>
 
 
@@ -68,7 +74,7 @@
 
 <script><!-- //
 
-	module( 'environment' );
+	module( 'environment', lifecycleCVAPI );
 
 	test( 'email fields are in test form', function() {
 
@@ -80,43 +86,35 @@
 
 	test( 'email fields are type email', function() {
 
-		strictEqual( $( '#foo' )[0].type, 'text', 'input#foo is type text' );
-		strictEqual( $( '#email' )[0].getAttribute( 'type' ), 'email', 'input#email is type email' );
-
-	});
-
-	test( 'form submission is suppressed', function() {
-
-		var form = $( '#test' );
-
-		form.submit();
-		ok( true, 'form was submitted and we are still running tests' );
-
-		form.find( '[type=submit]' ).click();
-		ok( true, 'submit button clicked and we are still running tests' );
+		strictEqual( $( '#foo' )[ 0 ].type, 'text', 'input#foo is type text' );
+		strictEqual( $( '#email' )[ 0 ].getAttribute( 'type' ), 'email', 'input#email is type email' );
 
 	});
 
 
-	module( 'input validityState typeMismatch' );
+	module( 'input validityState typeMismatch', lifecycleCVAPI );
 
 	test( 'validity.typeMismatch is false when blank', function() {
 		
 		$( '#email,#foo' ).val( '' );
-		$( '#test' ).submit();
-		strictEqual( $( '#email' )[0].validity.typeMismatch, false, '#email[value=""] validity.typeMismatch should be false' );
-		strictEqual( $( '#email' )[0].validity.valid, true, '#email[value=""] validity.valid should be true' );
-		strictEqual( $( '#foo' )[0].validity.typeMismatch, false, '#foo[value=""] validity.typeMismatch should be false' );
+		$( '#email' )[ 0 ].checkValidity();
+		$( '#foo' )[ 0 ].checkValidity();
+
+		strictEqual( $( '#email' )[ 0 ].validity.typeMismatch, false, '#email[value=""] validity.typeMismatch should be false' );
+		strictEqual( $( '#email' )[ 0 ].validity.valid, true, '#email[value=""] validity.valid should be true' );
+		strictEqual( $( '#foo' )[ 0 ].validity.typeMismatch, false, '#foo[value=""] validity.typeMismatch should be false' );
 
 	});
 
 	test( 'validity.typeMismatch is true when value is not an email address', function() {
 		
-		$( '#email,#foo' ).val( 'foo' );
-		$( '#test' ).submit();
-		strictEqual( $( '#email' )[0].validity.typeMismatch, true, '#email[value="foo"] validity.typeMismatch should be true' );
-		strictEqual( $( '#email' )[0].validity.valid, false, '#email[value=""] validity.valid should be false' );
-		strictEqual( $( '#foo' )[0].validity.typeMismatch, false, '#foo[value="foo"] validity.typeMismatch should be false' );
+		$( '#email, #foo' ).val( 'foo' );
+		$( '#email' )[ 0 ].checkValidity();
+		$( '#foo' )[ 0 ].checkValidity();
+
+		strictEqual( $( '#email' )[ 0 ].validity.typeMismatch, true, '#email[value="foo"] validity.typeMismatch should be true' );
+		strictEqual( $( '#email' )[ 0 ].validity.valid, false, '#email[value=""] validity.valid should be false' );
+		strictEqual( $( '#foo' )[ 0 ].validity.typeMismatch, false, '#foo[value="foo"] validity.typeMismatch should be false' );
 
 	});
 
@@ -124,10 +122,12 @@
 	test( 'validity.typeMismatch is false when an email address is supplied', function() {
 		
 		$( '#email,#foo' ).val( 'foo@example.com' );
-		$( '#test' ).submit();
-		strictEqual( $( '#email' )[0].validity.typeMismatch, false, '#email[value="foo@example.com"] validity.typeMismatch should be false' );
-		strictEqual( $( '#email' )[0].validity.valid, true, '#email[value=""] validity.valid should be true' );
-		strictEqual( $( '#foo' )[0].validity.typeMismatch, false, '#foo[value="foo@example.com"] validity.typeMismatch should be false' );
+		$( '#email' )[ 0 ].checkValidity();
+		$( '#foo' )[ 0 ].checkValidity();
+
+		strictEqual( $( '#email' )[ 0 ].validity.typeMismatch, false, '#email[value="foo@example.com"] validity.typeMismatch should be false' );
+		strictEqual( $( '#email' )[ 0 ].validity.valid, true, '#email[value=""] validity.valid should be true' );
+		strictEqual( $( '#foo' )[ 0 ].validity.typeMismatch, false, '#foo[value="foo@example.com"] validity.typeMismatch should be false' );
 
 	});
 
