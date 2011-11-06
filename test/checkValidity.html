@@ -74,7 +74,7 @@
 		strictEqual( $( 'form#test' ).length, 1, 'form#test is present' );
 		strictEqual( $( 'form#test input#foo' ).length, 1, 'form#test contains input#foo' );
 		ok( $( 'input#foo' ).attr( 'required' ), 'input#foo has @required' );
-		strictEqual( $( 'input#foo' ).val(), '', 'input#foo has no value' );
+		strictEqual( $( 'input#foo' ).val(), '', 'input#foo has no initial value' );
 
 	});
 
