@@ -20,6 +20,11 @@ if ( jQuery !== 'undefined' ) {
 		// for feature detection
 		input = $( '<input>' ),
 
+
+		// polyfill test
+		polyfill = input[ 0 ].validity !== 'object',
+
+
 		// new 'invalid' event
 		invalidEvent = function() {
 			var invalid = $.Event( 'invalid' );
@@ -27,6 +32,7 @@ if ( jQuery !== 'undefined' ) {
 			invalid.stopImmediatePropagation();
 			return invalid;
 		},
+
 
 		// manage validity state object
 		validityState = function( typeMismatch, valueMissing, message ) {
@@ -43,13 +49,20 @@ if ( jQuery !== 'undefined' ) {
 			};
 		},
 
+
 		validateField = function( message ) {
 
 			var $this = $( this ),
+				radio = this.type === 'radio',
 				valueMissing = $this.attr( 'required' ) && ! this.value,
 				invalidEmail = this.getAttribute( 'type' ) === 'email' && !! this.value && ! REXP_EMAIL.test( this.value )
 			;
 
+			// radio buttons
+			if ( radio ) {
+				valueMissing = $( this.form.elements[ this.name ] ).filter( ':checked' ).length === 0;
+			}
+				
 			// set .validityState
 			this.validity = validityState( invalidEmail, valueMissing, message );
 			
@@ -69,6 +82,7 @@ if ( jQuery !== 'undefined' ) {
 
 			return this.validity.valid;
 		},
+
 
 		initConstraintValidationAPI = function() {
 
@@ -135,89 +149,57 @@ if ( jQuery !== 'undefined' ) {
 					};
 				});
 			}
-
 		}
 	;
 
 
-	// expose
-	window.initConstraintValidationAPI = initConstraintValidationAPI;
+	// check validity on submit
+	// this should be bound before all other submit handlers
+	$( 'form' ).bind( 'submit.constraintValidationAPI', function( event ) {
 
+		var form = $( this ),
+			novalidate = !! form.attr( 'novalidate' )
+		;
 
-	// INPUT validity API not implemented in browser
-	if ( typeof input[ 0 ].validity !== 'object' ) {
-
-		// check for blank required fields on submit
-		// TODO perform ALL validation (helps pickup autofilled entries that did not trigger change)
-		$( 'form' ).bind( 'submit.constraintValidationAPI', function() {
-
-			var form = $( this ),
-				novalidate = !! form.attr( 'novalidate' )
-			;
-
+		// polyfill validation?
+		if ( polyfill ) {
 			// check fields
-			form.find( candidateForValidation ).not( ':radio' ).each(function() {
+			form.find( candidateForValidation ).each(function() {
 
 				validateField( this );
 
-				if ( !this.validity.valid ) {
-					// invalid event
-					if ( ! novalidate ) {
+				// unless @novalidate
+				if ( ! novalidate ) {
+					// if invalid
+					if ( ! this.validity.valid ) {
+						// trigger invalid
 						$( this ).trigger( invalidEvent() );
+						// submit will be aborted
+						abortSubmit = true;
 					}
 				}
-
 			});
+		}
 
-			// check required radio button groups
-			// TODO roll radio button handling into .checkValidity() and validateField()
-			(function() {
-				
-				var names = {};
+		// NOTE the code below runs in all browsers to polyfill implementation bugs
+		// e.g. Opera 11 on OSX fires submit event even when fields are invalid
+		// correct implementations will not invoke this submit handler until all fields are valid
 
-				form.find( ':radio[required]' ).each(function() {
-
-					if ( names[ this.name ] !== true ) {
-						
-						var group = form.find( ':radio[name=' + this.name + ']' ),
-							isBlank = group.filter( ':checked' ).length === 0;
-
-						group.each(function() {
-							this.validity = validityState( false, isBlank );
-						});
-
-						names[ this.name ] = true;
-
-						// TODO research "invalid" events for radio buttons for correct emulation
-						// are events thrown for each button or once for the group?
-						if ( isBlank === true ) {
-							if ( ! novalidate ) {
-								$( this ).trigger( invalidEvent() );
-							}
-						}
-					}
-				});
-
-			}());
-
-		});
-
-	}
-
-
-	// suppress submit if invalid fields exist
-	// required for Opera 11.5 on OSX
-	// TODO need @novalidate tests for this, it should not executive is @novalidate is true
-	$( 'form' ).live( 'submit', function( event ) {
-		if ( $( this ).find( 'input, select, textarea' ).filter(function() {
-			return this.validity && ! this.validity.valid;
+		// unless @novalidate
+		// if there are invalid fields
+		if ( ! novalidate && form.find( candidateForValidation ).filter(function() {
+			return ! this.validity.valid;
 		}).length > 0 ) {
-			
+			// abort submit
 			event.stopImmediatePropagation();
 			event.preventDefault();
 			return false;
 		}
 	});
+
+
+	// expose init function
+	window.initConstraintValidationAPI = initConstraintValidationAPI;
 
 
 }( jQuery ));

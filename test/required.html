@@ -245,8 +245,8 @@
 
 	test( 'validity.valueMissing is true when blank', function() {
 		
-		$( '#test' ).submit();
-		strictEqual( $( '#radio-foo-foo' )[0].validity.valueMissing, true, '#' + this.id + ' validity.valueMissing should be true' );
+		$( '#radio-foo-foo' )[0].checkValidity();
+		strictEqual( $( '#radio-foo-foo' )[0].validity.valueMissing, true, '#radio-foo-foo validity.valueMissing should be true' );
 		// $( '#test :radio[name=radioFoo]' ).each(function() {
 		// 	strictEqual( this.validity.valueMissing, true, '#' + this.id + ' validity.valueMissing should be true' );		
 		// });
@@ -256,7 +256,7 @@
 	test( 'validity.valid is false when blank', function() {
 		
 		$( '#radio-foo-foo' )[0].checkValidity();
-		strictEqual( $( '#radio-foo-foo' )[0].validity.valid, false, '#' + this.id + ' validity.valueMissing should be false' );
+		strictEqual( $( '#radio-foo-foo' )[0].validity.valid, false, '#radio-foo-foo validity.valueMissing should be false' );
 		// $( '#test :radio[name=radioFoo]' ).each(function() {
 		// 	strictEqual( this.validity.valid, false, '#' + this.id + ' validity.valid should be false' );		
 		// });
@@ -271,7 +271,12 @@
 			strictEqual( this.validity.valueMissing, false, '#' + this.id + ' validity.valueMissing should be false' );		
 		});
 
-		// test value=''
+	});
+
+	test( 'validity.valueMissing is false when an item with empty value is checked', function() {
+		
+		strictEqual( $( '#radio-foo-BLANK' ).val(), '', '#radio-foo-BLANK value is ""' );
+
 		$( '#radio-foo-BLANK' ).attr( 'checked', 'checked' );
 		$( '#radio-foo-BLANK' )[0].checkValidity();
 		$( '#test :radio[name=radioFoo]' ).each(function() {
