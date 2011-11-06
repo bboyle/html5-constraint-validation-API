@@ -84,6 +84,11 @@ if ( jQuery !== 'undefined' ) {
 		},
 
 
+		changeHandler = function( event ) {
+			validateField.call( event.target );
+		},
+
+
 		submitHandler = function( event ) {
 
 			var form = $( this ),
@@ -142,6 +147,12 @@ if ( jQuery !== 'undefined' ) {
 					this.validationMessage = '';
 
 				});
+
+				// check validity on change
+				$( candidateForValidation )
+					.unbind( 'change.constraintValidationAPI' )
+					.bind( 'change.constraintValidationAPI', changeHandler )
+				;
 			}
 
 			// INPUT validitationMessage
@@ -198,7 +209,10 @@ if ( jQuery !== 'undefined' ) {
 			// check validity on submit
 			// this should be bound before all other submit handlers bound to the same form
 			// otherwise they will execute before this handler can cancel submit (oninvalid)
-			$( 'form' ).bind( 'submit.constraintValidationAPI', submitHandler );
+			$( 'form' )
+				.unbind( 'submit.constraintValidationAPI' )
+				.bind( 'submit.constraintValidationAPI', submitHandler )
+			;
 		}
 	;
 
