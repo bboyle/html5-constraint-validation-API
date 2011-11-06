@@ -104,17 +104,17 @@
 	test( 'submit suppressed by invalid fields', 1, function() {
 
 		var submitDetection = function() {
-			ok( true, 'submit event was not suppressed' );	
+			ok( false, 'submit event was not suppressed' );	
 		};
 
-		$( '#test' ).live( 'submit', submitDetection );
+		$( '#test' ).bind( 'submit', submitDetection );
 
 		// make foo invalid
 		$( '#foo' ).val( '' );
 
 		$( '#test :submit' )[0].click();
 
-		$( '#test' ).die( 'submit', submitDetection );
+		$( '#test' ).unbind( 'submit', submitDetection );
 
 		ok( true, 'test complete' );
 		

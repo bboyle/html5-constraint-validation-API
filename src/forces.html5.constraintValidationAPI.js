@@ -14,10 +14,21 @@ if ( jQuery !== 'undefined' ) {
 	// 1*( atext / "." ) "@" ldh-str 1*( "." ldh-str )
 	var REXP_EMAIL = /^[A-Za-z0-9!#$%&'*+\-\/=\?\^_`\{\|\}~\.]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+$/,
 
+		// fields that validate
+		candidateForValidation = 'input, select, textarea',
+
+		// for feature detection
 		input = $( '<input>' ),
 
-		// TODO abstract this, maybe into .checkValidity (without event trigger)
-		// so that it also sets .validationMessage and .willValidate
+		// new 'invalid' event
+		invalidEvent = function() {
+			var invalid = $.Event( 'invalid' );
+			// invalid events do not bubble
+			invalid.stopImmediatePropagation();
+			return invalid;
+		},
+
+		// manage validity state object
 		validityState = function( typeMismatch, valueMissing, message ) {
 			var customError = !! message,
 				valid = ! typeMismatch && ! valueMissing && ! customError;
@@ -29,51 +40,106 @@ if ( jQuery !== 'undefined' ) {
 			};
 		},
 
-		checkValidity = function( message ) {
+		validateField = function( message ) {
 
-			var validity;
+			var $this = $( this ),
+				valueMissing = $this.attr( 'required' ) && ! this.value,
+				invalidEmail = this.getAttribute( 'type' ) === 'email' && !! this.value && ! REXP_EMAIL.test( this.value )
+			;
 
 			// set .validityState
 			// TODO don't always pass false, false!
-			this.validity = validityState( this.validity.typeMismatch, this.validity.valueMissing, message );
+			this.validity = validityState( invalidEmail, valueMissing, message );
 			
-			// get validity state
-			validity = this.validity;
-
 			// set .validationMessage
-			if ( validity.valid ) {
+			if ( this.validity.valid ) {
 				this.validationMessage = '';
 
-			} else if ( validity.customError ) {
+			} else if ( this.validity.customError ) {
 				this.validationMessage = message;
 
-			} else if ( validity.valueMissing ) {
+			} else if ( this.validity.valueMissing ) {
 				this.validationMessage = 'Please answer this question';
 
-			} else if ( validity.typeMismatch ) {
+			} else if ( this.validity.typeMismatch ) {
 				this.validationMessage = 'Please type an email address';
 			}
 
-			return validity.valid;
+			return this.validity.valid;
+		},
+
+		initConstraintValidationAPI = function() {
+
+			// INPUT validityState
+			if ( typeof input[ 0 ].validity !== 'object' ) {
+				// set us up the API
+				$( candidateForValidation ).filter(function() {
+					return typeof this.validity !== 'object';
+				}).each(function() {
+
+					this.validity = validityState( false, false, '' );
+					this.validationMessage = '';
+
+				});
+			}
+
+			// INPUT validitationMessage
+			if ( typeof input[ 0 ].validationMessage !== 'string' ) {
+				// set us up the API
+				$( candidateForValidation ).filter(function() {
+					return typeof this.validationMessage !== 'string';
+				}).each(function() {
+					this.validationMessage = '';
+				});
+			}
+
+			// INPUT checkValidity
+			if ( typeof input[ 0 ].checkValidity !== 'function' ) {
+				// set us up the API
+				$( candidateForValidation ).filter(function() {
+					return typeof this.checkValidity !== 'function';
+				}).each(function() {
+					var domElement = this,
+						$this = $( this );
+
+					this.checkValidity = function() {
+						// TODO is this breaking .setCustomValidity() by passing NULL as 'message'
+						var valid = validateField.call( domElement );
+
+						// if invalid, and unless novalidate
+						if ( ! valid && ! $this.closest( 'form' ).attr( 'novalidate' )) {
+							// fire invalid event
+							$this.trigger( invalidEvent() );
+						}
+
+						return valid;
+					};
+				});
+			}
+
+			// INPUT setCustomValidity
+			if ( typeof input[ 0 ].setCustomValidity !== 'function' ) {
+				// set us up the API
+				$( candidateForValidation ).filter(function() {
+					return typeof this.setCustomValidity !== 'function';
+				}).each(function() {
+					var that = this;
+
+					this.validity = validityState( false, false, '' );
+					this.validationMessage = '';
+
+					this.setCustomValidity = function( message ) {
+						validateField.call( that, message );
+					};
+				});
+			}
+
 		}
 	;
 
 
-	// INPUT setCustomValidity
-	if ( typeof input[ 0 ].setCustomValidity !== 'function' ) {
-		// set initial validity
-		$( 'input' ).each(function() {
-			var that = this;
-
-			this.validity = validityState( false, false, '' );
-			this.validationMessage = '';
-
-			this.setCustomValidity = function( message ) {
-				checkValidity.call( that, message );
-			};
-
-		});
-	}
+	// expose
+	window.initConstraintValidationAPI = initConstraintValidationAPI;
 
 
 	// INPUT validity API not implemented in browser
@@ -84,17 +150,14 @@ if ( jQuery !== 'undefined' ) {
 		$( 'form' ).bind( 'submit.constraintValidationAPI', function() {
 
 			var form = $( this ),
-				novalidate = !! form.attr( 'novalidate' ),
-				// TODO this event be created as needed (not shared)
-				// method for new InvalidEvent() that returns a new event with stop propagation on by default
-				invalidEvent = $.Event( 'invalid' )
+				novalidate = !! form.attr( 'novalidate' )
 			;
 
 			// invalid events do not bubble
 			invalidEvent.stopImmediatePropagation();
 
 			// check required fields
-			form.find( ':text, select, textarea' ).each(function() {
+			form.find( candidateForValidation ).each(function() {
 
 				var $this = $( this ),
 
@@ -108,7 +171,7 @@ if ( jQuery !== 'undefined' ) {
 				if ( !this.validity.valid ) {
 					// invalid event
 					if ( ! novalidate ) {
-						$this.trigger( invalidEvent );
+						$this.trigger( invalidEvent() );
 					}
 				}
 
@@ -136,7 +199,7 @@ if ( jQuery !== 'undefined' ) {
 						// are events thrown for each button or once for the group?
 						if ( isBlank === true ) {
 							if ( ! novalidate ) {
-								$( this ).trigger( invalidEvent );
+								$( this ).trigger( invalidEvent() );
 							}
 						}
 					}
