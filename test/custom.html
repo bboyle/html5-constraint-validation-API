@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-AU" lang="en-AU">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>custom validity tests · forces Constraint Validation API tests</title>
+
+	<link rel="stylesheet" href="../lib/qunit-git.css">
+	<script src="../lib/qunit-git.js"></script>
+	<script src="qunit-helpers.js"></script>
+
+	<style>
+		body {
+			padding: 2em;
+			font-family: sans-serif;
+			background: #faf7f3;
+			color: #111;
+		}
+	</style>
+</head>
+
+<body>
+
+
+<div id="qunit">
+	<h1 id="qunit-header">QUnit</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">
+
+
+		<form id="test" action="javascript:">
+
+			<ol class="questions">
+
+				<li>
+					<label for="foo">
+						<span class="label">Foo</span>
+						<abbr title="(required)">*</abbr>
+					</label>
+					<input type="text" name="foo" id="foo" value="" />
+				</li>
+
+				<li>
+					<label for="email">
+						<span class="label">Email</span>
+					</label>
+					<input type="email" name="email" id="email" value="" />
+				</li>
+
+				<li class="footer">
+					<ol class="submit">
+						<li>
+							<strong>
+								<input type="submit" value="Submit" />
+							</strong>
+						</li>
+					</ol>
+				</li>
+
+			</ol>
+
+		</form>
+
+
+	</div>
+</div>
+
+
+<script src="../lib/jquery-1.4.4-min.js"></script>
+<script src="../src/forces.html5.constraintValidationAPI.js"></script>
+
+<script><!-- //
+
+	module( 'environment', lifecycleCVAPI );
+
+	test( 'test fields are in test form', function() {
+
+		strictEqual( $( 'form#test' ).length, 1, 'form#test is present' );
+		strictEqual( $( 'form#test input#foo' ).length, 1, 'form#test contains input#foo' );
+		strictEqual( $( 'form#test input#email' ).length, 1, 'form#test contains input#email' );
+
+	});
+
+	test( 'form submission is suppressed', function() {
+
+		var form = $( '#test' );
+
+		form.submit();
+		ok( true, 'form was submitted and we are still running tests' );
+
+		form.find( '[type=submit]' ).click();
+		ok( true, 'submit button clicked and we are still running tests' );
+
+	});
+
+
+	module( 'input validityState customError', lifecycleCVAPI );
+
+	test( 'validity.customError', function() {
+		
+		$( '#foo' )[ 0 ].setCustomValidity( 'foo' );
+
+		strictEqual( $( '#foo' )[ 0 ].validity.customError, true, '#foo validity.customError should be true' );
+		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo validity.valid should be false' );
+		strictEqual( $( '#email' )[ 0 ].validity.customError, false, '#email validity.customError should be false' );
+
+	});
+
+	test( 'can get message set with setCustomValidity()', function() {
+		
+		// must be @example.com
+		$( '#email' )[ 0 ].setCustomValidity( 'Must be an @example.com email address' );
+
+		strictEqual( $( '#email' )[ 0 ].validity.customError, true, '#email validity.customError should be true' );
+		strictEqual( $( '#email' )[ 0 ].validationMessage, 'Must be an @example.com email address', '#email validationMessage is correct' );
+
+		// remove custom error
+		$( '#email' )[ 0 ].setCustomValidity( '' );
+		strictEqual( $( '#email' )[ 0 ].validity.customError, false, '#email validity.customError should be false' );
+		strictEqual( $( '#email' )[ 0 ].validationMessage, '', '#email validationMessage is empty' );
+
+	});
+
+	test( 'setCustomValidity() can mask other errors', function() {
+		
+		// make email invalid (type error)
+		$( '#email' ).val( 'foo' );
+		// TODO validity checking only happening on submit! should work on 'change', or call .checkValidity()
+		$( 'form' ).trigger( 'submit' );
+		// then set a custom error
+		$( '#email' )[ 0 ].setCustomValidity( 'custom error' );
+		// custom error is shown
+		strictEqual( $( '#email' )[ 0 ].validity.valid, false, '#email is not valid' );
+		strictEqual( $( '#email' )[ 0 ].validationMessage, 'custom error', 'custom error shown' );
+
+		// remove custom error
+		$( '#email' )[ 0 ].setCustomValidity( '' );
+		// type error now current
+		strictEqual( $( '#email' )[ 0 ].validity.customError, false, '#email has no custom error' );
+		strictEqual( $( '#email' )[ 0 ].validity.valid, false, '#email is still not valid' );
+		// browser specific error will be shown
+		strictEqual( /email/.test( $( '#email' )[ 0 ].validationMessage ), true, 'message contains "email"' );
+
+		// remove value
+		// is required seen?
+
+		// need to add other tests like min/max as implemented
+
+	});
+
+	test( 'setCustomValidity() from change event', function() {
+		
+		// must be @example.com
+		$( '#email' ).bind( 'change.TEST', function() {
+			var inDomain = /@example\.com/.test( this.value ),
+				customError = inDomain ? '' : 'Must be an @example.com email address'
+			;
+
+			this.setCustomValidity( customError );
+		});
+
+		$( '#email' ).val( 'foo@bar.com' ).trigger( 'change' );
+		strictEqual( $( '#email' )[ 0 ].validity.customError, true, '#email validity.customError should be true' );
+
+		$( '#email' ).val( 'foo@example.com' ).trigger( 'change' );
+		strictEqual( $( '#email' )[ 0 ].validity.customError, false, '#email validity.customError should be false' );
+
+		// teardown
+		$( '#email' ).unbind( 'change.TEST' );
+
+	});
+
+// --></script>
+
+</body>
+</html>

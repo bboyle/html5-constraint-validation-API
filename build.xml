@@ -55,7 +55,7 @@
 
 
 	<target name="jslint" description="quality control with jslint">
-		<jsl:jslint options="undef,white">
+		<jsl:jslint options="undef,white,browser,plusplus">
 			<formatter type="plain"/>
 			<formatter type="xml" destfile="${log.dir}/jslint.xml"/>
 			<fileset dir="${source.dir}" includes="**/*.js"/>

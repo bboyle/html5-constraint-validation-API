@@ -2,7 +2,7 @@
 <html lang="en-AU">
 <head>
 	<meta charset="UTF-8" />
-	<title>invalid tests · forces Constraint Validation API tests</title>
+	<title>@novalidate tests · forces Constraint Validation API tests</title>
 
 	<link rel="stylesheet" href="../lib/qunit-git.css" />
 	<script src="../lib/qunit-git.js"></script>
@@ -31,7 +31,7 @@
 	<div id="qunit-fixture">
 
 
-		<form id="test" action="javascript:">
+		<form id="test" action="javascript:" novalidate="novalidate">
 
 			<ol class="questions">
 
@@ -68,14 +68,15 @@
 <script><!-- //
 
 	var	userInitiatedSubmit = function() {
-		$( '#test :submit' )[0].click();
+		$( '#test :submit' )[ 0 ].click();
 	};
 
 	module( 'environment', lifecycleCVAPI );
 
-	test( 'required fields are in test form', 4, function() {
+	test( 'required fields are in test form', 5, function() {
 
 		strictEqual( $( 'form#test' ).length, 1, 'form#test is present' );
+		ok( $( 'form#test' ).attr( 'novalidate' ), 'form#test has @novalidate' );
 		strictEqual( $( 'form#test input#foo' ).length, 1, 'form#test contains input#foo' );
 		ok( $( 'input#foo' ).attr( 'required' ), 'input#foo has @required' );
 		strictEqual( $( 'input#foo' ).val(), '', 'input#foo has no value' );
@@ -85,33 +86,40 @@
 
 	module( 'invalid events', lifecycleCVAPI );
 
-	test( 'invalid thrown for @required', 2, function() {
+	test( 'invalid not thrown on submit', 1, function() {
 
 		var handler = function( event ) {
-			ok( true, 'invalid handler was triggered' );
-			strictEqual( event.target, $( '#foo' )[0], 'invalid event thrown by #foo' );
+			ok( false, 'invalid handler should not be triggered' );
+			strictEqual( event.target, $( '#foo' )[ 0 ], 'invalid event detected on #foo' );
 		};
 
 		$( '#foo' ).bind( 'invalid', handler );
 
 		userInitiatedSubmit();
+
+		ok( true, 'invalid event not seen' );
 	});
 
-	test( 'invalid cannot be captured on form', 1, function() {
 
-		var handler = function( event ) {
-			ok( true, 'invalid handler was triggered' );
-			strictEqual( true, false, 'invalid event thrown by #foo, captured on form' );
+	module( 'submit events', lifecycleCVAPI );
+
+	test( 'submit events triggered with invalid fields', 2, function() {
+
+		var handler = function() {
+			ok( true, 'submit event detected' );
 		};
 
-		$( 'form' ).bind( 'invalid', handler );
+		$( '#foo' ).val( '' );
+		$( '#test' ).bind( 'submit', handler );
 
 		userInitiatedSubmit();
 
-		ok( true, 'text complete' );
-	});
+		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo is invalid' );
 
-	// how many invalid events expected for a set of radio buttons?
+		// teardown
+		$( '#test' ).unbind( 'submit', handler );
+
+	});
 
 
 // --></script>
