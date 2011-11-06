@@ -203,7 +203,7 @@ if ( jQuery !== 'undefined' ) {
 	;
 
 
-	// run immediately and onload
+	// run immediately and ondocumentready
 	initConstraintValidationAPI();
 	$( initConstraintValidationAPI );
 

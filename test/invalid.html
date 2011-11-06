@@ -6,6 +6,7 @@
 
 	<link rel="stylesheet" href="../lib/qunit-git.css" />
 	<script src="../lib/qunit-git.js"></script>
+	<script src="qunit-helpers.js"></script>
 
 	<style>
 		body {
@@ -13,10 +14,6 @@
 			font-family: sans-serif;
 			background: #faf7f3;
 			color: #111;
-		}
-
-		#qunit-fixture {
-			position: static;
 		}
 	</style>
 
@@ -74,7 +71,7 @@
 		$( '#test :submit' )[0].click();
 	};
 
-	module( 'environment' );
+	module( 'environment', lifecycleCVAPI );
 
 	test( 'required fields are in test form', 4, function() {
 
@@ -86,7 +83,7 @@
 	});
 
 
-	module( 'invalid events' );
+	module( 'invalid events', lifecycleCVAPI );
 
 	test( 'invalid thrown for @required', 2, function() {
 
