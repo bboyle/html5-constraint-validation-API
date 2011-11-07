@@ -107,15 +107,15 @@
 			}
 		;
 
-		// form.bind( 'submit.TEST', submitDetection );
+		form.bind( 'submit.TEST', submitDetection );
 
 		// make foo invalid
 		$( '#foo' ).val( '' );
-		$( '#test' ).trigger( 'submit' );
+		form.trigger( 'submit' );
 		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo is invalid' );
 
 		// teardown
-		// form.unbind( 'submit.TEST' );
+		form.unbind( 'submit.TEST' );
 		
 	});
 
