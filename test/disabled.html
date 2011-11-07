@@ -105,6 +105,24 @@
 	});
 
 
+	module( 'invalid events and disabled controls', lifecycleCVAPI );
+
+	test( 'disabled controls never trigger invalid', 0, function() {
+
+		$( '#disabled' ).bind( 'invalid.TEST', function() {
+			ok( false, 'invalid event detected' );
+		});
+
+		// make disabled invalid
+		$( '#disabled' ).val( '' );
+		$( '#disabled' )[ 0 ].checkValidity(); // should not throw any invalid events
+
+		// teardown
+		$( '#disabled' ).unbind( 'invalid.TEST' );
+		
+	});
+
+
 // --></script>
 
 
