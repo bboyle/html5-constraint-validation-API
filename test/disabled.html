@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+	<meta charset="UTF-8" />
+	<title>disabled tests · forces Constraint Validation API tests</title>
+
+	<link rel="stylesheet" href="../lib/qunit-git.css">
+	<script src="../lib/qunit-git.js"></script>
+	<script src="qunit-helpers.js"></script>
+
+	<style>
+		body {
+			padding: 2em;
+			font-family: sans-serif;
+			background: #faf7f3;
+			color: #111;
+		}
+	</style>
+</head>
+
+<body>
+
+
+<div id="qunit">
+	<h1 id="qunit-header">QUnit</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">
+
+
+		<form id="test" action="javascript:">
+
+			<ol class="questions">
+
+				<li>
+					<label for="foo">
+						<span class="label">Foo</span>
+						<abbr title="(required)">*</abbr>
+					</label>
+					<input type="text" name="foo" id="foo" value="" required="required" />
+				</li>
+
+				<li>
+					<label for="disabled">
+						<span class="label">Disabled</span>
+						<abbr title="(required)">*</abbr>
+					</label>
+					<input type="text" name="disabled" id="disabled" value="" disabled="disabled" required="required" />
+				</li>
+
+				<li class="footer">
+					<ol class="submit">
+						<li>
+							<strong>
+								<input type="submit" value="Submit" />
+							</strong>
+						</li>
+					</ol>
+				</li>
+
+			</ol>
+
+		</form>
+
+
+	</div>
+</div>
+
+
+<script src="../lib/jquery-1.4.4-min.js"></script>
+<script src="../src/forces.html5.constraintValidationAPI.js"></script>
+
+<script><!-- //
+
+	module( 'environment', lifecycleCVAPI );
+
+	test( 'required fields are in test form', function() {
+
+		strictEqual( $( 'form#test' ).length, 1, 'form#test is present' );
+		strictEqual( $( 'form#test input#foo' ).length, 1, 'form#test contains input#foo' );
+		strictEqual( $( 'form#test input#disabled' ).length, 1, 'form#test contains input#disabled' );
+		ok( $( 'input#foo' ).attr( 'required' ), 'input#foo has @required' );
+		ok( $( 'input#disabled' ).attr( 'required' ), 'input#disabled has @required' );
+		ok( $( 'input#disabled' ).attr( 'disabled' ), 'input#foo has @disabled' );
+
+	});
+
+
+	module( 'validityState and disabled controls', lifecycleCVAPI );
+
+	test( 'disabled controls are always valid', 3, function() {
+
+		// make disabled invalid
+		$( '#disabled' ).val( '' );
+		strictEqual( $( '#disabled' )[ 0 ].checkValidity(), true, '#disabled .checkValidity() valid' );
+		// strictEqual( $( '#disabled' )[ 0 ].validity.valid, true, '#disabled .validity.valid valid' ); // IE 10.0.1008.16421 disagrees
+
+		// make foo valid
+		$( '#disabled' ).val( 'foo' );
+		strictEqual( $( '#disabled' )[ 0 ].checkValidity(), true, '#disabled .checkValidity() valid' );
+		strictEqual( $( '#disabled' )[ 0 ].validity.valid, true, '#disabled .validity.valid valid' );
+		
+	});
+
+
+	module( 'invalid events and disabled controls', lifecycleCVAPI );
+
+	test( 'disabled controls never trigger invalid', 0, function() {
+
+		$( '#disabled' ).bind( 'invalid.TEST', function() {
+			ok( false, 'invalid event detected' );
+		});
+
+		// make disabled invalid
+		$( '#disabled' ).val( '' );
+		$( '#disabled' )[ 0 ].checkValidity(); // should not throw any invalid events
+
+		// teardown
+		$( '#disabled' ).unbind( 'invalid.TEST' );
+		
+	});
+
+
+	module( 'submit and disabled controls', lifecycleCVAPI );
+
+	test( 'disabled controls never abort submit', 1, function() {
+
+		var submitted = 0;
+		$( '#test' ).bind( 'submit.TEST', function() {
+			submitted++;
+			ok( submitted <= 1, 'invalid event detected' );
+		});
+
+		// make foo valid
+		$( '#foo' ).val( 'foo' );
+
+		// make disabled invalid
+		$( '#disabled' ).val( '' );
+
+		$( '#test' ).trigger( 'submit' ); // should succeed, even tho #disabled would be invalid (if enabled)
+
+		// teardown
+		$( '#test' ).unbind( 'submit.TEST' );
+		
+	});
+
+
+// --></script>
+
+
+</body>
+</html>
