@@ -80,7 +80,7 @@ if ( jQuery !== 'undefined' ) {
 				this.validationMessage = 'Please type an email address';
 			}
 
-			return this.validity.valid;
+			return this.disabled || this.validity.valid;
 		},
 
 
