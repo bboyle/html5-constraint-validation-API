@@ -93,7 +93,7 @@ if ( jQuery !== 'undefined' ) {
 
 			var form = $( this ),
 				novalidate = !! form.attr( 'novalidate' ),
-				valid = false
+				invalid = false
 			;
 
 			// polyfill validation?
