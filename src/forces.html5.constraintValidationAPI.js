@@ -93,7 +93,7 @@ if ( jQuery !== 'undefined' ) {
 
 			var form = $( this ),
 				novalidate = !! form.attr( 'novalidate' ),
-				abortSubmit = false
+				valid = false
 			;
 
 			// polyfill validation?
@@ -101,17 +101,15 @@ if ( jQuery !== 'undefined' ) {
 				// check fields
 				form.find( candidateForValidation ).each(function() {
 
-					validateField.call( this );
+					invalid = ! validateField.call( this );
 
 
 					// unless @novalidate
 					if ( ! novalidate ) {
 						// if invalid
-						if ( ! this.validity.valid ) {
+						if ( invalid ) {
 							// trigger invalid
 							$( this ).trigger( invalidEvent() );
-							// submit will be aborted
-							abortSubmit = true;
 						}
 					}
 				});
@@ -124,7 +122,7 @@ if ( jQuery !== 'undefined' ) {
 			// unless @novalidate
 			// if there are invalid fields
 			if ( ! novalidate && form.find( candidateForValidation ).filter(function() {
-				return ! this.validity.valid;
+				return ! ( this.disabled || this.validity.valid );
 			}).length > 0 ) {
 				// abort submit
 				event.stopImmediatePropagation();

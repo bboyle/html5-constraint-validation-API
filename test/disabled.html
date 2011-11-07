@@ -123,6 +123,30 @@
 	});
 
 
+	module( 'submit and disabled controls', lifecycleCVAPI );
+
+	test( 'disabled controls never abort submit', 1, function() {
+
+		var submitted = 0;
+		$( '#test' ).bind( 'submit.TEST', function() {
+			submitted++;
+			ok( submitted <= 1, 'invalid event detected' );
+		});
+
+		// make foo valid
+		$( '#foo' ).val( 'foo' );
+
+		// make disabled invalid
+		$( '#disabled' ).val( '' );
+
+		$( '#test' ).trigger( 'submit' ); // should succeed, even tho #disabled would be invalid (if enabled)
+
+		// teardown
+		$( '#test' ).unbind( 'submit.TEST' );
+		
+	});
+
+
 // --></script>
 
 
