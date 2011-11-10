@@ -52,14 +52,22 @@ if ( jQuery !== 'undefined' ) {
 		validateField = function( message ) {
 
 			var $this = $( this ),
-				radio = this.type === 'radio',
-				valueMissing = $this.attr( 'required' ) && ! this.value,
+				valueMissing = !! $this.attr( 'required' ),
 				invalidEmail = this.getAttribute( 'type' ) === 'email' && !! this.value && ! REXP_EMAIL.test( this.value )
 			;
 
-			// radio buttons
-			if ( radio ) {
-				valueMissing = $( this.form.elements[ this.name ] ).filter( ':checked' ).length === 0;
+			// if required, check for missing value
+			if ( valueMissing ) {
+
+				if ( /^select$/i.test( this.nodeName )) {
+					valueMissing = this.selectedIndex === 0 && this.options[ 0 ].value === '';
+
+				// radio buttons
+				} else if ( this.type === 'radio' ) {
+					valueMissing = $( this.form.elements[ this.name ] ).filter( ':checked' ).length === 0;
+				} else {
+					valueMissing = ! this.value;
+				}
 			}
 
 			// set .validityState
@@ -84,7 +92,16 @@ if ( jQuery !== 'undefined' ) {
 
 
 		changeHandler = function( event ) {
-			validateField.call( event.target );
+			var target = event.target;
+
+			validateField.call( target );
+
+			if ( target.type === 'radio' ) {
+				$( target.form.elements[ this.name ] ).each(function() {
+					this.validity = target.validity;
+					this.validationMessage = target.validationMessage;
+				});
+			}
 		},
 
 
@@ -132,11 +149,12 @@ if ( jQuery !== 'undefined' ) {
 
 
 		initConstraintValidationAPI = function() {
+			var candidates = $( candidateForValidation );
 
 			// INPUT validityState
 			if ( typeof input[ 0 ].validity !== 'object' ) {
 				// set us up the API
-				$( candidateForValidation ).filter(function() {
+				candidates.filter(function() {
 					return typeof this.validity !== 'object';
 				}).each(function() {
 
@@ -146,7 +164,7 @@ if ( jQuery !== 'undefined' ) {
 				});
 
 				// check validity on change
-				$( candidateForValidation )
+				candidates
 					.unbind( 'change.constraintValidationAPI' )
 					.bind( 'change.constraintValidationAPI', changeHandler )
 				;
@@ -155,7 +173,7 @@ if ( jQuery !== 'undefined' ) {
 			// INPUT validitationMessage
 			if ( typeof input[ 0 ].validationMessage !== 'string' ) {
 				// set us up the API
-				$( candidateForValidation ).filter(function() {
+				candidates.filter(function() {
 					return typeof this.validationMessage !== 'string';
 				}).each(function() {
 					this.validationMessage = '';
@@ -165,7 +183,7 @@ if ( jQuery !== 'undefined' ) {
 			// INPUT checkValidity
 			if ( typeof input[ 0 ].checkValidity !== 'function' ) {
 				// set us up the API
-				$( candidateForValidation ).filter(function() {
+				candidates.filter(function() {
 					return typeof this.checkValidity !== 'function';
 				}).each(function() {
 					var domElement = this,
@@ -189,7 +207,7 @@ if ( jQuery !== 'undefined' ) {
 			// INPUT setCustomValidity
 			if ( typeof input[ 0 ].setCustomValidity !== 'function' ) {
 				// set us up the API
-				$( candidateForValidation ).filter(function() {
+				candidates.filter(function() {
 					return typeof this.setCustomValidity !== 'function';
 				}).each(function() {
 					var that = this;
