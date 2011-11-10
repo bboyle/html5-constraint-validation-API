@@ -69,7 +69,7 @@ if ( jQuery !== 'undefined' ) {
 			if ( this.validity.valid ) {
 				this.validationMessage = '';
 
-			} else if ( this.validity.customError ) {
+			} else if ( this.validity.customError && typeof message === 'string' ) {
 				this.validationMessage = message;
 
 			} else if ( this.validity.valueMissing ) {
