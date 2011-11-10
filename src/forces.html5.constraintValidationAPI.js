@@ -35,10 +35,9 @@ if ( jQuery !== 'undefined' ) {
 
 
 		// manage validity state object
-		validityState = function( typeMismatch, valueMissing, message ) {
-			var customError = false;
+		validityState = function( typeMismatch, valueMissing, customError, message ) {
 
-			if ( typeof message !== 'undefined' ) {
+			if ( typeof message === 'string' ) {
 				customError = !! message;
 			}
 			return {
@@ -64,7 +63,7 @@ if ( jQuery !== 'undefined' ) {
 			}
 
 			// set .validityState
-			this.validity = validityState( invalidEmail, valueMissing, message );
+			this.validity = validityState( invalidEmail, valueMissing, this.validity.customError || false, message );
 			
 			// set .validationMessage
 			if ( this.validity.valid ) {
@@ -141,7 +140,7 @@ if ( jQuery !== 'undefined' ) {
 					return typeof this.validity !== 'object';
 				}).each(function() {
 
-					this.validity = validityState( false, false, '' );
+					this.validity = validityState( false, false, false, '' );
 					this.validationMessage = '';
 
 				});
@@ -194,9 +193,6 @@ if ( jQuery !== 'undefined' ) {
 					return typeof this.setCustomValidity !== 'function';
 				}).each(function() {
 					var that = this;
-
-					this.validity = validityState( false, false, '' );
-					this.validationMessage = '';
 
 					this.setCustomValidity = function( message ) {
 						validateField.call( that, message );
