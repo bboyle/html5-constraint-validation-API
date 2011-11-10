@@ -106,6 +106,12 @@
 		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo validity.valid should be false' );
 		strictEqual( $( '#email' )[ 0 ].validity.customError, false, '#email validity.customError should be false' );
 
+		$( '#foo' )[ 0 ].checkValidity();
+
+		strictEqual( $( '#foo' )[ 0 ].validity.customError, true, '#foo validity.customError should be true' );
+		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo validity.valid should be false' );
+		strictEqual( $( '#email' )[ 0 ].validity.customError, false, '#email validity.customError should be false' );
+
 	});
 
 	test( 'can get message set with setCustomValidity()', function() {
