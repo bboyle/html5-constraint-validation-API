@@ -98,18 +98,20 @@
 
 	module( 'input validityState customError', lifecycleCVAPI );
 
-	test( 'validity.customError', function() {
+	test( 'validity.customError', 8, function() {
 		
-		$( '#foo' )[ 0 ].setCustomValidity( 'foo' );
+		$( '#foo' )[ 0 ].setCustomValidity( 'foo is invalid' );
 
 		strictEqual( $( '#foo' )[ 0 ].validity.customError, true, '#foo validity.customError should be true' );
 		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo validity.valid should be false' );
+		strictEqual( $( '#foo' )[ 0 ].validationMessage, 'foo is invalid', '#foo .validityMessage found' );
 		strictEqual( $( '#email' )[ 0 ].validity.customError, false, '#email validity.customError should be false' );
 
 		$( '#foo' )[ 0 ].checkValidity();
 
 		strictEqual( $( '#foo' )[ 0 ].validity.customError, true, '#foo validity.customError should be true' );
 		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo validity.valid should be false' );
+		strictEqual( $( '#foo' )[ 0 ].validationMessage, 'foo is invalid', '#foo .validityMessage found' );
 		strictEqual( $( '#email' )[ 0 ].validity.customError, false, '#email validity.customError should be false' );
 
 	});
@@ -147,7 +149,9 @@
 		strictEqual( $( '#email' )[ 0 ].validity.customError, false, '#email has no custom error' );
 		strictEqual( $( '#email' )[ 0 ].validity.valid, false, '#email is still not valid' );
 		// browser specific error will be shown
-		strictEqual( /email/.test( $( '#email' )[ 0 ].validationMessage ), true, 'message contains "email"' );
+		// fails in Opera 11, which sets .validationMessage to ""
+		// Safari 5 returns "type mismatch"
+		ok( $( '#email' )[ 0 ].validationMessage, '.validationMessage is truthy' );
 
 		// remove value
 		// is required seen?
