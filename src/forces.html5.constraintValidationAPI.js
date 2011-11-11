@@ -12,7 +12,7 @@ if ( jQuery !== 'undefined' ) {
 
 	// http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#valid-e-mail-address
 	// 1*( atext / "." ) "@" ldh-str 1*( "." ldh-str )
-	var REXP_EMAIL = /^[A-Za-z0-9!#$%&'*+\-\/=\?\^_`\{\|\}~\.]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+$/,
+	var REXP_EMAIL = /^[A-Za-z0-9!#$%&'*+\-\/=\?\^_`\{\|\}~\.]+@[A-Za-z0-9\-]+(\.[A-Za-z0-9\-]+)*$/,
 
 		// fields that validate
 		candidateForValidation = 'input, select, textarea',
