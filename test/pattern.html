@@ -211,8 +211,57 @@
 
 	});
 
+	test( 'regexp parsing is correct', function() {
 
-	// TODO correct regexp handling (email, part number)
+		// valid part numbers
+		$.each( [ '1ABC', '3BEN', '0ZZZ' ], function( index, element ) {
+			$( '#part' ).val( element );
+			$( '#part' )[ 0 ].checkValidity();
+			strictEqual( $( '#part' )[ 0 ].validity.patternMismatch, false, '#part[value="' + element + '"] validity.patternMismatch should be false' );
+			strictEqual( $( '#part' )[ 0 ].validity.valid, true, '#part[value="' + element + '"] validity.valid should be true' );
+		});
+
+		// invalid part numbers
+		$.each( [ '0', '123', '1abc', '1ABCD', '00ZZZ' ], function( index, element ) {
+			$( '#part' ).val( element );
+			$( '#part' )[ 0 ].checkValidity();
+			strictEqual( $( '#part' )[ 0 ].validity.patternMismatch, true, '#part[value="' + element + '"] validity.patternMismatch should be true' );
+			strictEqual( $( '#part' )[ 0 ].validity.valid, false, '#part[value="' + element + '"] validity.valid should be false' );
+		});
+
+	});
+
+	test( 'email @pattern', function() {
+
+		// valid email patterns
+		$.each( [ 'a@b.c', 'benjamins.boyle@gmail.com' ], function( index, element ) {
+			$( '#email' ).val( element );
+			$( '#email' )[ 0 ].checkValidity();
+			strictEqual( $( '#email' )[ 0 ].validity.typeMismatch, false, '#email[value="' + element + '"] validity.typeMismatch should be false' );
+			strictEqual( $( '#email' )[ 0 ].validity.patternMismatch, false, '#email[value="' + element + '"] validity.patternMismatch should be false' );
+			strictEqual( $( '#email' )[ 0 ].validity.valid, true, '#email[value="' + element + '"] validity.valid should be true' );
+		});
+
+		// invalid email patterns
+		$.each( [ 'a@b', 'foo@localhost' ], function( index, element ) {
+			$( '#email' ).val( element );
+			$( '#email' )[ 0 ].checkValidity();
+			strictEqual( $( '#email' )[ 0 ].validity.typeMismatch, false, '#email[value="' + element + '"] validity.typeMismatch should be false' );
+			strictEqual( $( '#email' )[ 0 ].validity.patternMismatch, true, '#email[value="' + element + '"] validity.patternMismatch should be true' );
+			strictEqual( $( '#email' )[ 0 ].validity.valid, false, '#email[value="' + element + '"] validity.valid should be false' );
+		});
+
+		// invalid email address
+		$.each( [ 'foo', '@' ], function( index, element ) {
+			$( '#email' ).val( element );
+			$( '#email' )[ 0 ].checkValidity();
+			strictEqual( $( '#email' )[ 0 ].validity.typeMismatch, true, '#email[value="' + element + '"] validity.typeMismatch should be true' );
+			strictEqual( $( '#email' )[ 0 ].validity.patternMismatch, true, '#email[value="' + element + '"] validity.patternMismatch should be true' );
+			strictEqual( $( '#email' )[ 0 ].validity.valid, false, '#email[value="' + element + '"] validity.valid should be false' );
+		});
+
+	});
+
 
 // --></script>
 
