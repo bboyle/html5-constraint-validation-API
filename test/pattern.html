@@ -167,6 +167,26 @@
 	});
 
 
+	test( 'validity.patternMismatch toggles as value is changed', function() {
+		
+		$( '#foo' ).val( 'bar' );
+		$( '#foo' )[ 0 ].checkValidity();
+		strictEqual( $( '#foo' )[ 0 ].validity.patternMismatch, true, '#foo[value="bar"] validity.patternMismatch should be true' );
+		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo[value="bar"] validity.valid should be false' );
+
+		$( '#foo' ).val( 'foo' );
+		$( '#foo' )[ 0 ].checkValidity();
+		strictEqual( $( '#foo' )[ 0 ].validity.patternMismatch, false, '#foo[value="foo"] validity.patternMismatch should be false' );
+		strictEqual( $( '#foo' )[ 0 ].validity.valid, true, '#foo[value="foo"] validity.valid should be true' );
+
+		$( '#foo' ).val( 'bar' );
+		$( '#foo' )[ 0 ].checkValidity();
+		strictEqual( $( '#foo' )[ 0 ].validity.patternMismatch, true, '#foo[value="bar"] validity.patternMismatch should be true' );
+		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo[value="bar"] validity.valid should be false' );
+
+	});
+
+
 	// TODO when an invalid value is corrected, patternMismatch toggles
 
 	// patterns are anchored
