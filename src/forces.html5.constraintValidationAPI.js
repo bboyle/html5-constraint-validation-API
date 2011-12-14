@@ -56,7 +56,7 @@ if ( jQuery !== 'undefined' ) {
 				valueMissing = !! $this.attr( 'required' ),
 				invalidEmail = this.getAttribute( 'type' ) === 'email' && !! this.value && ! REXP_EMAIL.test( this.value ),
 				patternMismatch,
-				pattern;
+				pattern
 			;
 
 			// if required, check for missing value
