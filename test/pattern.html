@@ -129,10 +129,37 @@
 		
 		$( '#foo' ).val( '' );
 		$( '#foo' )[ 0 ].checkValidity();
-		strictEqual( $( '#foo' )[0].validity.patternMismatch, false, '#foo[value=""] validity.patternMismatch should be false' );
+		strictEqual( $( '#foo' )[ 0 ].validity.patternMismatch, false, '#foo[value=""] validity.patternMismatch should be false' );
 
 	});
 
+	test( 'validity.patternMismatch is false when pattern matches value', function() {
+		
+		$( '#foo' ).val( 'foo' );
+		$( '#foo' )[ 0 ].checkValidity();
+		strictEqual( $( '#foo' )[ 0 ].validity.patternMismatch, false, '#foo[value="foo"] validity.patternMismatch should be false' );
+		strictEqual( $( '#foo' )[ 0 ].validity.valid, true, '#foo[value="foo"] validity.valid should be true' );
+
+	});
+
+	test( 'validity.patternMismatch is true when pattern does not match value', function() {
+		
+		$( '#foo' ).val( 'bar' );
+		$( '#foo' )[ 0 ].checkValidity();
+		strictEqual( $( '#foo' )[ 0 ].validity.patternMismatch, true, '#foo[value="bar"] validity.patternMismatch should be true' );
+		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo[value="bar"] validity.valid should be false' );
+
+	});
+
+
+	// TODO when an invalid value is blanked, patternMismatch becomes false
+	// TODO when an invalid value is corrected, patternMismatch toggles
+
+	// patterns are anchored
+	// TODO if pattern is .*bar.* then foobarfoo matches
+	// TODO if pattern is foo then foobarfoo does not match
+
+	// TODO correct regexp handling (email, part number)
 
 // --></script>
 

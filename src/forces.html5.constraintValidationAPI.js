@@ -55,7 +55,8 @@ if ( jQuery !== 'undefined' ) {
 			var $this = $( this ),
 				valueMissing = !! $this.attr( 'required' ),
 				invalidEmail = this.getAttribute( 'type' ) === 'email' && !! this.value && ! REXP_EMAIL.test( this.value ),
-				patternMismatch = false
+				patternMismatch,
+				pattern;
 			;
 
 			// if required, check for missing value
@@ -69,6 +70,19 @@ if ( jQuery !== 'undefined' ) {
 					valueMissing = $( this.form.elements[ this.name ] ).filter( ':checked' ).length === 0;
 				} else {
 					valueMissing = ! this.value;
+				}
+
+			}
+
+			if ( !! this.getAttribute( 'pattern' ) ) {
+				if ( this.value.length > 0 ) {
+					// http://www.whatwg.org/specs/web-apps/current-work/multipage/common-input-element-attributes.html#compiled-pattern-regular-expression
+					pattern = new RegExp( '^(?:' + this.getAttribute( 'pattern' ) + ')$' );
+
+					patternMismatch = ! pattern.test( this.value );
+					
+				} else {
+					patternMismatch = false;
 				}
 			}
 
