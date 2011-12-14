@@ -35,7 +35,7 @@ if ( jQuery !== 'undefined' ) {
 
 
 		// manage validity state object
-		validityState = function( typeMismatch, valueMissing, customError, message ) {
+		validityState = function( typeMismatch, valueMissing, customError, message, patternMismatch ) {
 
 			if ( typeof message === 'string' ) {
 				customError = !! message;
@@ -43,8 +43,9 @@ if ( jQuery !== 'undefined' ) {
 			return {
 				customError: customError,
 				typeMismatch: !! typeMismatch,
+				patternMismatch: !! patternMismatch,
 				valueMissing: !! valueMissing,
-				valid: ! typeMismatch && ! valueMissing && ! customError
+				valid: ! valueMissing && ! customError && ! typeMismatch && ! patternMismatch
 			};
 		},
 
@@ -53,7 +54,8 @@ if ( jQuery !== 'undefined' ) {
 
 			var $this = $( this ),
 				valueMissing = !! $this.attr( 'required' ),
-				invalidEmail = this.getAttribute( 'type' ) === 'email' && !! this.value && ! REXP_EMAIL.test( this.value )
+				invalidEmail = this.getAttribute( 'type' ) === 'email' && !! this.value && ! REXP_EMAIL.test( this.value ),
+				patternMismatch = false
 			;
 
 			// if required, check for missing value
@@ -71,7 +73,7 @@ if ( jQuery !== 'undefined' ) {
 			}
 
 			// set .validityState
-			this.validity = validityState( invalidEmail, valueMissing, this.validity.customError || false, message );
+			this.validity = validityState( invalidEmail, valueMissing, this.validity.customError || false, message, patternMismatch );
 			
 			// set .validationMessage
 			if ( this.validity.valid ) {
@@ -158,7 +160,7 @@ if ( jQuery !== 'undefined' ) {
 					return typeof this.validity !== 'object';
 				}).each(function() {
 
-					this.validity = validityState( false, false, false, '' );
+					this.validity = validityState( false, false, false, '', false );
 					this.validationMessage = '';
 
 				});
