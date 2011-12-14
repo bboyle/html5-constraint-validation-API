@@ -109,6 +109,9 @@
 		strictEqual( $( '[pattern]' )[ 2 ], $( 'input#part' )[ 0 ], 'input#part is the 3rd field with a pattern' );
 		strictEqual( $( '[pattern]' )[ 3 ], $( 'input#email' )[ 0 ], 'input#email is the 4th field with a pattern' );
 
+		strictEqual( $( '#foo' ).attr( 'pattern' ), 'foo', '#foo @pattern must match /^foo$/' );
+		strictEqual( $( '#bar' ).attr( 'pattern' ), '.*bar.*', '#bar @pattern must match /^.*bar.*$/' );
+
 	});
 
 
@@ -187,11 +190,27 @@
 	});
 
 
-	// TODO when an invalid value is corrected, patternMismatch toggles
+	module( '@pattern behaviour', lifecycleCVAPI );
 
-	// patterns are anchored
-	// TODO if pattern is .*bar.* then foobarfoo matches
-	// TODO if pattern is foo then foobarfoo does not match
+	test( 'patterns are anchored', function() {
+		
+		$( '#foo' ).val( 'foobarfoo' );
+		$( '#foo' )[ 0 ].checkValidity();
+		strictEqual( $( '#foo' )[ 0 ].validity.patternMismatch, true, '#foo[value="foobarfoo"] validity.patternMismatch should be true' );
+		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo[value="foobarfoo"] validity.valid should be false' );
+
+		$( '#bar' ).val( 'bar' );
+		$( '#bar' )[ 0 ].checkValidity();
+		strictEqual( $( '#bar' )[ 0 ].validity.patternMismatch, false, '#bar[value="bar"] validity.patternMismatch should be false' );
+		strictEqual( $( '#bar' )[ 0 ].validity.valid, true, '#bar[value="bar"] validity.valid should be true' );
+
+		$( '#bar' ).val( 'foobarfoo' );
+		$( '#bar' )[ 0 ].checkValidity();
+		strictEqual( $( '#bar' )[ 0 ].validity.patternMismatch, false, '#bar[value="foobarfoo"] validity.patternMismatch should be false' );
+		strictEqual( $( '#bar' )[ 0 ].validity.valid, true, '#bar[value="foobarfoo"] validity.valid should be true' );
+
+	});
+
 
 	// TODO correct regexp handling (email, part number)
 
