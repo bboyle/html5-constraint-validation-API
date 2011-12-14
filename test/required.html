@@ -166,7 +166,7 @@
 
 		strictEqual( typeof $( '#foo' )[0].validity, 'object', 'validityState is present' );
 		strictEqual( typeof $( '#foo' )[0].validity.valueMissing, 'boolean', 'validityState.valueMissing is present' );
-		strictEqual( typeof $( '#foo' )[0].validity.valid, 'boolean', 'validityState.valueMissing is present' );
+		strictEqual( typeof $( '#foo' )[0].validity.valid, 'boolean', 'validityState.valid is present' );
 
 	});
 
@@ -230,7 +230,6 @@
 		strictEqual( $( '#select-foo' )[0].validity.valid, false, '#select-foo validity.valid should be false' );
 
 	});
-
 
 	test( 'validity.valueMissing is false when a value is selected', function() {
 		
