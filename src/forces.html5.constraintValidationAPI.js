@@ -101,6 +101,12 @@ if ( jQuery !== 'undefined' ) {
 
 			} else if ( this.validity.typeMismatch ) {
 				this.validationMessage = 'Please type an email address';
+
+			} else if ( this.validity.patternMismatch ) {
+				this.validationMessage = 'Please use the format shown';
+
+			} else {
+				this.validationMessage = 'Please answer the question correctly';
 			}
 
 			return this.disabled || this.validity.valid;
