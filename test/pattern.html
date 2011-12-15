@@ -134,6 +134,7 @@
 		$( '#foo' )[ 0 ].checkValidity();
 		strictEqual( $( '#foo' )[ 0 ].validity.patternMismatch, false, '#foo[value=""] validity.patternMismatch should be false' );
 		strictEqual( $( '#foo' )[ 0 ].validity.valid, true, '#foo[value=""] validity.valid should be true' );
+		strictEqual( $( '#foo' )[ 0 ].validationMessage.length, 0, '#foo[value=""] validitionMessage should be ""' );
 
 	});
 
@@ -143,6 +144,7 @@
 		$( '#foo' )[ 0 ].checkValidity();
 		strictEqual( $( '#foo' )[ 0 ].validity.patternMismatch, false, '#foo[value="foo"] validity.patternMismatch should be false' );
 		strictEqual( $( '#foo' )[ 0 ].validity.valid, true, '#foo[value="foo"] validity.valid should be true' );
+		strictEqual( $( '#foo' )[ 0 ].validationMessage.length, 0, '#foo[value=""] validitionMessage should be ""' );
 
 	});
 
@@ -152,6 +154,7 @@
 		$( '#foo' )[ 0 ].checkValidity();
 		strictEqual( $( '#foo' )[ 0 ].validity.patternMismatch, true, '#foo[value="bar"] validity.patternMismatch should be true' );
 		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo[value="bar"] validity.valid should be false' );
+		strictEqual( $( '#foo' )[ 0 ].validationMessage.length > 0, true, '#foo[value=""] validitionMessage should not be an empty string' );
 
 	});
 
@@ -161,11 +164,13 @@
 		$( '#foo' )[ 0 ].checkValidity();
 		strictEqual( $( '#foo' )[ 0 ].validity.patternMismatch, true, '#foo[value="bar"] validity.patternMismatch should be true' );
 		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo[value="bar"] validity.valid should be false' );
+		strictEqual( $( '#foo' )[ 0 ].validationMessage.length > 0, true, '#foo[value=""] validitionMessage should not be an empty string' );
 
 		$( '#foo' ).val( '' );
 		$( '#foo' )[ 0 ].checkValidity();
 		strictEqual( $( '#foo' )[ 0 ].validity.patternMismatch, false, '#foo[value=""] validity.patternMismatch should be false' );
 		strictEqual( $( '#foo' )[ 0 ].validity.valid, true, '#foo[value=""] validity.valid should be true' );
+		strictEqual( $( '#foo' )[ 0 ].validationMessage.length, 0, '#foo[value=""] validitionMessage should be ""' );
 
 	});
 
