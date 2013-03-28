@@ -2,11 +2,21 @@
 <html lang="en-AU">
 <head>
 	<meta charset="UTF-8" />
-	<title>change tests · forces Constraint Validation API tests</title>
+	<title>change tests · Constraint Validation API tests</title>
 
-	<link rel="stylesheet" href="../lib/qunit-git.css">
-	<script src="../lib/qunit-git.js"></script>
+	<!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+	<script src="../libs/jquery-loader.js"></script>
+	<!-- Load local QUnit. -->
+	<link rel="stylesheet" href="../libs/qunit/qunit.css" media="screen">
+	<script src="../libs/qunit/qunit.js"></script>
+	<!-- Load local lib and tests. -->
+	<script src="../src/html5.constraintValidationAPI.js"></script>
 	<script src="qunit-helpers.js"></script>
+	<script src="change.js"></script>
+	<!-- Removing access to jQuery and $. But it'll still be available as _$, if
+		you REALLY want to mess around with jQuery in the console. REMEMBER WE
+		ARE TESTING A PLUGIN HERE, THIS HELPS ENSURE BEST PRACTICES. REALLY. -->
+	<script>window._$ = jQuery.noConflict(true);</script>
 
 	<style>
 		body {
@@ -87,81 +97,6 @@
 
 		</form>
 	</div>
-
-
-<script src="../lib/jquery-1.4.4-min.js"></script>
-<script src="../src/forces.html5.constraintValidationAPI.js"></script>
-
-<script><!-- //
-
-	module( 'environment', lifecycleCVAPI );
-
-	test( 'required fields are in test form', function() {
-
-		strictEqual( $( 'form#test' ).length, 1, 'form#test is present' );
-		strictEqual( $( 'form#test input#foo' ).length, 1, 'form#test contains input#foo' );
-		ok( $( 'input#foo' ).attr( 'required' ), 'input#foo has @required' );
-
-		strictEqual( $( 'form#test :radio[name=flavour]#flavour-chocolate' ).length, 1, 'found :radio[name=flavour]#flavour-chocolate' );
-		strictEqual( $( 'form#test :radio[name=flavour]#flavour-strawberry' ).length, 1, 'found :radio[name=flavour]#flavour-strawberry' );
-		strictEqual( $( 'form#test :radio[name=flavour]#flavour-vanilla' ).length, 1, 'found :radio[name=flavour]#flavour-vanilla' );
-
-		strictEqual( $( 'form#test select#select-flavour' ).length, 1, 'found select#select-flavour' );
-		ok( $( 'select#select-flavour' ).attr( 'required' ), 'select#select-flavour is required' );
-
-	});
-
-
-	module( 'text onchange', lifecycleCVAPI );
-
-	test( 'validity flagged onchange', 2, function() {
-
-		// make foo invalid
-		$( '#foo' ).val( '' ).trigger( 'change' );
-		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo is invalid' );
-
-		// make foo valid
-		$( '#foo' ).val( 'foo' ).trigger( 'change' );
-		strictEqual( $( '#foo' )[ 0 ].validity.valid, true, '#foo is valid' );
-		
-	});
-
-
-	module( 'radio onchange', lifecycleCVAPI );
-
-	test( 'validity flagged onchange', 6, function() {
-
-		$( '#flavour-chocolate' ).trigger( 'change' );
-		strictEqual( $( '#flavour-chocolate' )[ 0 ].validity.valid, false, '#flavour-chocolate is invalid' );
-		strictEqual( $( '#flavour-strawberry' )[ 0 ].validity.valid, false, '#flavour-strawberry is invalid' );
-		strictEqual( $( '#flavour-vanilla' )[ 0 ].validity.valid, false, '#flavour-vanilla is invalid' );
-
-		// make valid
-		$( '#flavour-chocolate' )[ 0 ].click(); // triggers change? not in IE6!
-		$( '#flavour-chocolate' ).trigger( 'change' );
-		strictEqual( $( '#flavour-chocolate' )[ 0 ].validity.valid, true, '#flavour-chocolate is valid' );
-		strictEqual( $( '#flavour-strawberry' )[ 0 ].validity.valid, true, '#flavour-strawberry is valid' );
-		strictEqual( $( '#flavour-vanilla' )[ 0 ].validity.valid, true, '#flavour-vanilla is valid' );
-		
-	});
-
-
-	module( 'select onchange', lifecycleCVAPI );
-
-	test( 'validity flagged onchange', 2, function() {
-
-		$( '#select-flavour' ).trigger( 'change' );
-		strictEqual( $( '#select-flavour' )[ 0 ].validity.valid, false, '#select-flavour is invalid' );
-
-		// make valid
-		$( '#select-flavour' )[ 0 ].selectedIndex = 1; // triggers change? nope
-		$( '#select-flavour' ).trigger( 'change' ); // triggers change?
-		strictEqual( $( '#select-flavour' )[ 0 ].validity.valid, true, '#select-flavour is valid' );
-		
-	});
-
-
-// --></script>
 
 
 </body>

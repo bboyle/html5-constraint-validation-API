@@ -2,11 +2,21 @@
 <html lang="en-AU">
 <head>
 	<meta charset="UTF-8" />
-	<title>checkValidity() tests · forces Constraint Validation API tests</title>
+	<title>checkValidity() tests · Constraint Validation API tests</title>
 
-	<link rel="stylesheet" href="../lib/qunit-git.css" />
-	<script src="../lib/qunit-git.js"></script>
+	<!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+	<script src="../libs/jquery-loader.js"></script>
+	<!-- Load local QUnit. -->
+	<link rel="stylesheet" href="../libs/qunit/qunit.css" media="screen">
+	<script src="../libs/qunit/qunit.js"></script>
+	<!-- Load local lib and tests. -->
+	<script src="../src/html5.constraintValidationAPI.js"></script>
 	<script src="qunit-helpers.js"></script>
+	<script src="checkValidity.js"></script>
+	<!-- Removing access to jQuery and $. But it'll still be available as _$, if
+		you REALLY want to mess around with jQuery in the console. REMEMBER WE
+		ARE TESTING A PLUGIN HERE, THIS HELPS ENSURE BEST PRACTICES. REALLY. -->
+	<script>window._$ = jQuery.noConflict(true);</script>
 
 	<style>
 		body {
@@ -51,59 +61,6 @@
 
 		</form>
 	</div>
-
-
-<script src="../lib/jquery-1.4.4-min.js"></script>
-<script src="../src/forces.html5.constraintValidationAPI.js"></script>
-
-
-<script><!-- //
-
-	module( 'environment', lifecycleCVAPI );
-
-	test( 'required fields are in test form', 4, function() {
-
-		strictEqual( $( 'form#test' ).length, 1, 'form#test is present' );
-		strictEqual( $( 'form#test input#foo' ).length, 1, 'form#test contains input#foo' );
-		ok( $( 'input#foo' ).attr( 'required' ), 'input#foo has @required' );
-		strictEqual( $( 'input#foo' ).val(), '', 'input#foo has no initial value' );
-
-	});
-
-
-	module( '.checkValidity() reflects validity', lifecycleCVAPI );
-
-	test( 'invalid fields return false', 2, function() {
-
-		strictEqual( $( '#foo' )[ 0 ].checkValidity(), false, '.checkValidity() false for blank required field' );
-		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '.validity.valid false for blank required field' );
-		
-	});
-
-
-	module( '.checkValidity() triggers invalid events', lifecycleCVAPI );
-
-	test( 'invalid fields trigger events', 3, function() {
-		
-		// setup - detect invalid events
-		var invalidDetectedOnFoo = 0;
-
-		$( '#foo' ).bind( 'invalid.TEST', function() {
-			invalidDetectedOnFoo++;
-			ok( invalidDetectedOnFoo <= 1, 'invalid event detected on foo' );
-		});
-
-		strictEqual( $( '#foo' )[ 0 ].checkValidity(), false, 'foo is invalid' );
-
-		// make it valid
-		$( '#foo' ).val( 'foo' );
-		strictEqual( $( '#foo' )[ 0 ].checkValidity(), true, 'foo is valid' );
-
-		// teardown
-		$( '#foo' ).unbind( 'invalid.TEST' );
-	});
-
-// --></script>
 
 
 </body>
