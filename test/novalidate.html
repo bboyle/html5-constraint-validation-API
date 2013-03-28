@@ -2,11 +2,21 @@
 <html lang="en-AU">
 <head>
 	<meta charset="UTF-8" />
-	<title>@novalidate tests · forces Constraint Validation API tests</title>
+	<title>@novalidate tests · Constraint Validation API tests</title>
 
-	<link rel="stylesheet" href="../lib/qunit-git.css" />
-	<script src="../lib/qunit-git.js"></script>
+	<!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+	<script src="../libs/jquery-loader.js"></script>
+	<!-- Load local QUnit. -->
+	<link rel="stylesheet" href="../libs/qunit/qunit.css" media="screen">
+	<script src="../libs/qunit/qunit.js"></script>
+	<!-- Load local lib and tests. -->
+	<script src="../src/html5.constraintValidationAPI.js"></script>
 	<script src="qunit-helpers.js"></script>
+	<script src="novalidate.js"></script>
+	<!-- Removing access to jQuery and $. But it'll still be available as _$, if
+		you REALLY want to mess around with jQuery in the console. REMEMBER WE
+		ARE TESTING A PLUGIN HERE, THIS HELPS ENSURE BEST PRACTICES. REALLY. -->
+	<script>window._$ = jQuery.noConflict(true);</script>
 
 	<style>
 		body {
@@ -52,69 +62,6 @@
 
 		</form>
 	</div>
-
-
-<script src="../lib/jquery-1.4.4-min.js"></script>
-<script src="../src/forces.html5.constraintValidationAPI.js"></script>
-
-<script><!-- //
-
-	var	userInitiatedSubmit = function() {
-		$( '#test :submit' )[ 0 ].click();
-	};
-
-	module( 'environment', lifecycleCVAPI );
-
-	test( 'required fields are in test form', 5, function() {
-
-		strictEqual( $( 'form#test' ).length, 1, 'form#test is present' );
-		ok( $( 'form#test' ).attr( 'novalidate' ), 'form#test has @novalidate' );
-		strictEqual( $( 'form#test input#foo' ).length, 1, 'form#test contains input#foo' );
-		ok( $( 'input#foo' ).attr( 'required' ), 'input#foo has @required' );
-		strictEqual( $( 'input#foo' ).val(), '', 'input#foo has no value' );
-
-	});
-
-
-	module( 'invalid events', lifecycleCVAPI );
-
-	test( 'invalid not thrown on submit', 1, function() {
-
-		var handler = function( event ) {
-			ok( false, 'invalid handler should not be triggered' );
-			strictEqual( event.target, $( '#foo' )[ 0 ], 'invalid event detected on #foo' );
-		};
-
-		$( '#foo' ).bind( 'invalid', handler );
-
-		userInitiatedSubmit();
-
-		ok( true, 'invalid event not seen' );
-	});
-
-
-	module( 'submit events', lifecycleCVAPI );
-
-	test( 'submit events triggered with invalid fields', 2, function() {
-
-		var handler = function() {
-			ok( true, 'submit event detected' );
-		};
-
-		$( '#foo' ).val( '' );
-		$( '#test' ).bind( 'submit', handler );
-
-		userInitiatedSubmit();
-
-		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo is invalid' );
-
-		// teardown
-		$( '#test' ).unbind( 'submit', handler );
-
-	});
-
-
-// --></script>
 
 
 </body>
