@@ -2,7 +2,7 @@
 	'use strict';
 	
 	var	userInitiatedSubmit = function() {
-		$( '#test :submit' )[0].click();
+		$( ':submit', '#test' )[0].click();
 	};
 
 	module( 'environment', lifecycleCVAPI );
@@ -10,7 +10,7 @@
 	test( 'required fields are in test form', 4, function() {
 
 		strictEqual( $( 'form#test' ).length, 1, 'form#test is present' );
-		strictEqual( $( 'form#test input#foo' ).length, 1, 'form#test contains input#foo' );
+		strictEqual( $( 'input#foo', 'form#test' ).length, 1, 'form#test contains input#foo' );
 		ok( $( 'input#foo' ).attr( 'required' ), 'input#foo has @required' );
 		strictEqual( $( 'input#foo' ).val(), '', 'input#foo has no value' );
 
