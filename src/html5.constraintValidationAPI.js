@@ -66,9 +66,12 @@ if ( jQuery !== 'undefined' ) {
 					if ( /^select$/i.test( this.nodeName )) {
 						valueMissing = this.selectedIndex === 0 && this.options[ 0 ].value === '';
 
-					// radio buttons
 					} else if ( this.type === 'radio' ) {
 						valueMissing = $( this.form.elements[ this.name ] ).filter( ':checked' ).length === 0;
+
+					} else if ( this.type === 'checkbox' ) {
+						valueMissing = ! this.checked;
+
 					} else {
 						valueMissing = ! this.value;
 					}
