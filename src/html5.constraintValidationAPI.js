@@ -26,15 +26,6 @@ if ( jQuery !== 'undefined' ) {
 			polyfill = typeof input[ 0 ].validity !== 'object',
 
 
-			// new 'invalid' event
-			invalidEvent = function() {
-				var invalid = $.Event( 'invalid' );
-				// invalid events do not bubble
-				invalid.stopImmediatePropagation();
-				return invalid;
-			},
-
-
 			// manage validity state object
 			validityState = function( typeMismatch, valueMissing, customError, message, patternMismatch ) {
 
@@ -66,9 +57,12 @@ if ( jQuery !== 'undefined' ) {
 					if ( /^select$/i.test( this.nodeName )) {
 						valueMissing = this.selectedIndex === 0 && this.options[ 0 ].value === '';
 
-					// radio buttons
 					} else if ( this.type === 'radio' ) {
 						valueMissing = $( this.form.elements[ this.name ] ).filter( ':checked' ).length === 0;
+
+					} else if ( this.type === 'checkbox' ) {
+						valueMissing = ! this.checked;
+
 					} else {
 						valueMissing = ! this.value;
 					}
@@ -149,8 +143,8 @@ if ( jQuery !== 'undefined' ) {
 						if ( ! novalidate ) {
 							// if invalid
 							if ( invalid ) {
-								// trigger invalid
-								$( this ).trigger( invalidEvent() );
+								// use triggerHandler because invalid does not bubble
+								$( this ).triggerHandler( 'invalid' );
 							}
 						}
 					});
@@ -211,17 +205,15 @@ if ( jQuery !== 'undefined' ) {
 					candidates.filter(function() {
 						return typeof this.checkValidity !== 'function';
 					}).each(function() {
-						var domElement = this,
-							$this = $( this );
+						var domElement = this;
 
 						this.checkValidity = function() {
-							// TODO is this breaking .setCustomValidity() by passing NULL as 'message'
 							var valid = validateField.call( domElement );
 
 							// if invalid, and unless novalidate
-							if ( ! valid && ! $this.closest( 'form' ).attr( 'novalidate' )) {
-								// fire invalid event
-								$this.trigger( invalidEvent() );
+							if ( ! valid && ! this.form.hasAttribute( 'novalidate' )) {
+								// use triggerHandler because invalid does not bubble
+								$( domElement ).triggerHandler( 'invalid' );
 							}
 
 							return valid;
