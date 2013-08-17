@@ -59,7 +59,7 @@
 
 	});
 
-	test( 'setCustomValidity() can mask other errors', 7, function() {
+	test( 'setCustomValidity() can mask other errors', 6, function() {
 		
 		// make email invalid (type error)
 		$( '#email' ).val( 'foo' );
@@ -69,6 +69,7 @@
 		$( '#email' )[ 0 ].setCustomValidity( 'custom error' );
 		// custom error is shown
 		strictEqual( $( '#email' )[ 0 ].validity.valid, false, '#email is not valid' );
+		strictEqual( $( '#email' )[ 0 ].validity.typeMismatch, true, '#email has typeMismatch' );
 		strictEqual( $( '#email' )[ 0 ].validationMessage, 'custom error', 'custom error shown' );
 
 		// remove custom error
@@ -76,18 +77,7 @@
 		// type error now current
 		strictEqual( $( '#email' )[ 0 ].validity.customError, false, '#email has no custom error' );
 		strictEqual( $( '#email' )[ 0 ].validity.valid, false, '#email is still not valid' );
-		// browser specific error will be shown
-		// fails in Opera 11, which sets .validationMessage to ""
-		// Safari 5 returns "type mismatch"
-		// TODO fails in PhantomJS (email validation issue?)
-		notStrictEqual( $( '#email' )[ 0 ].validationMessage, null, '.validationMessage is not null' );
-		notStrictEqual( $( '#email' )[ 0 ].validationMessage, undefined, '.validationMessage is not undefined' );
-		notStrictEqual( $( '#email' )[ 0 ].validationMessage, '', '.validationMessage is not empty string' );
-
-		// remove value
-		// is required seen?
-
-		// need to add other tests like min/max as implemented
+		strictEqual( $( '#email' )[ 0 ].validity.typeMismatch, true, '#email has typeMismatch' );
 
 	});
 

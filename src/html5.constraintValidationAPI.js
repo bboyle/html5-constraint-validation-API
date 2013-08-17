@@ -21,7 +21,6 @@ if ( jQuery !== 'undefined' ) {
 			// for feature detection
 			input = $( '<input>' ),
 
-
 			// polyfill test
 			polyfill = typeof input[ 0 ].validity !== 'object',
 
@@ -171,7 +170,7 @@ if ( jQuery !== 'undefined' ) {
 				var candidates = $( candidateForValidation );
 
 				// INPUT validityState
-				if ( typeof input[ 0 ].validity !== 'object' ) {
+				if ( polyfill ) {
 					// set us up the API
 					candidates.filter(function() {
 						return typeof this.validity !== 'object';

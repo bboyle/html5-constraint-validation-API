@@ -30,7 +30,6 @@ module.exports = function( grunt ) {
 			files: [
 				'test/**/*.html',
 				// TODO failing in phantomjs (constraintValidationAPI implementation conflict?)
-				'!test/**/custom.html',
 				'!test/**/invalid.html',
 				'!test/**/pattern.html'
 			]
