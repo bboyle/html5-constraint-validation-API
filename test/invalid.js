@@ -1,10 +1,6 @@
 (function( $ ) {
 	'use strict';
 	
-	var	userInitiatedSubmit = function() {
-		$( ':submit', '#test' )[0].click();
-	};
-
 	module( 'environment', lifecycleCVAPI );
 
 	test( 'required fields are in test form', 4, function() {
@@ -19,16 +15,21 @@
 
 	module( 'invalid events', lifecycleCVAPI );
 
-	test( 'invalid thrown for @required', 2, function() {
+	test( 'invalid thrown for @required', 3, function() {
 
-		var handler = function( event ) {
-			ok( true, 'invalid handler was triggered' );
-			strictEqual( event.target, $( '#foo' )[0], 'invalid event thrown by #foo' );
-		};
+		var invalidEvents = 0,
+			handler = function( event ) {
+				invalidEvents++;
+				strictEqual( invalidEvents, 1, '1 invalid event was triggered' );
+				strictEqual( event.target, $( '#foo' )[ 0 ], 'invalid event thrown by #foo' );
+			}
+		;
 
 		$( '#foo' ).bind( 'invalid', handler );
+		// checkValidity should trigger invalid event
+		$( '#foo' )[ 0 ].checkValidity();
 
-		userInitiatedSubmit();
+		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo is invalid' );
 	});
 
 	test( 'invalid cannot be captured on form', 1, function() {
@@ -39,10 +40,10 @@
 		};
 
 		$( 'form' ).bind( 'invalid', handler );
+		// checkValidity should trigger invalid event
+		$( '#foo' )[ 0 ].checkValidity();
 
-		userInitiatedSubmit();
-
-		ok( true, 'text complete' );
+		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo is invalid' );
 	});
 
 	// how many invalid events expected for a set of radio buttons?

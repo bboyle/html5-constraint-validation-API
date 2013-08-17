@@ -27,11 +27,7 @@ module.exports = function( grunt ) {
 		},
 		// code quality tasks
 		qunit: {
-			files: [
-				'test/**/*.html',
-				// TODO failing in phantomjs (constraintValidationAPI implementation conflict?)
-				'!test/**/invalid.html'
-			]
+			files: [ 'test/**/*.html' ]
 		},
 		jshint: {
 			gruntfile: {
