@@ -69,7 +69,7 @@
 
 	});
 
-	test( 'validity.patternMismatch becomes true when an invalid value is removed', function() {
+	test( 'validity.patternMismatch is reset when an invalid value is removed', function() {
 		
 		$( '#foo' ).val( 'bar' );
 		$( '#foo' )[ 0 ].checkValidity();

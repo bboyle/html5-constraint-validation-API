@@ -59,7 +59,7 @@
 
 	});
 
-	test( 'setCustomValidity() can mask other errors', function() {
+	test( 'setCustomValidity() can mask other errors', 7, function() {
 		
 		// make email invalid (type error)
 		$( '#email' ).val( 'foo' );
@@ -80,7 +80,9 @@
 		// fails in Opera 11, which sets .validationMessage to ""
 		// Safari 5 returns "type mismatch"
 		// TODO fails in PhantomJS (email validation issue?)
-		ok( $( '#email' )[ 0 ].validationMessage, '.validationMessage is truthy' );
+		notStrictEqual( $( '#email' )[ 0 ].validationMessage, null, '.validationMessage is not null' );
+		notStrictEqual( $( '#email' )[ 0 ].validationMessage, undefined, '.validationMessage is not undefined' );
+		notStrictEqual( $( '#email' )[ 0 ].validationMessage, '', '.validationMessage is not empty string' );
 
 		// remove value
 		// is required seen?
