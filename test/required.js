@@ -3,29 +3,32 @@
 	
 	module( 'environment', lifecycleCVAPI );
 
-	test( 'required fields are in test form', function() {
+	test( 'required fields are in test form', 6, function() {
 
 		strictEqual( $( 'form#test' ).length, 1, 'form#test is present' );
-		strictEqual( $( 'form#test input#foo' ).length, 1, 'form#test contains input#foo' );
-		strictEqual( $( 'form#test select#select-foo' ).length, 1, 'form#test contains select#select-foo' );
-		strictEqual( $( 'form#test :radio[name=radioFoo]' ).length, 5, 'form#test contains 5 radio buttons in radioFoo group' );
-		strictEqual( $( 'form#test textarea#textarea-foo' ).length, 1, 'form#test contains textarea#textarea-foo' );
+		strictEqual( $( 'input#foo', '#test' ).length, 1, 'form#test contains input#foo' );
+		strictEqual( $( 'select#select-foo', '#test' ).length, 1, 'form#test contains select#select-foo' );
+		strictEqual( $( ':radio[name=radioFoo]', '#test' ).length, 5, 'form#test contains 5 radio buttons in radioFoo group' );
+		strictEqual( $( 'textarea#textarea-foo', '#test' ).length, 1, 'form#test contains textarea#textarea-foo' );
+		strictEqual( $( ':checkbox[name=checkbox]', '#test' ).length, 1, 'form#test contains 1 checkbox' );
 
 	});
 
-	test( 'required fields are present', function() {
+	test( 'required fields are present', 3, function() {
 
 		strictEqual( $( '[required]' )[0], $( 'input#foo' )[0], 'input#foo is the first required field' );
 		strictEqual( $( '[required]' )[1], $( 'select#select-foo' )[0], 'select#select-foo is the second required field' );
+		ok( $( ':checkbox#checkbox' ).is( '[required]' ), ':checkbox#checkbox is required' );
 
 	});
 
-	test( 'browser can report required fields', function() {
+	test( 'browser can report required fields', 2, function() {
 		
 		ok( $( 'input#foo' ).attr( 'required' ), 'input#foo.attr( "required" )' );
+		ok( $( '#checkbox' ).attr( 'required' ), '#checkbox.attr( "required" )' );
 		// fails in FF3.6 (OSX)
 		// ok( $( 'input#foo' )[0].required, 'input#foo[0].required' );
-		// fails i IE6
+		// fails in IE6
 		// ok( $( 'input#foo' )[0].hasAttribute( 'required' ), 'input#foo[0].hasAttribute( "required" )' );
 
 	});
@@ -135,7 +138,7 @@
 	test( 'validity.valid is false when blank', function() {
 		
 		$( '#radio-foo-foo' )[0].checkValidity();
-		strictEqual( $( '#radio-foo-foo' )[0].validity.valid, false, '#radio-foo-foo validity.valueMissing should be false' );
+		strictEqual( $( '#radio-foo-foo' )[0].validity.valid, false, '#radio-foo-foo validity.valid should be false' );
 
 	});
 
@@ -190,4 +193,25 @@
 	});
 
 
-}( jQuery ));
+	module( 'single checkbox validityState valueMissing', lifecycleCVAPI );
+
+	test( 'checkbox validityState when not checked', 3, function() {
+		
+		$( '#checkbox' )[0].checkValidity();
+		strictEqual( $( '#checkbox' )[0].checked, false, '#checkbox is not checked' );
+		strictEqual( $( '#checkbox' )[0].validity.valueMissing, true, '#checkbox validity.valueMissing should be true' );
+		strictEqual( $( '#checkbox' )[0].validity.valid, false, '#checkbox validity.valid should be false' );
+
+	});
+
+	test( 'checkbox validityState when checked', 3, function() {
+		
+		$( '#checkbox' ).attr( 'checked', 'checked' );
+		$( '#checkbox' )[0].checkValidity();
+		strictEqual( $( '#checkbox' )[0].checked, true, '#checkbox is checked' );
+		strictEqual( $( '#checkbox' )[0].validity.valueMissing, false, '#checkbox validity.valueMissing should be false' );
+		strictEqual( $( '#checkbox' )[0].validity.valid, true, '#checkbox validity.valid should be true' );
+
+	});
+
+	}( jQuery ));
