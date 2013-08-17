@@ -222,7 +222,7 @@ if ( jQuery !== 'undefined' ) {
 							var valid = validateField.call( domElement );
 
 							// if invalid, and unless novalidate
-							if ( ! valid && ! $this.closest( 'form' ).attr( 'novalidate' )) {
+							if ( ! valid && ! this.form.hasAttribute( 'novalidate' )) {
 								// fire invalid event
 								$this.trigger( invalidEvent() );
 							}
