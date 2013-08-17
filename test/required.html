@@ -44,7 +44,7 @@
 						<span class="label">Foo</span>
 						<abbr title="(required)">*</abbr>
 					</label>
-					<input type="text" name="foo" id="foo" value="" required="required" />
+					<input type="text" name="foo" id="foo" value="" required>
 				</li>
 
 				<li>
@@ -52,7 +52,7 @@
 						<span class="label">Select foo</span>
 						<abbr title="(required)">*</abbr>
 					</label>
-					<select id="select-foo" name="selectFoo" required="required">
+					<select id="select-foo" name="selectFoo" required>
 						<option value=""></option>
 						<option value="foo">foo</option>
 						<option value="0">0</option>
@@ -69,7 +69,7 @@
 						</legend>
 						<ul class="choices">
 							<li>
-								<input type="radio" name="radioFoo" value="foo" id="radio-foo-foo" required="required" />
+								<input type="radio" name="radioFoo" value="foo" id="radio-foo-foo" required>
 								<label for="radio-foo-foo">Foo</label>
 							</li>
 							<li>
@@ -97,7 +97,12 @@
 						<span class="label">Textarea foo</span>
 						<abbr title="(required)">*</abbr>
 					</label>
-					<textarea name="textareaFoo" id="textarea-foo" rows="5" cols="50" required="required"></textarea>
+					<textarea name="textareaFoo" id="textarea-foo" rows="5" cols="50" required></textarea>
+				</li>
+
+				<li>
+					<input type="checkbox" id="checkbox" name="checkbox" value="true" required>
+					<label for="checkbox">a required checkbox</label>
 				</li>
 
 				<li class="footer">
