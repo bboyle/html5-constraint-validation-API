@@ -1,6 +1,5 @@
-/*globals initConstraintValidationAPI*/
-/*exported lifecycleCVAPI*/
-var lifecycleCVAPI = (function( initConstraintValidationAPI ) {
+/*global initConstraintValidationAPI*/
+lifecycleCVAPI = (function( initConstraintValidationAPI ) {
 	return {
 		setup: function() {
 			initConstraintValidationAPI();

@@ -27,7 +27,7 @@
 		"notDeepEqual",
 		"strictEqual",
 		"notStrictEqual",
-		"throws",
-		"lifecycleCVAPI"
-	]
+		"throws"
+	],
+	"globals": { "lifecycleCVAPI": true }
 }
