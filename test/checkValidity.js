@@ -30,7 +30,7 @@
 		// setup - detect invalid events
 		var invalidDetectedOnFoo = 0;
 
-		$( '#foo' ).on( 'invalid.TEST', function() {
+		$( '#foo' ).bind( 'invalid.TEST', function() {
 			invalidDetectedOnFoo++;
 			strictEqual( invalidDetectedOnFoo, 1, 'invalid event detected on foo' );
 		});
@@ -42,7 +42,7 @@
 		strictEqual( $( '#foo' )[ 0 ].checkValidity(), true, 'foo is valid' );
 
 		// teardown
-		$( '#foo' ).on( 'invalid.TEST' );
+		$( '#foo' ).unbind( 'invalid.TEST' );
 	});
 
 
