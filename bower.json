@@ -1,0 +1,25 @@
+{
+  "name": "html5.constraintValidationAPI",
+  "title": "HTML5 constraintValidationAPI",
+  "version": "1.0.1",
+  "homepage": "https://github.com/bboyle/html5-constraint-validation-API",
+  "authors": [
+    "Ben Boyle <benjamins.boyle@gmail.com>"
+  ],
+  "description": "A polyfill for the HTML5 constraintValidationAPI",
+  "main": "src/html5.constraintValidationAPI.js",
+  "keywords": [ "HTML5", "constraint validation API", "form validation", "polyfill" ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "libs",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "1.7.2"
+  }
+}

@@ -17,6 +17,7 @@
 # Libraries #
 #############
 lib/*
+bower_components/*
 node_modules/*
 
 # Logs and databases #
