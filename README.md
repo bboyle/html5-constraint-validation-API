@@ -1,3 +1,5 @@
+[![Travis build status](https://travis-ci.org/bboyle/html5-constraint-validation-API.png?branch=master)](https://travis-ci.org/bboyle/html5-constraint-validation-API)
+
 * handle `@required` on `:text`, `textarea`, `select` and `:radio` controls
 * fire `invalid` events
 * support `form@novalidate`
