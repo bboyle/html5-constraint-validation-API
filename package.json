@@ -2,7 +2,7 @@
   "name": "html5.constraintValidationAPI",
   "title": "HTML5 constraintValidationAPI",
   "description": "A polyfill for the HTML5 constraintValidationAPI",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "homepage": "https://github.com/bboyle/html5-constraint-validation-API",
   "author": {
     "name": "Ben Boyle",
