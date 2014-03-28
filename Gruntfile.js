@@ -15,6 +15,14 @@ module.exports = function( grunt ) {
 		clean: {
 			files: [ 'dist' ]
 		},
+		connect: {
+			server: {
+				options: {
+					port: 8000,
+					base: '.'
+				}
+			}
+		},
 		// production pipeline tasks
 		uglify: {
 			options: {
@@ -27,7 +35,36 @@ module.exports = function( grunt ) {
 		},
 		// code quality tasks
 		qunit: {
-			files: [ 'test/**/*.html' ]
+			unit: [ 'test/**/*.html' ],
+			// test other jquery versions
+			jquery: {
+				options: {
+					timeout: 12000,
+					urls: [
+						'http://localhost:8000/test/change.html?jquery=1.4.4',
+						'http://localhost:8000/test/checkValidity.html?jquery=1.4.4',
+						'http://localhost:8000/test/custom.html?jquery=1.4.4',
+						'http://localhost:8000/test/disabled.html?jquery=1.4.4',
+						'http://localhost:8000/test/email.html?jquery=1.4.4',
+						'http://localhost:8000/test/invalid.html?jquery=1.4.4',
+						'http://localhost:8000/test/novalidate.html?jquery=1.4.4',
+						'http://localhost:8000/test/pattern.html?jquery=1.4.4',
+						'http://localhost:8000/test/required.html?jquery=1.4.4',
+						'http://localhost:8000/test/submit.html?jquery=1.4.4',
+						// latest
+						'http://localhost:8000/test/change.html?jquery=2.1.0',
+						'http://localhost:8000/test/checkValidity.html?jquery=2.1.0',
+						'http://localhost:8000/test/custom.html?jquery=2.1.0',
+						'http://localhost:8000/test/disabled.html?jquery=2.1.0',
+						'http://localhost:8000/test/email.html?jquery=2.1.0',
+						'http://localhost:8000/test/invalid.html?jquery=2.1.0',
+						'http://localhost:8000/test/novalidate.html?jquery=2.1.0',
+						'http://localhost:8000/test/pattern.html?jquery=2.1.0',
+						'http://localhost:8000/test/required.html?jquery=2.1.0',
+						'http://localhost:8000/test/submit.html?jquery=2.1.0',
+					]
+				}
+			}
 		},
 		jshint: {
 			gruntfile: {
@@ -61,11 +98,11 @@ module.exports = function( grunt ) {
 			},
 			src: {
 				files: '<%= jshint.src.src %>',
-				tasks: [ 'jshint:src', 'qunit' ]
+				tasks: [ 'jshint:src', 'qunit:unit' ]
 			},
 			test: {
 				files: '<%= jshint.test.src %>',
-				tasks: [ 'jshint:test', 'qunit' ]
+				tasks: [ 'jshint:test', 'qunit:unit' ]
 			},
 		}
 	});
@@ -73,12 +110,13 @@ module.exports = function( grunt ) {
 	// These plugins provide necessary tasks.
 	grunt.loadNpmTasks( 'grunt-contrib-clean' );
 	grunt.loadNpmTasks( 'grunt-contrib-uglify' );
+	grunt.loadNpmTasks( 'grunt-contrib-connect' );
 	grunt.loadNpmTasks( 'grunt-contrib-qunit' );
 	grunt.loadNpmTasks( 'grunt-contrib-jshint' );
 	grunt.loadNpmTasks( 'grunt-contrib-watch' );
 
 	// Default task.
-	grunt.registerTask( 'test', [ 'jshint', 'qunit' ]);
+	grunt.registerTask( 'test', [ 'jshint', 'connect', 'qunit' ]);
 	grunt.registerTask( 'produce', [ 'clean', 'uglify' ]);
 	grunt.registerTask( 'default', [ 'test', 'produce' ]);
 
