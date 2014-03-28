@@ -27,7 +27,7 @@ module.exports = function( grunt ) {
 		},
 		// code quality tasks
 		qunit: {
-			files: [ 'test/**/*.html' ]
+			unit: [ 'test/**/*.html' ]
 		},
 		jshint: {
 			gruntfile: {
@@ -61,11 +61,11 @@ module.exports = function( grunt ) {
 			},
 			src: {
 				files: '<%= jshint.src.src %>',
-				tasks: [ 'jshint:src', 'qunit' ]
+				tasks: [ 'jshint:src', 'qunit:unit' ]
 			},
 			test: {
 				files: '<%= jshint.test.src %>',
-				tasks: [ 'jshint:test', 'qunit' ]
+				tasks: [ 'jshint:test', 'qunit:unit' ]
 			},
 		}
 	});
