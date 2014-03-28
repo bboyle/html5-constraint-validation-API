@@ -1,4 +1,4 @@
-[![Travis build status](https://travis-ci.org/bboyle/html5-constraint-validation-API.png?branch=master)](https://travis-ci.org/bboyle/html5-constraint-validation-API)
+[![Build Status](https://travis-ci.org/bboyle/html5-constraint-validation-API.svg?branch=master)](https://travis-ci.org/bboyle/html5-constraint-validation-API)
 [![devDependencies](https://david-dm.org/bboyle/html5-constraint-validation-API/dev-status.png)](https://david-dm.org/bboyle/html5-constraint-validation-API#info=devDependencies)
 
 * handle `@required` on `:text`, `textarea`, `select` and `:radio` controls
