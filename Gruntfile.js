@@ -24,12 +24,22 @@ module.exports = function( grunt ) {
 			}
 		},
 		// production pipeline tasks
+		concat: {
+			options: {
+				banner: '<%= banner %>',
+				stripBanners: true
+			},
+			dist: {
+				src: [ 'src/<%= pkg.name %>.js' ],
+				dest: 'dist/<%= pkg.name %>.js'
+			}
+		},
 		uglify: {
 			options: {
 				banner: '<%= banner %>'
 			},
 			dist: {
-				src: 'src/<%= pkg.name %>.js',
+				src: 'dist/<%= pkg.name %>.js',
 				dest: 'dist/<%= pkg.name %>.min.js'
 			},
 		},
@@ -51,6 +61,17 @@ module.exports = function( grunt ) {
 						'http://localhost:8000/test/pattern.html?jquery=1.4.4',
 						'http://localhost:8000/test/required.html?jquery=1.4.4',
 						'http://localhost:8000/test/submit.html?jquery=1.4.4',
+						// 1.7.2
+						'http://localhost:8000/test/change.html?jquery=1.7.2',
+						'http://localhost:8000/test/checkValidity.html?jquery=1.7.2',
+						'http://localhost:8000/test/custom.html?jquery=1.7.2',
+						'http://localhost:8000/test/disabled.html?jquery=1.7.2',
+						'http://localhost:8000/test/email.html?jquery=1.7.2',
+						'http://localhost:8000/test/invalid.html?jquery=1.7.2',
+						'http://localhost:8000/test/novalidate.html?jquery=1.7.2',
+						'http://localhost:8000/test/pattern.html?jquery=1.7.2',
+						'http://localhost:8000/test/required.html?jquery=1.7.2',
+						'http://localhost:8000/test/submit.html?jquery=1.7.2',
 						// latest
 						'http://localhost:8000/test/change.html?jquery=2.1.0',
 						'http://localhost:8000/test/checkValidity.html?jquery=2.1.0',
@@ -109,6 +130,7 @@ module.exports = function( grunt ) {
 
 	// These plugins provide necessary tasks.
 	grunt.loadNpmTasks( 'grunt-contrib-clean' );
+	grunt.loadNpmTasks( 'grunt-contrib-concat' );
 	grunt.loadNpmTasks( 'grunt-contrib-uglify' );
 	grunt.loadNpmTasks( 'grunt-contrib-connect' );
 	grunt.loadNpmTasks( 'grunt-contrib-qunit' );
@@ -117,7 +139,7 @@ module.exports = function( grunt ) {
 
 	// Default task.
 	grunt.registerTask( 'test', [ 'jshint', 'connect', 'qunit' ]);
-	grunt.registerTask( 'produce', [ 'clean', 'uglify' ]);
+	grunt.registerTask( 'produce', [ 'clean', 'concat', 'uglify' ]);
 	grunt.registerTask( 'default', [ 'test', 'produce' ]);
 
 };
