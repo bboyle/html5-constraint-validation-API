@@ -61,6 +61,17 @@ module.exports = function( grunt ) {
 						'http://localhost:8000/test/pattern.html?jquery=1.4.4',
 						'http://localhost:8000/test/required.html?jquery=1.4.4',
 						'http://localhost:8000/test/submit.html?jquery=1.4.4',
+						// 1.7.2
+						'http://localhost:8000/test/change.html?jquery=1.7.2',
+						'http://localhost:8000/test/checkValidity.html?jquery=1.7.2',
+						'http://localhost:8000/test/custom.html?jquery=1.7.2',
+						'http://localhost:8000/test/disabled.html?jquery=1.7.2',
+						'http://localhost:8000/test/email.html?jquery=1.7.2',
+						'http://localhost:8000/test/invalid.html?jquery=1.7.2',
+						'http://localhost:8000/test/novalidate.html?jquery=1.7.2',
+						'http://localhost:8000/test/pattern.html?jquery=1.7.2',
+						'http://localhost:8000/test/required.html?jquery=1.7.2',
+						'http://localhost:8000/test/submit.html?jquery=1.7.2',
 						// latest
 						'http://localhost:8000/test/change.html?jquery=2.1.0',
 						'http://localhost:8000/test/checkValidity.html?jquery=2.1.0',

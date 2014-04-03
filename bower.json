@@ -1,7 +1,7 @@
 {
   "name": "html5.constraintValidationAPI",
   "title": "HTML5 constraintValidationAPI",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "homepage": "https://github.com/bboyle/html5-constraint-validation-API",
   "authors": [
     "Ben Boyle <benjamins.boyle@gmail.com>"
@@ -13,13 +13,16 @@
   "private": true,
   "ignore": [
     "**/.*",
+    "*.json",
+    "CONTRIBUTING.md",
+    "Gruntfile.js",
+    "bower_components",
     "libs",
     "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "src",
+    "test"
   ],
   "dependencies": {
-    "jquery": "1.7.2"
+    "jquery": "*"
   }
 }
