@@ -41,6 +41,7 @@
     "qunitjs": "~1.16.0"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "postinstall": "bower install"
   }
 }
