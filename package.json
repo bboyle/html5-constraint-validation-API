@@ -2,7 +2,7 @@
   "name": "html5.constraintValidationAPI",
   "title": "HTML5 constraintValidationAPI",
   "description": "A polyfill for the HTML5 constraintValidationAPI",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "homepage": "https://github.com/bboyle/html5-constraint-validation-API",
   "author": {
     "name": "Ben Boyle",
@@ -29,6 +29,9 @@
   "directories": {
     "test": "test"
   },
+  "dependencies": {
+    "jquery": "^2.1.3"
+  },
   "devDependencies": {
     "grunt": "~0.4.5",
     "grunt-contrib-clean": "~0.6.0",
@@ -41,7 +44,6 @@
     "qunitjs": "~1.16.0"
   },
   "scripts": {
-    "test": "grunt test",
-    "postinstall": "bower install"
+    "test": "grunt test"
   }
 }
