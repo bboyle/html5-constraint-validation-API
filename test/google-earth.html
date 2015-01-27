@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+	<meta charset="UTF-8">
+	<title>google earth tests · Constraint Validation API tests</title>
+
+	<!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+	<script src="../libs/jquery-loader.js"></script>
+	<!-- Load local lib and tests. -->
+	<script src="../src/html5.constraintValidationAPI.js"></script>
+
+	<style>
+	:invalid:before {
+		display: block;
+		content: "invalid";
+		color: red;
+	}
+	</style>
+</head>
+
+<body>
+
+
+	<p>This form is for testing validation in the google earth internal browser.
+	You should be able to submit this form (and be taken to this repo home page).</p>
+
+	<form action="https://github.com/bboyle/html5-constraint-validation-API" action>
+
+		<ol class="questions">
+
+			<li>
+				<fieldset>
+					<legend>
+						<span class="label">Radio foo</span>
+						<abbr title="(required)">*</abbr>
+					</legend>
+					<ul class="choices">
+						<li>
+							<input type="radio" name="radioFoo" value="foo" id="radio-foo-foo" required>
+							<label for="radio-foo-foo">Foo</label>
+						</li>
+						<li>
+							<input type="radio" name="radioFoo" value="bar" id="radio-foo-bar">
+							<label for="radio-foo-bar">Bar</label>
+						</li>
+						<li>
+							<input type="radio" name="radioFoo" value="" id="radio-foo-BLANK">
+							<label for="radio-foo-BLANK">BLANK</label>
+						</li>
+						<li>
+							<input type="radio" name="radioFoo" value="undefined" id="radio-foo-undefined">
+							<label for="radio-foo-undefined">undefined</label>
+						</li>
+						<li>
+							<input type="radio" name="radioFoo" value="null" id="radio-foo-null">
+							<label for="radio-foo-null">null</label>
+						</li>
+					</ul>
+				</fieldset>
+			</li>
+
+			<li class="footer">
+				<ol class="submit">
+					<li>
+						<strong>
+							<input type="submit" value="Submit">
+						</strong>
+					</li>
+				</ol>
+			</li>
+
+		</ol>
+	</form>
+
+
+</body>
+</html>

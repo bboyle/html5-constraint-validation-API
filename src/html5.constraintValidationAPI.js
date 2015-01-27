@@ -19,10 +19,16 @@ if ( jQuery !== 'undefined' ) {
 			candidateForValidation = 'input, select, textarea',
 
 			// for feature detection
-			input = $( '<input>' ),
+			input = $( '<input>' ).get( 0 ),
 
 			// polyfill test
-			polyfill = typeof input[ 0 ].validity !== 'object',
+			polyfill = typeof input.validity !== 'object',
+
+
+			// invalid fields filter
+			isInvalid = function() {
+				return ! ( this.disabled || this.validity.valid );
+			},
 
 
 			// manage validity state object
@@ -150,14 +156,24 @@ if ( jQuery !== 'undefined' ) {
 				}
 
 				// NOTE the code below runs in all browsers to polyfill implementation bugs
-				// e.g. Opera 11 on OSX fires submit event even when fields are invalid
+
+				// google earth treats all required radio buttons as invalid
+				// if the only thing stopping submission is a required radio button group...
+				invalid = form.find( candidateForValidation ).filter( isInvalid );
+				if ( invalid.length === invalid.filter( ':radio' ).length && invalid.length === invalid.filter(function() {
+					// radio button has been checked, but is flagged as value missing
+					return this.validity.valueMissing && $( this.form.elements[ this.name ]).filter( ':checked' ).length > 0;
+				}).length ) {
+					// let submission continue
+					invalid.removeAttr( 'required' );
+				}
+
+				// Opera 11 on OSX fires submit event even when fields are invalid
 				// correct implementations will not invoke this submit handler until all fields are valid
 
 				// unless @novalidate
 				// if there are invalid fields
-				if ( ! novalidate && form.find( candidateForValidation ).filter(function() {
-					return ! ( this.disabled || this.validity.valid );
-				}).length > 0 ) {
+				if ( ! novalidate && form.find( candidateForValidation ).filter( isInvalid ).length > 0 ) {
 					// abort submit
 					event.stopImmediatePropagation();
 					event.preventDefault();
@@ -189,7 +205,7 @@ if ( jQuery !== 'undefined' ) {
 				}
 
 				// INPUT validitationMessage
-				if ( typeof input[ 0 ].validationMessage !== 'string' ) {
+				if ( typeof input.validationMessage !== 'string' ) {
 					// set us up the API
 					candidates.filter(function() {
 						return typeof this.validationMessage !== 'string';
@@ -199,7 +215,7 @@ if ( jQuery !== 'undefined' ) {
 				}
 
 				// INPUT checkValidity
-				if ( typeof input[ 0 ].checkValidity !== 'function' ) {
+				if ( typeof input.checkValidity !== 'function' ) {
 					// set us up the API
 					candidates.filter(function() {
 						return typeof this.checkValidity !== 'function';
@@ -221,7 +237,7 @@ if ( jQuery !== 'undefined' ) {
 				}
 
 				// INPUT setCustomValidity
-				if ( typeof input[ 0 ].setCustomValidity !== 'function' ) {
+				if ( typeof input.setCustomValidity !== 'function' ) {
 					// set us up the API
 					candidates.filter(function() {
 						return typeof this.setCustomValidity !== 'function';
