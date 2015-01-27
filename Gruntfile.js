@@ -45,7 +45,10 @@ module.exports = function( grunt ) {
 		},
 		// code quality tasks
 		qunit: {
-			unit: [ 'test/**/*.html' ],
+			unit: [
+				'test/*.html',
+				'!test/google-earth.html'
+			],
 			// test other jquery versions
 			jquery: {
 				options: {
