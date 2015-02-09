@@ -20,6 +20,9 @@ if ( jQuery !== 'undefined' ) {
 
 			// for feature detection
 			input = $( '<input>' ).get( 0 ),
+			// radio button bug (google earth internal browser)
+			radioButtonBug = $( '<input type="radio" required checked>' ).get( 0 ).validity.valueMissing,
+			validateBuggyRadioButtons,
 
 			// polyfill test
 			polyfill = typeof input.validity !== 'object',
@@ -155,17 +158,11 @@ if ( jQuery !== 'undefined' ) {
 					});
 				}
 
-				// NOTE the code below runs in all browsers to polyfill implementation bugs
+				// NOTE all the code below runs in all browsers to polyfill implementation bugs
 
-				// google earth treats all required radio buttons as invalid
-				// if the only thing stopping submission is a required radio button group...
-				invalid = form.find( candidateForValidation ).filter( isInvalid );
-				if ( invalid.length === invalid.filter( ':radio' ).length && invalid.length === invalid.filter(function() {
-					// radio button has been checked, but is flagged as value missing
-					return this.validity.valueMissing && $( this.form.elements[ this.name ]).filter( ':checked' ).length > 0;
-				}).length ) {
-					// let submission continue
-					invalid.removeAttr( 'required' );
+				// required radio button check
+				if ( radioButtonBug ) {
+					validateBuggyRadioButtons( this );
 				}
 
 				// Opera 11 on OSX fires submit event even when fields are invalid
@@ -248,6 +245,46 @@ if ( jQuery !== 'undefined' ) {
 							validateField.call( that, message );
 						};
 					});
+				}
+
+				// check for required radio button bug (google earth internal browser)
+				if ( radioButtonBug ) {
+		 			validateBuggyRadioButtons = function( form ) {
+						var seen = {};
+						var radio, valueMissing;
+
+						// check every required radio button
+						$( 'input', form ).filter( ':radio' ).filter( '[required],[aria-required="true"]' ).each(function() {
+							if ( typeof seen[ this.name ] === 'undefined' ) {
+								seen[ this.name ] = true;
+
+								radio = $( this.form.elements[ this.name ] );
+								valueMissing = radio.filter( ':checked' ).length === 0;
+
+								if ( valueMissing ) {
+									// make sure @required is set to use validation API
+									radio.attr( 'required', 'required' );
+								} else {
+									// using @aria-required=true so we can track this control
+									// removing @required here to bypass validation bug
+									radio.attr( 'aria-required', true ).removeAttr( 'required' );
+								}
+							}
+						});
+					};
+
+					// initial validity
+					$( 'form' ).each( validateBuggyRadioButtons );
+
+					// watch changes
+					if ( ! polyfill ) {
+						candidates.filter( ':radio' )
+							.unbind( 'change.constraintValidationAPI' )
+							.bind( 'change.constraintValidationAPI', function() {
+								validateBuggyRadioButtons( this.form );
+							})
+						;
+					}
 				}
 
 				// check validity on submit

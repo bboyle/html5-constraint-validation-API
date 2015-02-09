@@ -24,6 +24,16 @@
 	<p>This form is for testing validation in the google earth internal browser.
 	You should be able to submit this form (and be taken to this repo home page).</p>
 
+
+	<button>Uncheck all radio buttons</button>
+	<script>
+		$( 'button' ).click(function() {
+			$( ':radio' ).prop( 'checked', false );
+		});
+	</script>
+
+
+	<h2>Form A</h2>
 	<form action="https://github.com/bboyle/html5-constraint-validation-API" action>
 
 		<ol class="questions">
@@ -68,10 +78,34 @@
 					</li>
 				</ol>
 			</li>
-
 		</ol>
 	</form>
 
+
+	<h2>Form B</h2>
+
+	<form action="https://github.com/bboyle/html5-constraint-validation-API" method="get">
+		<ol class="questions">
+			<li class="select1">
+				<fieldset id="cc-type">
+					<legend>
+						<span class="label">Card type</span>
+						<abbr title="(required)">*</abbr>
+					</legend>
+					<ul class="choices compact">
+						<li><input type="radio" name="card_type" id="cc-type-visa" value="Visa" checked="checked" required="required" /><label for="cc-type-visa">Visa</label></li>
+						<li><input type="radio" name="card_type" id="cc-type-mastercard" value="MasterCard" /><label for="cc-type-mastercard">MasterCard</label></li>
+					</ul>
+				</fieldset>
+			</li>
+
+			<li class="footer">
+				<ol class="submit">
+					<li><strong><input type="submit" value="Submit" /></strong></li>
+				</ol>
+			</li>
+		</ol>
+	</form>
 
 </body>
 </html>
