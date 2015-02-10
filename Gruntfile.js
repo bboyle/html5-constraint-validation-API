@@ -25,7 +25,7 @@ module.exports = function( grunt ) {
 
 		// Task configuration.
 		clean: {
-			files: [ 'dist' ]
+			files: [ 'sc_*.log' ]
 		},
 		connect: {
 			server: {
