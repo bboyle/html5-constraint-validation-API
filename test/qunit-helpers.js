@@ -1,11 +1,7 @@
 /*global initConstraintValidationAPI*/
-lifecycleCVAPI = (function( initConstraintValidationAPI ) {
-	return {
-		setup: function() {
-			initConstraintValidationAPI();
-		},
-		teardown: function() {
-			initConstraintValidationAPI();
-		}
-	};
-}( initConstraintValidationAPI ));
+lifecycleCVAPI = {
+	beforeEach: function() {
+		initConstraintValidationAPI();
+	},
+	afterEach: jQuery.noop
+};

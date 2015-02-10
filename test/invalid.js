@@ -1,6 +1,6 @@
 (function( $ ) {
 	'use strict';
-	
+
 	module( 'environment', lifecycleCVAPI );
 
 	test( 'required fields are in test form', 4, function() {
@@ -13,7 +13,14 @@
 	});
 
 
-	module( 'invalid events', lifecycleCVAPI );
+	module( 'invalid events', {
+		beforeEach: lifecycleCVAPI.beforeEach,
+		afterEach: function() {
+			// unbind event handlers
+			$( 'form, #foo' ).unbind( 'invalid' );
+			lifecycleCVAPI.afterEach();
+		}
+	});
 
 	test( 'invalid thrown for @required', 3, function() {
 
