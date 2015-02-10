@@ -14,12 +14,12 @@ module.exports = function( grunt ) {
 			' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
 
 		browsers: [
-			// { browserName: 'Internet Explorer', version: '11' },
+			{ browserName: 'Internet Explorer', version: '11' },
 			{ browserName: 'Internet Explorer', version:  '9' },
-			// { browserName: 'Internet Explorer', version:  '8' },
+			{ browserName: 'Internet Explorer', version:  '8' },
 			{ browserName: 'Firefox' },
-			// { browserName: 'Chrome' },
-			// { browserName: 'Chrome', version: "4" }, // old, like Google Earth
+			{ browserName: 'Chrome' },
+			// { browserName: 'Samsung Galaxy S2' }, // old, like Google Earth
 			// { browserName: 'Opera' }
 		],
 
@@ -106,7 +106,7 @@ module.exports = function( grunt ) {
 			required: {
 				options: {
 					testname: 'Required fields (<%= title %>)',
-					url: 'http://127.0.0.1:8000/test/required.html?jquery=1.7.2',
+					urls: [ 'http://127.0.0.1:8000/test/required.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>',
 				}
 			}
