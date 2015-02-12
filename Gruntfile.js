@@ -7,7 +7,7 @@ module.exports = function( grunt ) {
 		// Metadata.
 		pkg: grunt.file.readJSON( 'package.json' ),
 		title: '<%= pkg.title || pkg.name %> - v<%= pkg.version %>',
-		buildNumber: process.env.CI_BUILD_NUMBER || '<%= grunt.template.today("isoDateTime") %>',
+		buildNumber: process.env.TRAVIS_BUILD_ID || grunt.template.today("isoUtcDateTime"),
 		banner: '/*! <%= title %> - ' +
 			'<%= grunt.template.today("yyyy-mm-dd") %>\n' +
 			'<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
