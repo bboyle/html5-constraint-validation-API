@@ -20,13 +20,13 @@ if ( jQuery !== 'undefined' ) {
 
 			// for feature detection
 			input = $( '<input>' ).get( 0 ),
-			// radio button bug (google earth internal browser)
-			radioButtonBug = $( '<input type="radio" required checked>' ).get( 0 ).validity.valueMissing,
-			validateBuggyRadioButtons,
 
 			// polyfill test
 			polyfill = typeof input.validity !== 'object',
 
+			// radio button bug (google earth internal browser)
+			radioButtonBug = ! polyfill && $( '<input type="radio" required checked>' ).get( 0 ).validity.valueMissing === true,
+			validateBuggyRadioButtons,
 
 			// invalid fields filter
 			isInvalid = function() {
@@ -223,7 +223,7 @@ if ( jQuery !== 'undefined' ) {
 							var valid = validateField.call( domElement );
 
 							// if invalid, and unless novalidate
-							if ( ! valid && ! this.form.hasAttribute( 'novalidate' )) {
+							if ( ! valid && ! this.form.getAttribute( 'novalidate' )) {
 								// use triggerHandler because invalid does not bubble
 								$( domElement ).triggerHandler( 'invalid' );
 							}
