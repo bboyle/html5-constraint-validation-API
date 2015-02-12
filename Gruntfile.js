@@ -17,14 +17,14 @@ module.exports = function( grunt ) {
 			{ browserName: 'Internet Explorer', version:  '6' },
 			{ browserName: 'android', version: '4.0' }, // old, like Google Earth (maybe not quite that old)
 			{ browserName: 'Internet Explorer', version:  '8' },
-			{ browserName: 'Internet Explorer', version:  '9' }
+			{ browserName: 'Internet Explorer', version:  '9' },
 			// modern browsers (polyfill should play nice)
 			{ browserName: 'Internet Explorer' },
-			{ browserName: 'Chrome' }
+			{ browserName: 'Chrome' },
 			{ browserName: 'iPhone' },
 			{ browserName: 'android' },
 			{ browserName: 'Firefox' }
-		},
+		],
 
 		// Task configuration.
 		clean: {
