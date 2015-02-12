@@ -1,6 +1,6 @@
 (function( $ ) {
 	'use strict';
-	
+
 	var	userInitiatedSubmit = function() {
 		$( '#test :submit' )[ 0 ].click();
 	};
@@ -25,6 +25,7 @@
 		var handler = function( event ) {
 			ok( false, 'invalid handler should not be triggered' );
 			strictEqual( event.target, $( '#foo' )[ 0 ], 'invalid event detected on #foo' );
+			event.preventDefault();
 		};
 
 		$( '#foo' ).bind( 'invalid', handler );
@@ -39,8 +40,9 @@
 
 	test( 'submit events triggered with invalid fields', 2, function() {
 
-		var handler = function() {
+		var handler = function( event ) {
 			ok( true, 'submit event detected' );
+			event.preventDefault();
 		};
 
 		$( '#foo' ).val( '' );

@@ -1,6 +1,6 @@
 (function( $ ) {
 	'use strict';
-	
+
 	module( 'environment', lifecycleCVAPI );
 
 	test( 'test fields are in test form', function() {
@@ -24,10 +24,11 @@
 	});
 
 
+
 	module( 'input validityState customError', lifecycleCVAPI );
 
 	test( 'validity.customError', 8, function() {
-		
+
 		$( '#foo' )[ 0 ].setCustomValidity( 'foo is invalid' );
 
 		strictEqual( $( '#foo' )[ 0 ].validity.customError, true, '#foo validity.customError should be true' );
@@ -45,7 +46,7 @@
 	});
 
 	test( 'can get message set with setCustomValidity()', function() {
-		
+
 		// must be @example.com
 		$( '#email' )[ 0 ].setCustomValidity( 'Must be an @example.com email address' );
 
@@ -59,16 +60,18 @@
 
 	});
 
-	test( 'setCustomValidity() can mask other errors', 6, function() {
-		
+	test( 'setCustomValidity() can mask other errors', 7, function() {
+
 		// make email invalid (type error)
 		$( '#email' ).val( 'foo' );
 		// TODO validity checking only happening on submit! should work on 'change', or call .checkValidity()
-		$( 'form' ).trigger( 'submit' );
+		$( '#email' )[ 0 ].checkValidity();
+
 		// then set a custom error
 		$( '#email' )[ 0 ].setCustomValidity( 'custom error' );
 		// custom error is shown
-		strictEqual( $( '#email' )[ 0 ].validity.valid, false, '#email is not valid' );
+		strictEqual( $( '#email' )[ 0 ].validity.valid, false, '#email is still invalid' );
+		strictEqual( $( '#email' )[ 0 ].validity.customError, true, '#email has a custom error' );
 		strictEqual( $( '#email' )[ 0 ].validity.typeMismatch, true, '#email has typeMismatch' );
 		strictEqual( $( '#email' )[ 0 ].validationMessage, 'custom error', 'custom error shown' );
 
@@ -82,7 +85,7 @@
 	});
 
 	test( 'setCustomValidity() from change event', function() {
-		
+
 		// must be @example.com
 		$( '#email' ).bind( 'change.TEST', function() {
 			var inDomain = /@example\.com/.test( this.value ),
@@ -102,6 +105,5 @@
 		$( '#email' ).unbind( 'change.TEST' );
 
 	});
-
 
 }( jQuery ));
