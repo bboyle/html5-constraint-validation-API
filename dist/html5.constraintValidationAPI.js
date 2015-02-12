@@ -1,4 +1,4 @@
-/*! HTML5 constraintValidationAPI - v1.0.5 - 2015-02-10
+/*! HTML5 constraintValidationAPI - v1.0.6 - 2015-02-12
 * https://github.com/bboyle/html5-constraint-validation-API
 * Copyright (c) 2015 Ben Boyle; Licensed MIT */
 /*exported initConstraintValidationAPI*/
@@ -219,7 +219,7 @@ if ( jQuery !== 'undefined' ) {
 							var valid = validateField.call( domElement );
 
 							// if invalid, and unless novalidate
-							if ( ! valid && ! this.form.hasAttribute( 'novalidate' )) {
+							if ( ! valid && ! this.form.getAttribute( 'novalidate' )) {
 								// use triggerHandler because invalid does not bubble
 								$( domElement ).triggerHandler( 'invalid' );
 							}
