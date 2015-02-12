@@ -23,10 +23,10 @@ module.exports = function( grunt ) {
 			// polyfill should play nice in latest browsers
 			modern: [
 				{ browserName: 'Internet Explorer' },
-				{ browserName: 'Chrome' },
-				{ browserName: 'iPhone' },
-				{ browserName: 'android' },
-				{ browserName: 'Firefox' }
+				{ browserName: 'Chrome' }
+				// { browserName: 'iPhone' },
+				// { browserName: 'android' },
+				// { browserName: 'Firefox' }
 			]
 		},
 
