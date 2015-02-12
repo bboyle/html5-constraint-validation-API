@@ -13,21 +13,17 @@ module.exports = function( grunt ) {
 			'* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
 			' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
 
-		browsers: {
-			polyfill: [
-				{ browserName: 'Internet Explorer', version:  '6' },
-				{ browserName: 'android', version: '4.0' }, // old, like Google Earth (maybe not quite that old)
-				{ browserName: 'Internet Explorer', version:  '8' },
-				{ browserName: 'Internet Explorer', version:  '9' }
-			],
-			// polyfill should play nice in latest browsers
-			modern: [
-				{ browserName: 'Internet Explorer' },
-				{ browserName: 'Chrome' }
-				// { browserName: 'iPhone' },
-				// { browserName: 'android' },
-				// { browserName: 'Firefox' }
-			]
+		browsers: [
+			{ browserName: 'Internet Explorer', version:  '6' },
+			{ browserName: 'android', version: '4.0' }, // old, like Google Earth (maybe not quite that old)
+			{ browserName: 'Internet Explorer', version:  '8' },
+			{ browserName: 'Internet Explorer', version:  '9' }
+			// modern browsers (polyfill should play nice)
+			{ browserName: 'Internet Explorer' },
+			{ browserName: 'Chrome' }
+			{ browserName: 'iPhone' },
+			{ browserName: 'android' },
+			{ browserName: 'Firefox' }
 		},
 
 		// Task configuration.
@@ -126,88 +122,70 @@ module.exports = function( grunt ) {
 				options: {
 					testname: 'change - <%= title %>',
 					urls: [ 'http://127.0.0.1:8000/test/change.html?jquery=1.7.2' ],
-					browsers: '<%= browsers.polyfill %>'
+					browsers: '<%= browsers %>'
 				}
 			},
 			checkValidity: {
 				options: {
 					testname: 'checkValidity() - <%= title %>',
 					urls: [ 'http://127.0.0.1:8000/test/checkValidity.html?jquery=1.7.2' ],
-					browsers: '<%= browsers.polyfill %>'
+					browsers: '<%= browsers %>'
 				}
 			},
 			customValidity: {
 				options: {
 					testname: 'customValidity - <%= title %>',
 					urls: [ 'http://127.0.0.1:8000/test/custom.html?jquery=1.7.2' ],
-					browsers: '<%= browsers.polyfill %>'
+					browsers: '<%= browsers %>'
 				}
 			},
 			disabled: {
 				options: {
 					testname: 'disabled - <%= title %>',
 					urls: [ 'http://127.0.0.1:8000/test/disabled.html?jquery=1.7.2' ],
-					browsers: '<%= browsers.polyfill %>'
+					browsers: '<%= browsers %>'
 				}
 			},
 			email: {
 				options: {
 					testname: 'email - <%= title %>',
 					urls: [ 'http://127.0.0.1:8000/test/email.html?jquery=1.7.2' ],
-					browsers: '<%= browsers.polyfill %>'
+					browsers: '<%= browsers %>'
 				}
 			},
 			invalid: {
 				options: {
 					testname: 'invalid - <%= title %>',
 					urls: [ 'http://127.0.0.1:8000/test/invalid.html?jquery=1.7.2' ],
-					browsers: '<%= browsers.polyfill %>'
+					browsers: '<%= browsers %>'
 				}
 			},
 			novalidate: {
 				options: {
 					testname: 'novalidate - <%= title %>',
 					urls: [ 'http://127.0.0.1:8000/test/novalidate.html?jquery=1.7.2' ],
-					browsers: '<%= browsers.polyfill %>'
+					browsers: '<%= browsers %>'
 				}
 			},
 			pattern: {
 				options: {
 					testname: 'pattern - <%= title %>',
 					urls: [ 'http://127.0.0.1:8000/test/pattern.html?jquery=1.7.2' ],
-					browsers: '<%= browsers.polyfill %>'
+					browsers: '<%= browsers %>'
 				}
 			},
 			required: {
 				options: {
 					testname: 'required - <%= title %>',
 					urls: [ 'http://127.0.0.1:8000/test/required.html?jquery=1.7.2' ],
-					browsers: '<%= browsers.polyfill %>'
+					browsers: '<%= browsers %>'
 				}
 			},
 			submit: {
 				options: {
 					testname: 'submit - <%= title %>',
 					urls: [ 'http://127.0.0.1:8000/test/submit.html?jquery=1.7.2' ],
-					browsers: '<%= browsers.polyfill %>'
-				}
-			},
-			modern: {
-				options: {
-					testname: 'Modern browsers - <%= title %>',
-					urls: [
-						'http://127.0.0.1:8000/test/change.html?jquery=2.1.3',
-						'http://127.0.0.1:8000/test/checkValidity.html?jquery=2.1.3',
-						'http://127.0.0.1:8000/test/custom.html?jquery=2.1.3',
-						'http://127.0.0.1:8000/test/disabled.html?jquery=2.1.3',
-						'http://127.0.0.1:8000/test/email.html?jquery=2.1.3',
-						'http://127.0.0.1:8000/test/invalid.html?jquery=2.1.3',
-						'http://127.0.0.1:8000/test/novalidate.html?jquery=2.1.3',
-						'http://127.0.0.1:8000/test/pattern.html?jquery=2.1.3',
-						'http://127.0.0.1:8000/test/required.html?jquery=2.1.3',
-						'http://127.0.0.1:8000/test/submit.html?jquery=2.1.3'
-					],
-					browsers: '<%= browsers.modern %>'
+					browsers: '<%= browsers %>'
 				}
 			}
 		},
