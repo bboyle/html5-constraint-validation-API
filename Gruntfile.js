@@ -13,15 +13,22 @@ module.exports = function( grunt ) {
 			'* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
 			' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
 
-		browsers: [
-			{ browserName: 'Internet Explorer', version: '11' },
-			{ browserName: 'Internet Explorer', version:  '9' },
-			{ browserName: 'Internet Explorer', version:  '8' },
-			{ browserName: 'Firefox' },
-			{ browserName: 'Chrome' },
-			// { browserName: 'Samsung Galaxy S2' }, // old, like Google Earth
-			// { browserName: 'Opera' }
-		],
+		browsers: {
+			polyfill: [
+				{ browserName: 'Internet Explorer', version:  '6' },
+				{ browserName: 'android', version: '4.0' }, // old, like Google Earth (maybe not quite that old)
+				{ browserName: 'Internet Explorer', version:  '8' },
+				{ browserName: 'Internet Explorer', version:  '9' }
+			],
+			// polyfill should play nice in latest browsers
+			modern: [
+				{ browserName: 'Internet Explorer' },
+				{ browserName: 'Chrome' },
+				{ browserName: 'iPhone' },
+				{ browserName: 'android' },
+				{ browserName: 'Firefox' }
+			]
+		},
 
 		// Task configuration.
 		clean: {
@@ -62,7 +69,7 @@ module.exports = function( grunt ) {
 				'!test/google-earth.html'
 			],
 			// test other jquery versions
-			jquery: {
+			jquery144: {
 				options: {
 					timeout: 12000,
 					urls: [
@@ -75,8 +82,14 @@ module.exports = function( grunt ) {
 						'http://127.0.0.1:8000/test/novalidate.html?jquery=1.4.4',
 						'http://127.0.0.1:8000/test/pattern.html?jquery=1.4.4',
 						'http://127.0.0.1:8000/test/required.html?jquery=1.4.4',
-						'http://127.0.0.1:8000/test/submit.html?jquery=1.4.4',
-						// 1.7.2
+						'http://127.0.0.1:8000/test/submit.html?jquery=1.4.4'
+					]
+				}
+			},
+			jquery172: {
+				options: {
+					timeout: 12000,
+					urls: [
 						'http://127.0.0.1:8000/test/change.html?jquery=1.7.2',
 						'http://127.0.0.1:8000/test/checkValidity.html?jquery=1.7.2',
 						'http://127.0.0.1:8000/test/custom.html?jquery=1.7.2',
@@ -86,28 +99,115 @@ module.exports = function( grunt ) {
 						'http://127.0.0.1:8000/test/novalidate.html?jquery=1.7.2',
 						'http://127.0.0.1:8000/test/pattern.html?jquery=1.7.2',
 						'http://127.0.0.1:8000/test/required.html?jquery=1.7.2',
-						'http://127.0.0.1:8000/test/submit.html?jquery=1.7.2',
-						// latest
-						'http://127.0.0.1:8000/test/change.html?jquery=2.1.0',
-						'http://127.0.0.1:8000/test/checkValidity.html?jquery=2.1.0',
-						'http://127.0.0.1:8000/test/custom.html?jquery=2.1.0',
-						'http://127.0.0.1:8000/test/disabled.html?jquery=2.1.0',
-						'http://127.0.0.1:8000/test/email.html?jquery=2.1.0',
-						'http://127.0.0.1:8000/test/invalid.html?jquery=2.1.0',
-						'http://127.0.0.1:8000/test/novalidate.html?jquery=2.1.0',
-						'http://127.0.0.1:8000/test/pattern.html?jquery=2.1.0',
-						'http://127.0.0.1:8000/test/required.html?jquery=2.1.0',
-						'http://127.0.0.1:8000/test/submit.html?jquery=2.1.0',
+						'http://127.0.0.1:8000/test/submit.html?jquery=1.7.2'
+					]
+				}
+			},
+			jquery213: {
+				options: {
+					timeout: 12000,
+					urls: [
+						'http://127.0.0.1:8000/test/change.html?jquery=2.1.3',
+						'http://127.0.0.1:8000/test/checkValidity.html?jquery=2.1.3',
+						'http://127.0.0.1:8000/test/custom.html?jquery=2.1.3',
+						'http://127.0.0.1:8000/test/disabled.html?jquery=2.1.3',
+						'http://127.0.0.1:8000/test/email.html?jquery=2.1.3',
+						'http://127.0.0.1:8000/test/invalid.html?jquery=2.1.3',
+						'http://127.0.0.1:8000/test/novalidate.html?jquery=2.1.3',
+						'http://127.0.0.1:8000/test/pattern.html?jquery=2.1.3',
+						'http://127.0.0.1:8000/test/required.html?jquery=2.1.3',
+						'http://127.0.0.1:8000/test/submit.html?jquery=2.1.3'
 					]
 				}
 			}
 		},
 		'saucelabs-qunit': {
+			change: {
+				options: {
+					testname: 'change - <%= title %>',
+					urls: [ 'http://127.0.0.1:8000/test/change.html?jquery=1.7.2' ],
+					browsers: '<%= browsers.polyfill %>'
+				}
+			},
+			checkValidity: {
+				options: {
+					testname: 'checkValidity() - <%= title %>',
+					urls: [ 'http://127.0.0.1:8000/test/checkValidity.html?jquery=1.7.2' ],
+					browsers: '<%= browsers.polyfill %>'
+				}
+			},
+			customValidity: {
+				options: {
+					testname: 'customValidity - <%= title %>',
+					urls: [ 'http://127.0.0.1:8000/test/custom.html?jquery=1.7.2' ],
+					browsers: '<%= browsers.polyfill %>'
+				}
+			},
+			disabled: {
+				options: {
+					testname: 'disabled - <%= title %>',
+					urls: [ 'http://127.0.0.1:8000/test/disabled.html?jquery=1.7.2' ],
+					browsers: '<%= browsers.polyfill %>'
+				}
+			},
+			email: {
+				options: {
+					testname: 'email - <%= title %>',
+					urls: [ 'http://127.0.0.1:8000/test/email.html?jquery=1.7.2' ],
+					browsers: '<%= browsers.polyfill %>'
+				}
+			},
+			invalid: {
+				options: {
+					testname: 'invalid - <%= title %>',
+					urls: [ 'http://127.0.0.1:8000/test/invalid.html?jquery=1.7.2' ],
+					browsers: '<%= browsers.polyfill %>'
+				}
+			},
+			novalidate: {
+				options: {
+					testname: 'novalidate - <%= title %>',
+					urls: [ 'http://127.0.0.1:8000/test/novalidate.html?jquery=1.7.2' ],
+					browsers: '<%= browsers.polyfill %>'
+				}
+			},
+			pattern: {
+				options: {
+					testname: 'pattern - <%= title %>',
+					urls: [ 'http://127.0.0.1:8000/test/pattern.html?jquery=1.7.2' ],
+					browsers: '<%= browsers.polyfill %>'
+				}
+			},
 			required: {
 				options: {
-					testname: 'Required fields (<%= title %>)',
+					testname: 'required - <%= title %>',
 					urls: [ 'http://127.0.0.1:8000/test/required.html?jquery=1.7.2' ],
-					browsers: '<%= browsers %>',
+					browsers: '<%= browsers.polyfill %>'
+				}
+			},
+			submit: {
+				options: {
+					testname: 'submit - <%= title %>',
+					urls: [ 'http://127.0.0.1:8000/test/submit.html?jquery=1.7.2' ],
+					browsers: '<%= browsers.polyfill %>'
+				}
+			},
+			modern: {
+				options: {
+					testname: 'Modern browsers - <%= title %>',
+					urls: [
+						'http://127.0.0.1:8000/test/change.html?jquery=2.1.3',
+						'http://127.0.0.1:8000/test/checkValidity.html?jquery=2.1.3',
+						'http://127.0.0.1:8000/test/custom.html?jquery=2.1.3',
+						'http://127.0.0.1:8000/test/disabled.html?jquery=2.1.3',
+						'http://127.0.0.1:8000/test/email.html?jquery=2.1.3',
+						'http://127.0.0.1:8000/test/invalid.html?jquery=2.1.3',
+						'http://127.0.0.1:8000/test/novalidate.html?jquery=2.1.3',
+						'http://127.0.0.1:8000/test/pattern.html?jquery=2.1.3',
+						'http://127.0.0.1:8000/test/required.html?jquery=2.1.3',
+						'http://127.0.0.1:8000/test/submit.html?jquery=2.1.3'
+					],
+					browsers: '<%= browsers.modern %>'
 				}
 			}
 		},
@@ -164,7 +264,7 @@ module.exports = function( grunt ) {
 
 	// Default task.
 	grunt.registerTask( 'test', [ 'jshint', 'connect', 'qunit' ]);
-	grunt.registerTask( 'sauce', [ 'jshint', 'connect', 'saucelabs-qunit' ]);
+	grunt.registerTask( 'test-remote', [ 'jshint', 'qunit:unit', 'connect', 'clean', 'saucelabs-qunit' ]);
 	grunt.registerTask( 'produce', [ 'clean', 'concat', 'uglify' ]);
 	grunt.registerTask( 'default', [ 'test', 'produce' ]);
 

@@ -48,7 +48,6 @@
 	test( 'validityState object present', function() {
 
 		$( '#foo' ).val( '' );
-		$( '#foo' )[0].checkValidity();
 
 		strictEqual( typeof $( '#foo' )[0].validity, 'object', 'validityState is present' );
 		strictEqual( typeof $( '#foo' )[0].validity.valueMissing, 'boolean', 'validityState.valueMissing is present' );

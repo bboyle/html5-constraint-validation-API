@@ -223,7 +223,7 @@ if ( jQuery !== 'undefined' ) {
 							var valid = validateField.call( domElement );
 
 							// if invalid, and unless novalidate
-							if ( ! valid && ! this.form.hasAttribute( 'novalidate' )) {
+							if ( ! valid && ! this.form.getAttribute( 'novalidate' )) {
 								// use triggerHandler because invalid does not bubble
 								$( domElement ).triggerHandler( 'invalid' );
 							}
