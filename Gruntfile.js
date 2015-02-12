@@ -7,6 +7,7 @@ module.exports = function( grunt ) {
 		// Metadata.
 		pkg: grunt.file.readJSON( 'package.json' ),
 		title: '<%= pkg.title || pkg.name %> - v<%= pkg.version %>',
+		buildNumber: process.env.CI_BUILD_NUMBER || '<%= grunt.template.today("isoDateTime") %>',
 		banner: '/*! <%= title %> - ' +
 			'<%= grunt.template.today("yyyy-mm-dd") %>\n' +
 			'<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
@@ -121,6 +122,7 @@ module.exports = function( grunt ) {
 			change: {
 				options: {
 					testname: 'change - <%= title %>',
+					build: '<%= buildNumber %>',
 					urls: [ 'http://127.0.0.1:8000/test/change.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
@@ -128,6 +130,7 @@ module.exports = function( grunt ) {
 			checkValidity: {
 				options: {
 					testname: 'checkValidity() - <%= title %>',
+					build: '<%= buildNumber %>',
 					urls: [ 'http://127.0.0.1:8000/test/checkValidity.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
@@ -135,6 +138,7 @@ module.exports = function( grunt ) {
 			customValidity: {
 				options: {
 					testname: 'customValidity - <%= title %>',
+					build: '<%= buildNumber %>',
 					urls: [ 'http://127.0.0.1:8000/test/custom.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
@@ -142,6 +146,7 @@ module.exports = function( grunt ) {
 			disabled: {
 				options: {
 					testname: 'disabled - <%= title %>',
+					build: '<%= buildNumber %>',
 					urls: [ 'http://127.0.0.1:8000/test/disabled.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
@@ -149,6 +154,7 @@ module.exports = function( grunt ) {
 			email: {
 				options: {
 					testname: 'email - <%= title %>',
+					build: '<%= buildNumber %>',
 					urls: [ 'http://127.0.0.1:8000/test/email.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
@@ -156,6 +162,7 @@ module.exports = function( grunt ) {
 			invalid: {
 				options: {
 					testname: 'invalid - <%= title %>',
+					build: '<%= buildNumber %>',
 					urls: [ 'http://127.0.0.1:8000/test/invalid.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
@@ -163,6 +170,7 @@ module.exports = function( grunt ) {
 			novalidate: {
 				options: {
 					testname: 'novalidate - <%= title %>',
+					build: '<%= buildNumber %>',
 					urls: [ 'http://127.0.0.1:8000/test/novalidate.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
@@ -170,6 +178,7 @@ module.exports = function( grunt ) {
 			pattern: {
 				options: {
 					testname: 'pattern - <%= title %>',
+					build: '<%= buildNumber %>',
 					urls: [ 'http://127.0.0.1:8000/test/pattern.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
@@ -177,6 +186,7 @@ module.exports = function( grunt ) {
 			required: {
 				options: {
 					testname: 'required - <%= title %>',
+					build: '<%= buildNumber %>',
 					urls: [ 'http://127.0.0.1:8000/test/required.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
@@ -184,6 +194,7 @@ module.exports = function( grunt ) {
 			submit: {
 				options: {
 					testname: 'submit - <%= title %>',
+					build: '<%= buildNumber %>',
 					urls: [ 'http://127.0.0.1:8000/test/submit.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
