@@ -23,6 +23,7 @@ node_modules/*
 # Logs and databases #
 ######################
 logs/*
+sc_*.log
 
 # OS generated files #
 ######################
