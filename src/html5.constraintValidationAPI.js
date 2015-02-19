@@ -33,6 +33,11 @@ if ( jQuery !== 'undefined' ) {
 				return ! ( this.disabled || this.validity.valid );
 			},
 
+			// get all radio buttons
+			getRadioButtonsInGroup = function( radio ) {
+				return $( radio.form.elements[ radio.name ] ).filter( '[name="' + radio.name + '"]' );
+			},
+
 
 			// manage validity state object
 			validityState = function( typeMismatch, valueMissing, customError, message, patternMismatch ) {
@@ -66,7 +71,7 @@ if ( jQuery !== 'undefined' ) {
 						valueMissing = this.selectedIndex === 0 && this.options[ 0 ].value === '';
 
 					} else if ( this.type === 'radio' ) {
-						valueMissing = $( this.form.elements[ this.name ] ).filter( ':checked' ).length === 0;
+						valueMissing = getRadioButtonsInGroup( this ).length === 0;
 
 					} else if ( this.type === 'checkbox' ) {
 						valueMissing = ! this.checked;
@@ -124,7 +129,7 @@ if ( jQuery !== 'undefined' ) {
 				validateField.call( target );
 
 				if ( target.type === 'radio' ) {
-					$( target.form.elements[ this.name ] ).each(function() {
+					getRadioButtonsInGroup( target ).each(function() {
 						this.validity = target.validity;
 						this.validationMessage = target.validationMessage;
 					});
@@ -258,7 +263,7 @@ if ( jQuery !== 'undefined' ) {
 							if ( typeof seen[ this.name ] === 'undefined' ) {
 								seen[ this.name ] = true;
 
-								radio = $( this.form.elements[ this.name ] );
+								radio = getRadioButtonsInGroup( this );
 								valueMissing = radio.filter( ':checked' ).length === 0;
 
 								if ( valueMissing ) {

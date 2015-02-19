@@ -93,6 +93,26 @@
 				</li>
 
 				<li>
+					<fieldset>
+						<legend>
+							<span class="label">Radio bar</span>
+						</legend>
+						<ul>
+							<li>
+								<!-- id="radioFoo" matches name="radioFoo" in the previous group
+								for testing the edge case where an id/name conflict exists. -->
+								<input type="radio" id="radioFoo" name="radioBar" value="foo" checked>
+								<label for="radioFoo">radioFoo</label>
+							</li>
+							<li>
+								<input type="radio" id="radioBar" name="radioBar" value="bar">
+								<label for="radioBar">radioBar</label>
+							</li>
+						</ul>
+					</fieldset>
+				</li>
+
+				<li>
 					<label for="textarea-foo">
 						<span class="label">Textarea foo</span>
 						<abbr title="(required)">*</abbr>

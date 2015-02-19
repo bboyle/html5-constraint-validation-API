@@ -33,12 +33,11 @@
 
 	});
 
-	test( 'no radio buttons are checked', function() {
+	test( 'no radio buttons are checked', 3, function() {
 
-		$( 'form#test :radio' ).each(function() {
-			this.checked = false;
-		});
-		strictEqual( $( 'form#test :radio[checked]' ).length, 0, 'form#test radio buttons should not be checked' );
+		strictEqual( $( ':radio[name="radioFoo"]:checked' ).length, 0, 'radio buttons in "radioFoo" group should not be checked' );
+		strictEqual( $( ':radio[name="radioBar"]:checked' ).length, 1, '1 radio button in "radioBar" group checked' );
+		strictEqual( $( ':radio[name="radioBar"]:checked' ).attr( 'id' ), 'radioFoo', 'checked radio button in "radioBar" group has id="radioFoo"' );
 
 	});
 
