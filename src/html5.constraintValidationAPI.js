@@ -33,6 +33,11 @@ if ( jQuery !== 'undefined' ) {
 				return ! ( this.disabled || this.validity.valid );
 			},
 
+			// get all radio buttons
+			getRadioButtonsInGroup = function( radio ) {
+				return $( radio.form.elements[ radio.name ] ).filter( '[name="' + radio.name + '"]' );
+			},
+
 
 			// manage validity state object
 			validityState = function( typeMismatch, valueMissing, customError, message, patternMismatch ) {
@@ -53,20 +58,27 @@ if ( jQuery !== 'undefined' ) {
 			validateField = function( message ) {
 
 				var $this = $( this ),
-					valueMissing = !! $this.attr( 'required' ),
+					required = !! $this.attr( 'required' ),
+					radio = this.type === 'radio' && getRadioButtonsInGroup( this ),
+					valueMissing,
 					invalidEmail = this.getAttribute( 'type' ) === 'email' && !! this.value && ! REXP_EMAIL.test( this.value ),
 					patternMismatch,
-					pattern
+					pattern,
+					newValidityState
 				;
 
+				// radio buttons are required if any single radio button is flagged as required
+				if ( radio && ! required ) {
+					required = radio.filter( '[required]' ).length > 0;
+				}
 				// if required, check for missing value
-				if ( valueMissing ) {
+				if ( required ) {
 
 					if ( /^select$/i.test( this.nodeName )) {
 						valueMissing = this.selectedIndex === 0 && this.options[ 0 ].value === '';
 
-					} else if ( this.type === 'radio' ) {
-						valueMissing = $( this.form.elements[ this.name ] ).filter( ':checked' ).length === 0;
+					} else if ( radio ) {
+						valueMissing = radio.filter( ':checked' ).length === 0;
 
 					} else if ( this.type === 'checkbox' ) {
 						valueMissing = ! this.checked;
@@ -90,7 +102,12 @@ if ( jQuery !== 'undefined' ) {
 				}
 
 				// set .validityState
-				this.validity = validityState( invalidEmail, valueMissing, this.validity.customError || false, message, patternMismatch );
+				newValidityState = validityState( invalidEmail, valueMissing, this.validity.customError || false, message, patternMismatch );
+				if ( radio ) {
+					getRadioButtonsInGroup( this ).each(function() { this.validity = newValidityState; });
+				} else {
+					this.validity = newValidityState;
+				}
 
 				// set .validationMessage
 				if ( this.validity.valid ) {
@@ -124,7 +141,7 @@ if ( jQuery !== 'undefined' ) {
 				validateField.call( target );
 
 				if ( target.type === 'radio' ) {
-					$( target.form.elements[ this.name ] ).each(function() {
+					getRadioButtonsInGroup( target ).each(function() {
 						this.validity = target.validity;
 						this.validationMessage = target.validationMessage;
 					});
@@ -258,7 +275,7 @@ if ( jQuery !== 'undefined' ) {
 							if ( typeof seen[ this.name ] === 'undefined' ) {
 								seen[ this.name ] = true;
 
-								radio = $( this.form.elements[ this.name ] );
+								radio = getRadioButtonsInGroup( this );
 								valueMissing = radio.filter( ':checked' ).length === 0;
 
 								if ( valueMissing ) {
