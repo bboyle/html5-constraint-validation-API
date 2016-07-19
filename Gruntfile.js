@@ -12,7 +12,7 @@ module.exports = function( grunt ) {
 			'<%= grunt.template.today("yyyy-mm-dd") %>\n' +
 			'<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
 			'* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-			' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
+			' Licensed <%= pkg.license %> */\n',
 
 		browsers: [
 			{ browserName: 'Internet Explorer', version:  '6' },
