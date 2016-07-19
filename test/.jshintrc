@@ -29,5 +29,7 @@
 		"notStrictEqual",
 		"throws"
 	],
-	"globals": { "lifecycleCVAPI": true }
+	"globals": {
+		"lifecycleCVAPI": true
+	}
 }
