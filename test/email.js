@@ -1,7 +1,10 @@
 (function( $ ) {
 	'use strict';
-	
-	function testEmail( value, valid ) {
+
+	var module = QUnit.module;
+	var test = QUnit.test;
+
+	function testEmail( assert, value, valid ) {
 		var email = $( '#email' );
 
 		if ( valid !== false ) {
@@ -10,70 +13,71 @@
 
 		email.val( value );
 		email[ 0 ].checkValidity();
-		strictEqual( ! email[ 0 ].validity.typeMismatch, valid, value + ' is valid' );
+		assert.strictEqual(! email[ 0 ].validity.typeMismatch, valid, value + ' is valid' );
 	}
 
 
 
 	module( 'environment', lifecycleCVAPI );
 
-	test( 'email fields are in test form', function() {
+	test( 'email fields are in test form', function( assert ) {
 
-		strictEqual( $( 'form#test' ).length, 1, 'form#test is present' );
-		strictEqual( $( 'form#test input#foo' ).length, 1, 'form#test contains input#foo' );
-		strictEqual( $( 'form#test input#email' ).length, 1, 'form#test contains input#email' );
+		assert.strictEqual($( 'form#test' ).length, 1, 'form#test is present' );
+		assert.strictEqual($( 'form#test input#foo' ).length, 1, 'form#test contains input#foo' );
+		assert.strictEqual($( 'form#test input#email' ).length, 1, 'form#test contains input#email' );
 
 	});
 
-	test( 'email fields are type email', function() {
+	test( 'email fields are type email', function( assert ) {
 
-		strictEqual( $( '#foo' )[ 0 ].type, 'text', 'input#foo is type text' );
-		strictEqual( $( '#email' )[ 0 ].getAttribute( 'type' ), 'email', 'input#email is type email' );
+		assert.strictEqual($( '#foo' )[ 0 ].type, 'text', 'input#foo is type text' );
+		assert.strictEqual($( '#email' )[ 0 ].getAttribute( 'type' ), 'email', 'input#email is type email' );
 
 	});
 
 
 	module( 'input validityState typeMismatch', lifecycleCVAPI );
 
-	test( 'validity.typeMismatch is false when blank', function() {
-		
+	test( 'validity.typeMismatch is false when blank', function( assert ) {
+
 		$( '#email,#foo' ).val( '' );
 		$( '#email' )[ 0 ].checkValidity();
 		$( '#foo' )[ 0 ].checkValidity();
 
-		strictEqual( $( '#email' )[ 0 ].validity.typeMismatch, false, '#email[value=""] validity.typeMismatch should be false' );
-		strictEqual( $( '#email' )[ 0 ].validity.valid, true, '#email[value=""] validity.valid should be true' );
-		strictEqual( $( '#foo' )[ 0 ].validity.typeMismatch, false, '#foo[value=""] validity.typeMismatch should be false' );
+		assert.strictEqual($( '#email' )[ 0 ].validity.typeMismatch, false, '#email[value=""] validity.typeMismatch should be false' );
+		assert.strictEqual($( '#email' )[ 0 ].validity.valid, true, '#email[value=""] validity.valid should be true' );
+		assert.strictEqual($( '#foo' )[ 0 ].validity.typeMismatch, false, '#foo[value=""] validity.typeMismatch should be false' );
 
 	});
 
-	test( 'validity.typeMismatch is true when value is not an email address', function() {
-		
+	test( 'validity.typeMismatch is true when value is not an email address', function( assert ) {
+
 		$( '#email, #foo' ).val( 'foo' );
 		$( '#email' )[ 0 ].checkValidity();
 		$( '#foo' )[ 0 ].checkValidity();
 
-		strictEqual( $( '#email' )[ 0 ].validity.typeMismatch, true, '#email[value="foo"] validity.typeMismatch should be true' );
-		strictEqual( $( '#email' )[ 0 ].validity.valid, false, '#email[value=""] validity.valid should be false' );
-		strictEqual( $( '#foo' )[ 0 ].validity.typeMismatch, false, '#foo[value="foo"] validity.typeMismatch should be false' );
+		assert.strictEqual($( '#email' )[ 0 ].validity.typeMismatch, true, '#email[value="foo"] validity.typeMismatch should be true' );
+		assert.strictEqual($( '#email' )[ 0 ].validity.valid, false, '#email[value=""] validity.valid should be false' );
+		assert.strictEqual($( '#foo' )[ 0 ].validity.typeMismatch, false, '#foo[value="foo"] validity.typeMismatch should be false' );
 
 	});
 
 
-	test( 'validity.typeMismatch is false when an email address is supplied', function() {
-		
+	test( 'validity.typeMismatch is false when an email address is supplied', function( assert ) {
+
 		$( '#email,#foo' ).val( 'foo@example.com' );
 		$( '#email' )[ 0 ].checkValidity();
 		$( '#foo' )[ 0 ].checkValidity();
 
-		strictEqual( $( '#email' )[ 0 ].validity.typeMismatch, false, '#email[value="foo@example.com"] validity.typeMismatch should be false' );
-		strictEqual( $( '#email' )[ 0 ].validity.valid, true, '#email[value=""] validity.valid should be true' );
-		strictEqual( $( '#foo' )[ 0 ].validity.typeMismatch, false, '#foo[value="foo@example.com"] validity.typeMismatch should be false' );
+		assert.strictEqual($( '#email' )[ 0 ].validity.typeMismatch, false, '#email[value="foo@example.com"] validity.typeMismatch should be false' );
+		assert.strictEqual($( '#email' )[ 0 ].validity.valid, true, '#email[value=""] validity.valid should be true' );
+		assert.strictEqual($( '#foo' )[ 0 ].validity.typeMismatch, false, '#foo[value="foo@example.com"] validity.typeMismatch should be false' );
 
 	});
 
 
-	test( 'standard email formats', 2, function() {
+	test( 'standard email formats', function( assert ) {
+		assert.expect( 2 );
 
 		var formats = [
 			'benjamins.boyle@gmail.com',
@@ -81,12 +85,13 @@
 		];
 
 		$.each( formats, function( indexInArray, valueOfElement ) {
-			testEmail( valueOfElement );
+			testEmail( assert, valueOfElement );
 		});
 
 	});
 
-	test( 'unusual email formats', 1, function() {
+	test( 'unusual email formats', function( assert ) {
+		assert.expect( 1 );
 
 		var formats = [
 			// TODO why do these fail in PhantomJS?
@@ -96,13 +101,14 @@
 		];
 
 		$.each( formats, function( indexInArray, valueOfElement ) {
-			testEmail( valueOfElement );
+			testEmail( assert, valueOfElement );
 		});
 
 	});
 
-	test( 'allowed complex email formats', 4, function() {
-		
+	test( 'allowed complex email formats', function( assert ) {
+		assert.expect( 4 );
+
 		// http://haacked.com/archive/2007/08/21/i-knew-how-to-validate-an-email-address-until-i.aspx
 		var formats = [
 			'customer/department=shipping@example.com',
@@ -112,16 +118,17 @@
 		];
 
 		$.each( formats, function( indexInArray, valueOfElement ) {
-			testEmail( valueOfElement );
+			testEmail( assert, valueOfElement );
 		});
 
 	});
 
-	test( 'disallowed complex email formats', 4, function() {
-		
+	test( 'disallowed complex email formats', function( assert ) {
+		assert.expect( 4 );
+
 		// html5 does not allow these formats
 		// http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#valid-e-mail-address
-		
+
 		// http://haacked.com/archive/2007/08/21/i-knew-how-to-validate-an-email-address-until-i.aspx
 		var formats = [
 			'"Abc\\@def"@example.com',
@@ -131,7 +138,7 @@
 		];
 
 		$.each( formats, function( indexInArray, valueOfElement ) {
-			testEmail( valueOfElement, false );
+			testEmail( assert, valueOfElement, false );
 		});
 
 	});

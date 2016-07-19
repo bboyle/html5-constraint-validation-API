@@ -1,14 +1,18 @@
 (function( $ ) {
 	'use strict';
 
+	var module = QUnit.module;
+	var test = QUnit.test;
+
 	module( 'environment', lifecycleCVAPI );
 
-	test( 'required fields are in test form', 4, function() {
+	test( 'required fields are in test form', function( assert ) {
+		assert.expect( 4 );
 
-		strictEqual( $( 'form#test' ).length, 1, 'form#test is present' );
-		strictEqual( $( 'input#foo', 'form#test' ).length, 1, 'form#test contains input#foo' );
-		ok( $( 'input#foo' ).attr( 'required' ), 'input#foo has @required' );
-		strictEqual( $( 'input#foo' ).val(), '', 'input#foo has no value' );
+		assert.strictEqual($( 'form#test' ).length, 1, 'form#test is present' );
+		assert.strictEqual($( 'input#foo', 'form#test' ).length, 1, 'form#test contains input#foo' );
+		assert.ok($( 'input#foo' ).attr( 'required' ), 'input#foo has @required' );
+		assert.strictEqual($( 'input#foo' ).val(), '', 'input#foo has no value' );
 
 	});
 
@@ -22,13 +26,14 @@
 		}
 	});
 
-	test( 'invalid thrown for @required', 3, function() {
+	test( 'invalid thrown for @required', function( assert ) {
+		assert.expect( 3 );
 
 		var invalidEvents = 0,
 			handler = function( event ) {
 				invalidEvents++;
-				strictEqual( invalidEvents, 1, '1 invalid event was triggered' );
-				strictEqual( event.target, $( '#foo' )[ 0 ], 'invalid event thrown by #foo' );
+				assert.strictEqual(invalidEvents, 1, '1 invalid event was triggered' );
+				assert.strictEqual(event.target, $( '#foo' )[ 0 ], 'invalid event thrown by #foo' );
 			}
 		;
 
@@ -36,21 +41,22 @@
 		// checkValidity should trigger invalid event
 		$( '#foo' )[ 0 ].checkValidity();
 
-		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo is invalid' );
+		assert.strictEqual($( '#foo' )[ 0 ].validity.valid, false, '#foo is invalid' );
 	});
 
-	test( 'invalid cannot be captured on form', 1, function() {
+	test( 'invalid cannot be captured on form', function( assert ) {
+		assert.expect( 1 );
 
 		var handler = function() {
-			ok( true, 'invalid handler was triggered' );
-			strictEqual( true, false, 'invalid event thrown by #foo, captured on form' );
+			assert.ok(true, 'invalid handler was triggered' );
+			assert.strictEqual(true, false, 'invalid event thrown by #foo, captured on form' );
 		};
 
 		$( 'form' ).bind( 'invalid', handler );
 		// checkValidity should trigger invalid event
 		$( '#foo' )[ 0 ].checkValidity();
 
-		strictEqual( $( '#foo' )[ 0 ].validity.valid, false, '#foo is invalid' );
+		assert.strictEqual($( '#foo' )[ 0 ].validity.valid, false, '#foo is invalid' );
 	});
 
 	// how many invalid events expected for a set of radio buttons?

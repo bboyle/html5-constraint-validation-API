@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/bboyle/html5-constraint-validation-API.svg?branch=master)](https://travis-ci.org/bboyle/html5-constraint-validation-API)
-[![devDependencies](https://david-dm.org/bboyle/html5-constraint-validation-API/dev-status.svg)](https://david-dm.org/bboyle/html5-constraint-validation-API#info=devDependencies)
+[![bitHound Overall Score](https://www.bithound.io/github/bboyle/html5-constraint-validation-API/badges/score.svg)](https://www.bithound.io/github/bboyle/html5-constraint-validation-API)
+[![bitHound Dependencies](https://www.bithound.io/github/bboyle/html5-constraint-validation-API/badges/dependencies.svg)](https://www.bithound.io/github/bboyle/html5-constraint-validation-API/master/dependencies/npm)
+[![bitHound Dev Dependencies](https://www.bithound.io/github/bboyle/html5-constraint-validation-API/badges/devDependencies.svg)](https://www.bithound.io/github/bboyle/html5-constraint-validation-API/master/dependencies/npm)
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/benboyle-h5cvapi.svg)](https://saucelabs.com/u/benboyle-h5cvapi)
 

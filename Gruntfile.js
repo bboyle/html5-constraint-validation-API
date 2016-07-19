@@ -12,7 +12,7 @@ module.exports = function( grunt ) {
 			'<%= grunt.template.today("yyyy-mm-dd") %>\n' +
 			'<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
 			'* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-			' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
+			' Licensed <%= pkg.license %> */\n',
 
 		browsers: [
 			{ browserName: 'Internet Explorer', version:  '6' },
@@ -34,7 +34,7 @@ module.exports = function( grunt ) {
 		connect: {
 			server: {
 				options: {
-					port: 8000,
+					port: 8080,
 					base: '.'
 				}
 			}
@@ -70,16 +70,16 @@ module.exports = function( grunt ) {
 				options: {
 					timeout: 12000,
 					urls: [
-						'http://127.0.0.1:8000/test/change.html?jquery=1.4.4',
-						'http://127.0.0.1:8000/test/checkValidity.html?jquery=1.4.4',
-						'http://127.0.0.1:8000/test/custom.html?jquery=1.4.4',
-						'http://127.0.0.1:8000/test/disabled.html?jquery=1.4.4',
-						'http://127.0.0.1:8000/test/email.html?jquery=1.4.4',
-						'http://127.0.0.1:8000/test/invalid.html?jquery=1.4.4',
-						'http://127.0.0.1:8000/test/novalidate.html?jquery=1.4.4',
-						'http://127.0.0.1:8000/test/pattern.html?jquery=1.4.4',
-						'http://127.0.0.1:8000/test/required.html?jquery=1.4.4',
-						'http://127.0.0.1:8000/test/submit.html?jquery=1.4.4'
+						'http://127.0.0.1:8080/test/change.html?jquery=1.4.4',
+						'http://127.0.0.1:8080/test/checkValidity.html?jquery=1.4.4',
+						'http://127.0.0.1:8080/test/custom.html?jquery=1.4.4',
+						'http://127.0.0.1:8080/test/disabled.html?jquery=1.4.4',
+						'http://127.0.0.1:8080/test/email.html?jquery=1.4.4',
+						'http://127.0.0.1:8080/test/invalid.html?jquery=1.4.4',
+						'http://127.0.0.1:8080/test/novalidate.html?jquery=1.4.4',
+						'http://127.0.0.1:8080/test/pattern.html?jquery=1.4.4',
+						'http://127.0.0.1:8080/test/required.html?jquery=1.4.4',
+						'http://127.0.0.1:8080/test/submit.html?jquery=1.4.4'
 					]
 				}
 			},
@@ -87,16 +87,16 @@ module.exports = function( grunt ) {
 				options: {
 					timeout: 12000,
 					urls: [
-						'http://127.0.0.1:8000/test/change.html?jquery=1.7.2',
-						'http://127.0.0.1:8000/test/checkValidity.html?jquery=1.7.2',
-						'http://127.0.0.1:8000/test/custom.html?jquery=1.7.2',
-						'http://127.0.0.1:8000/test/disabled.html?jquery=1.7.2',
-						'http://127.0.0.1:8000/test/email.html?jquery=1.7.2',
-						'http://127.0.0.1:8000/test/invalid.html?jquery=1.7.2',
-						'http://127.0.0.1:8000/test/novalidate.html?jquery=1.7.2',
-						'http://127.0.0.1:8000/test/pattern.html?jquery=1.7.2',
-						'http://127.0.0.1:8000/test/required.html?jquery=1.7.2',
-						'http://127.0.0.1:8000/test/submit.html?jquery=1.7.2'
+						'http://127.0.0.1:8080/test/change.html?jquery=1.7.2',
+						'http://127.0.0.1:8080/test/checkValidity.html?jquery=1.7.2',
+						'http://127.0.0.1:8080/test/custom.html?jquery=1.7.2',
+						'http://127.0.0.1:8080/test/disabled.html?jquery=1.7.2',
+						'http://127.0.0.1:8080/test/email.html?jquery=1.7.2',
+						'http://127.0.0.1:8080/test/invalid.html?jquery=1.7.2',
+						'http://127.0.0.1:8080/test/novalidate.html?jquery=1.7.2',
+						'http://127.0.0.1:8080/test/pattern.html?jquery=1.7.2',
+						'http://127.0.0.1:8080/test/required.html?jquery=1.7.2',
+						'http://127.0.0.1:8080/test/submit.html?jquery=1.7.2'
 					]
 				}
 			},
@@ -104,16 +104,33 @@ module.exports = function( grunt ) {
 				options: {
 					timeout: 12000,
 					urls: [
-						'http://127.0.0.1:8000/test/change.html?jquery=2.1.3',
-						'http://127.0.0.1:8000/test/checkValidity.html?jquery=2.1.3',
-						'http://127.0.0.1:8000/test/custom.html?jquery=2.1.3',
-						'http://127.0.0.1:8000/test/disabled.html?jquery=2.1.3',
-						'http://127.0.0.1:8000/test/email.html?jquery=2.1.3',
-						'http://127.0.0.1:8000/test/invalid.html?jquery=2.1.3',
-						'http://127.0.0.1:8000/test/novalidate.html?jquery=2.1.3',
-						'http://127.0.0.1:8000/test/pattern.html?jquery=2.1.3',
-						'http://127.0.0.1:8000/test/required.html?jquery=2.1.3',
-						'http://127.0.0.1:8000/test/submit.html?jquery=2.1.3'
+						'http://127.0.0.1:8080/test/change.html?jquery=2.1.3',
+						'http://127.0.0.1:8080/test/checkValidity.html?jquery=2.1.3',
+						'http://127.0.0.1:8080/test/custom.html?jquery=2.1.3',
+						'http://127.0.0.1:8080/test/disabled.html?jquery=2.1.3',
+						'http://127.0.0.1:8080/test/email.html?jquery=2.1.3',
+						'http://127.0.0.1:8080/test/invalid.html?jquery=2.1.3',
+						'http://127.0.0.1:8080/test/novalidate.html?jquery=2.1.3',
+						'http://127.0.0.1:8080/test/pattern.html?jquery=2.1.3',
+						'http://127.0.0.1:8080/test/required.html?jquery=2.1.3',
+						'http://127.0.0.1:8080/test/submit.html?jquery=2.1.3'
+					]
+				}
+			},
+			jquery310: {
+				options: {
+					timeout: 12000,
+					urls: [
+						'http://127.0.0.1:8080/test/change.html?jquery=3.1.0',
+						'http://127.0.0.1:8080/test/checkValidity.html?jquery=3.1.0',
+						'http://127.0.0.1:8080/test/custom.html?jquery=3.1.0',
+						'http://127.0.0.1:8080/test/disabled.html?jquery=3.1.0',
+						'http://127.0.0.1:8080/test/email.html?jquery=3.1.0',
+						'http://127.0.0.1:8080/test/invalid.html?jquery=3.1.0',
+						'http://127.0.0.1:8080/test/novalidate.html?jquery=3.1.0',
+						'http://127.0.0.1:8080/test/pattern.html?jquery=3.1.0',
+						'http://127.0.0.1:8080/test/required.html?jquery=3.1.0',
+						'http://127.0.0.1:8080/test/submit.html?jquery=3.1.0'
 					]
 				}
 			}
@@ -123,7 +140,7 @@ module.exports = function( grunt ) {
 				options: {
 					testname: 'change - <%= title %>',
 					build: '<%= buildNumber %>',
-					urls: [ 'http://127.0.0.1:8000/test/change.html?jquery=1.7.2' ],
+					urls: [ 'http://127.0.0.1:8080/test/change.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
 			},
@@ -131,7 +148,7 @@ module.exports = function( grunt ) {
 				options: {
 					testname: 'checkValidity() - <%= title %>',
 					build: '<%= buildNumber %>',
-					urls: [ 'http://127.0.0.1:8000/test/checkValidity.html?jquery=1.7.2' ],
+					urls: [ 'http://127.0.0.1:8080/test/checkValidity.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
 			},
@@ -139,7 +156,7 @@ module.exports = function( grunt ) {
 				options: {
 					testname: 'customValidity - <%= title %>',
 					build: '<%= buildNumber %>',
-					urls: [ 'http://127.0.0.1:8000/test/custom.html?jquery=1.7.2' ],
+					urls: [ 'http://127.0.0.1:8080/test/custom.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
 			},
@@ -147,7 +164,7 @@ module.exports = function( grunt ) {
 				options: {
 					testname: 'disabled - <%= title %>',
 					build: '<%= buildNumber %>',
-					urls: [ 'http://127.0.0.1:8000/test/disabled.html?jquery=1.7.2' ],
+					urls: [ 'http://127.0.0.1:8080/test/disabled.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
 			},
@@ -155,7 +172,7 @@ module.exports = function( grunt ) {
 				options: {
 					testname: 'email - <%= title %>',
 					build: '<%= buildNumber %>',
-					urls: [ 'http://127.0.0.1:8000/test/email.html?jquery=1.7.2' ],
+					urls: [ 'http://127.0.0.1:8080/test/email.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
 			},
@@ -163,7 +180,7 @@ module.exports = function( grunt ) {
 				options: {
 					testname: 'invalid - <%= title %>',
 					build: '<%= buildNumber %>',
-					urls: [ 'http://127.0.0.1:8000/test/invalid.html?jquery=1.7.2' ],
+					urls: [ 'http://127.0.0.1:8080/test/invalid.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
 			},
@@ -171,7 +188,7 @@ module.exports = function( grunt ) {
 				options: {
 					testname: 'novalidate - <%= title %>',
 					build: '<%= buildNumber %>',
-					urls: [ 'http://127.0.0.1:8000/test/novalidate.html?jquery=1.7.2' ],
+					urls: [ 'http://127.0.0.1:8080/test/novalidate.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
 			},
@@ -179,7 +196,7 @@ module.exports = function( grunt ) {
 				options: {
 					testname: 'pattern - <%= title %>',
 					build: '<%= buildNumber %>',
-					urls: [ 'http://127.0.0.1:8000/test/pattern.html?jquery=1.7.2' ],
+					urls: [ 'http://127.0.0.1:8080/test/pattern.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
 			},
@@ -187,7 +204,7 @@ module.exports = function( grunt ) {
 				options: {
 					testname: 'required - <%= title %>',
 					build: '<%= buildNumber %>',
-					urls: [ 'http://127.0.0.1:8000/test/required.html?jquery=1.7.2' ],
+					urls: [ 'http://127.0.0.1:8080/test/required.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
 			},
@@ -195,7 +212,7 @@ module.exports = function( grunt ) {
 				options: {
 					testname: 'submit - <%= title %>',
 					build: '<%= buildNumber %>',
-					urls: [ 'http://127.0.0.1:8000/test/submit.html?jquery=1.7.2' ],
+					urls: [ 'http://127.0.0.1:8080/test/submit.html?jquery=1.7.2' ],
 					browsers: '<%= browsers %>'
 				}
 			}
@@ -222,7 +239,10 @@ module.exports = function( grunt ) {
 				options: {
 					jshintrc: 'test/.jshintrc'
 				},
-				src: [ 'test/*.js' ]
+				src: [
+					'libs/jquery-loader.js',
+					'test/*.js'
+				]
 			},
 		},
 		watch: {

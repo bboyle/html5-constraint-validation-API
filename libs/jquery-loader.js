@@ -8,5 +8,6 @@
     path = 'http://code.jquery.com/jquery-' + jqversion[1] + '.js';
   }
   // This is the only time I'll ever use document.write, I promise!
+  /*jshint evil:true */
   document.write('<script src="' + path + '"></script>');
 }());

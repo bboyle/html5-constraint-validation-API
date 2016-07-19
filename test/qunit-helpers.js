@@ -3,7 +3,7 @@ lifecycleCVAPI = {
 	beforeEach: function() {
 		initConstraintValidationAPI();
 	},
-	afterEach: function() {}
+	afterEach: jQuery.noop
 };
 
 

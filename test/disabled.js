@@ -1,43 +1,48 @@
 (function( $ ) {
 	'use strict';
-	
+
+	var module = QUnit.module;
+	var test = QUnit.test;
+
 	module( 'environment', lifecycleCVAPI );
 
-	test( 'required fields are in test form', function() {
+	test( 'required fields are in test form', function( assert ) {
 
-		strictEqual( $( 'form#test' ).length, 1, 'form#test is present' );
-		strictEqual( $( 'form#test input#foo' ).length, 1, 'form#test contains input#foo' );
-		strictEqual( $( 'form#test input#disabled' ).length, 1, 'form#test contains input#disabled' );
-		ok( $( 'input#foo' ).attr( 'required' ), 'input#foo has @required' );
-		ok( $( 'input#disabled' ).attr( 'required' ), 'input#disabled has @required' );
-		ok( $( 'input#disabled' ).attr( 'disabled' ), 'input#foo has @disabled' );
+		assert.strictEqual($( 'form#test' ).length, 1, 'form#test is present' );
+		assert.strictEqual($( 'form#test input#foo' ).length, 1, 'form#test contains input#foo' );
+		assert.strictEqual($( 'form#test input#disabled' ).length, 1, 'form#test contains input#disabled' );
+		assert.ok($( 'input#foo' ).attr( 'required' ), 'input#foo has @required' );
+		assert.ok($( 'input#disabled' ).attr( 'required' ), 'input#disabled has @required' );
+		assert.ok($( 'input#disabled' ).attr( 'disabled' ), 'input#foo has @disabled' );
 
 	});
 
 
 	module( 'validityState and disabled controls', lifecycleCVAPI );
 
-	test( 'disabled controls are always valid', 3, function() {
+	test( 'disabled controls are always valid', function( assert ) {
+		assert.expect( 3 );
 
 		// make disabled invalid
 		$( '#disabled' ).val( '' );
-		strictEqual( $( '#disabled' )[ 0 ].checkValidity(), true, '#disabled .checkValidity() valid' );
-		// strictEqual( $( '#disabled' )[ 0 ].validity.valid, true, '#disabled .validity.valid valid' ); // IE 10.0.1008.16421 disagrees
+		assert.strictEqual($( '#disabled' )[ 0 ].checkValidity(), true, '#disabled .checkValidity() valid' );
+		// assert.strictEqual($( '#disabled' )[ 0 ].validity.valid, true, '#disabled .validity.valid valid' ); // IE 10.0.1008.16421 disagrees
 
 		// make foo valid
 		$( '#disabled' ).val( 'foo' );
-		strictEqual( $( '#disabled' )[ 0 ].checkValidity(), true, '#disabled .checkValidity() valid' );
-		strictEqual( $( '#disabled' )[ 0 ].validity.valid, true, '#disabled .validity.valid valid' );
-		
+		assert.strictEqual($( '#disabled' )[ 0 ].checkValidity(), true, '#disabled .checkValidity() valid' );
+		assert.strictEqual($( '#disabled' )[ 0 ].validity.valid, true, '#disabled .validity.valid valid' );
+
 	});
 
 
 	module( 'invalid events and disabled controls', lifecycleCVAPI );
 
-	test( 'disabled controls never trigger invalid', 0, function() {
+	test( 'disabled controls never trigger invalid', function( assert ) {
+		assert.expect( 0 );
 
 		$( '#disabled' ).bind( 'invalid.TEST', function() {
-			ok( false, 'invalid event detected' );
+			assert.ok(false, 'invalid event detected' );
 		});
 
 		// make disabled invalid
@@ -46,18 +51,19 @@
 
 		// teardown
 		$( '#disabled' ).unbind( 'invalid.TEST' );
-		
+
 	});
 
 
 	module( 'submit and disabled controls', lifecycleCVAPI );
 
-	test( 'disabled controls never abort submit', 1, function() {
+	test( 'disabled controls never abort submit', function( assert ) {
+		assert.expect( 1 );
 
 		var submitted = 0;
 		$( '#test' ).bind( 'submit.TEST', function() {
 			submitted++;
-			ok( submitted <= 1, 'invalid event detected' );
+			assert.ok(submitted <= 1, 'invalid event detected' );
 		});
 
 		// make foo valid
@@ -70,7 +76,7 @@
 
 		// teardown
 		$( '#test' ).unbind( 'submit.TEST' );
-		
+
 	});
 
 
