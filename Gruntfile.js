@@ -239,7 +239,10 @@ module.exports = function( grunt ) {
 				options: {
 					jshintrc: 'test/.jshintrc'
 				},
-				src: [ 'test/*.js' ]
+				src: [
+					'libs/jquery-loader.js',
+					'test/*.js'
+				]
 			},
 		},
 		watch: {
