@@ -1,6 +1,6 @@
-/*! HTML5 constraintValidationAPI - v1.0.7 - 2015-02-19
+/*! HTML5 constraintValidationAPI - v1.0.8 - 2016-07-19
 * https://github.com/bboyle/html5-constraint-validation-API
-* Copyright (c) 2015 Ben Boyle; Licensed MIT */
+* Copyright (c) 2016 Ben Boyle; Licensed MIT */
 /*exported initConstraintValidationAPI*/
 if ( jQuery !== 'undefined' ) {
 	(function( $ ) {
